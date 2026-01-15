@@ -19,9 +19,9 @@ class Player extends FlxSprite
     {
         super(x, y);
         makeGraphic(30, 40, FlxColor.RED);
-        width = 28;     
-        height = 38;    
-        offset.set(2, 2); 
+		// width = 15;
+		// height = 35;
+		// offset.set(15, 5); 
 
         drag.x = 4000; 
         maxVelocity.set(400, 1500);

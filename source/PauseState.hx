@@ -6,10 +6,12 @@ import flixel.FlxSubState;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 
-class OptionState extends FlxSubState
+class PauseState extends FlxSubState
 {
     var closeBoton = new FlxSprite();
-    
+	var exitBoton = new FlxSprite();
+	var retryBoton = new FlxSprite();
+
     override public function create()
     {
         FlxG.mouse.visible = true;
@@ -45,8 +47,26 @@ class OptionState extends FlxSubState
         mainText.setBorderStyle(OUTLINE, FlxColor.WHITE, 6);
 
 		mainText.screenCenter();
-		mainText.y -= 200; // Importante!!!!11
+		mainText.y -= 200;
 		add(mainText);
+        
+		exitBoton.loadGraphic(AssetPaths.buttonTitleV2__png, true, 213, 58);
+		exitBoton.animation.add("normal", [0], 1, false);
+		exitBoton.animation.add("active", [1], 1, false);
+		exitBoton.animation.play("normal");
+		exitBoton.screenCenter();
+		exitBoton.y += 80;
+		add(exitBoton);
+
+		retryBoton.loadGraphic(AssetPaths.buttonTitleV2__png, true, 213, 58);
+		retryBoton.animation.add("normal", [0], 1, false);
+		retryBoton.animation.add("active", [1], 1, false);
+		retryBoton.animation.play("normal");
+		retryBoton.screenCenter();
+		retryBoton.y -= 20;
+		add(retryBoton);
+
+
         
     }
 
@@ -77,6 +97,38 @@ class OptionState extends FlxSubState
         if (FlxG.mouse.overlaps(closeBoton) && FlxG.mouse.justPressed || FlxG.keys.justPressed.ESCAPE)
             close();
 
+    }
+
+	function retryBotonFunction():Void
+	{
+		if (FlxG.mouse.overlaps(retryBoton))
+		{
+			retryBoton.animation.play("active");
+		}
+
+		else
+		{
+			retryBoton.animation.play("normal");
+		}
+
+        if (FlxG.mouse.overlaps(retryBoton) && FlxG.mouse.justPressed)
+        {
+            FlxG.resetState();
+            close();
+        }
+	}
+
+    function exitBotonFunction():Void
+    {
+        if (FlxG.mouse.overlaps(exitBoton))
+        {
+            exitBoton.animation.play("active");
+        }
+
+        else
+        {
+            exitBoton.animation.play("normal");
+        }
     }
 
 }

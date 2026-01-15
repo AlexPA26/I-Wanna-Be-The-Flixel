@@ -29,7 +29,7 @@ class LoadingState extends FlxSubState
 
         if (fill.alpha <= 1)
         {
-            fill.alpha = fill.alpha + 0.1;
+			fill.alpha = fill.alpha + 0.05;
         }
 
         if (fill.alpha == 1)
