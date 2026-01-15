@@ -48,7 +48,7 @@ class StageDebug01 extends FlxState
         // ######################
         // SOUNDTRACK DEL NIVEL!!
         // ######################
-        
+
         FlxG.sound.playMusic(AssetPaths.devmap__ogg, 0.1, true);
 
 
@@ -65,6 +65,11 @@ class StageDebug01 extends FlxState
         }
 
         super.update(elapsed);
+
+        if (FlxG.keys.justPressed.TAB)
+    {
+        FlxG.debugger.drawDebug = !FlxG.debugger.drawDebug;
+    }
         
         if (FlxG.keys.justPressed.R) FlxG.resetState();
     }
