@@ -301,10 +301,9 @@ function checkBotonDebug():Void
         }
     }
     else
-    {
-
-        botonDebug.animation.play("normal");
-    }
+		{
+			botonDebug.animation.play("normal");
+		}
 
 }
 

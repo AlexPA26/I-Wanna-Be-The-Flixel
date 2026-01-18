@@ -68,7 +68,7 @@ class NormalSpike
                     }
                     else 
                     {
-                        hitbox.makeGraphic(Std.int(obj.width), Std.int(obj.height), FlxColor.TRANSPARENT);
+                        hitbox.makeGraphic(Std.int(obj.width), Std.int(obj.height), FlxColor.RED);
                     }
                     
                     hitbox.immovable = true;

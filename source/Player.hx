@@ -1,40 +1,79 @@
 package;
 
+import flixel.util.FlxDirection;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.util.FlxColor;
+import flixel.util.FlxDirectionFlags;
+import PlayerData;
 
 class Player extends FlxSprite
 {
-    var canDoubleJump:Bool = false;
+    public var canDoubleJump:Bool = true;
     var safeJump:Float = 0;
     var safeJumpMax:Float = 0.15;
+    var playerSprite:FlxSprite;
 
-    var canDash:Bool = false;
+    public var canDash:Bool = false;
     var dashTimer:Float = 0;
     var dashDirection:Int = 0;
     var isDashing:Bool = false;
 
+    var animationJumpUp:Bool = false;
+    var animationJumpDown:Bool = false;
+
+    public static var lastFacing:FlxDirectionFlags = RIGHT;
+
     public function new(x:Float, y:Float)
     {
         super(x, y);
-        makeGraphic(30, 40, FlxColor.RED);
-		// width = 15;
-		// height = 35;
-		// offset.set(15, 5); 
+
+        loadGraphic(AssetPaths.thekid__png, true, 50, 50);
+        animation.add("idle", [0, 1, 2, 3], 11, true);
+        animation.add("jumpUp", [6], 16, false);
+        animation.add("jumpDown", [7], 1, false);
+        animation.add("walking", [8, 9, 10, 11, 12, 13], 24, true);
+        width = 20; 
+        height = 30;
+        offset.set(20, 20);
+
+        setFacingFlip(LEFT, true, false);
+        setFacingFlip(RIGHT, false, false);
+
+        this.canDoubleJump = PlayerData.savedCanDoubleJump;
+        this.canDash = PlayerData.savedCanDash;
+
+        if (PlayerData.facingLeft) 
+            {
+                this.facing = LEFT;
+                offset.set(10, 20);
+            } 
+            else 
+            {
+                this.facing = RIGHT;
+                offset.set(20, 20);
+            }
 
         drag.x = 4000; 
-        maxVelocity.set(400, 1500);
+        maxVelocity.set(400, 850);
         acceleration.y = 2000;
     }
 
     override public function update(elapsed:Float):Void
     {
+        acceleration.x = 0;
+         
         if (isTouching(DOWN))
         {
             safeJump = safeJumpMax;
-            canDoubleJump = true; 
+            canDoubleJump = true;
+            PlayerData.savedCanDoubleJump = true;
             canDash = true;
+            PlayerData.savedCanDash = true;
+            // this.canDash = this.canDash = PlayerData.savedCanDash;
+            animationJumpUp = false;
+            animationJumpDown = false;
+            PlayerData.savedCanDoubleJump = true;
         }
         else
         {
@@ -42,15 +81,31 @@ class Player extends FlxSprite
         }
 
         var jumpPressed = FlxG.keys.anyJustPressed([SPACE, UP, W]) || FlxG.mouse.justPressed;
-        var dashPressed = FlxG.keys.anyJustPressed([SHIFT, F]) || FlxG.mouse.justPressedRight;
+        var dashPressed = FlxG.keys.anyJustPressed([SHIFT, TAB, F]) || FlxG.mouse.justPressedRight;
 
-        var left = FlxG.keys.pressed.A;
-        var right = FlxG.keys.pressed.D;
+        var left = (FlxG.keys.anyPressed([LEFT, A]));
+        var right = (FlxG.keys.anyPressed([RIGHT, D]));
+    
+        if (left) 
+        { 
+            acceleration.x = -1500; 
+            facing = LEFT;
+            offset.set(10, 20);
+            PlayerData.facingLeft = true;
+        }
+        else if (right) 
+        { 
+            acceleration.x = 1500; 
+            facing = RIGHT;
+            offset.set(20, 20);
+            PlayerData.facingLeft = false;
+        }
 
         if (dashPressed && canDash && !isDashing && !isTouching(DOWN))
         {
             isDashing = true;
             canDash = false;
+            PlayerData.savedCanDash = false;
             dashTimer = 0.2;
             
             if (left) dashDirection = -1;
@@ -79,8 +134,20 @@ class Player extends FlxSprite
             acceleration.y = 2000;
             acceleration.x = 0;
             
-            if (left) { acceleration.x = -4500; facing = LEFT; }
-            else if (right) { acceleration.x = 4500; facing = RIGHT; }
+            if (left)
+            {
+                acceleration.x = -4000; facing = LEFT;
+            }
+
+            else if (right)
+            {
+                acceleration.x = 4000; facing = RIGHT;
+            }
+
+            else
+            {
+
+            }
 
             if (jumpPressed)
             {
@@ -89,25 +156,60 @@ class Player extends FlxSprite
                     velocity.y = -650; 
                     safeJump = 0;
                     FlxG.sound.play(AssetPaths.jump__ogg, 0.5);
+                    animationJumpUp = true;
+                    animationJumpDown = false;
                 }
                 else if (canDoubleJump) 
                 {
                     canDoubleJump = false;
                     velocity.y = -600;
-                    FlxG.sound.play(AssetPaths.doublejump__ogg, 0.5); 
-                    scale.set(1.2, 0.8); 
+                    FlxG.sound.play(AssetPaths.doublejump__ogg, 0.5);
+                    animationJumpUp = true;
+                    animationJumpDown = false;
                 }
             }
         }
 
-        super.update(elapsed);
+        var hardwarePressed = (FlxG.keys.pressed.D || FlxG.keys.pressed.A);
 
-        scale.x = flixel.math.FlxMath.lerp(scale.x, 1, 0.1);
-        scale.y = flixel.math.FlxMath.lerp(scale.y, 1, 0.1);
+    // trace(
+    // "| IN: " + (hardwarePressed ? "YES" : "NO ") + 
+    // " | ACCEL: " + acceleration.x + 
+    // " | VEL: " + Math.round(velocity.x * 100) / 100);
+        super.update(elapsed);
 
         if (FlxG.keys.anyJustReleased([SPACE, UP, W]) || FlxG.mouse.justReleased && velocity.y < 0)
         {
             velocity.y *= 0.5;
+            animationJumpDown = true;
+            animationJumpUp = false;
         }
+
+        if (isDashing) 
+        {
+            animation.play("walking");
+        }
+
+        else if (!isTouching(DOWN) && Math.abs(velocity.y) > 50) 
+        {
+            
+            if (velocity.y < 0)
+            {
+                animation.play("jumpUp");
+            }
+            else
+            {
+                animation.play("jumpDown");
+            }
+        }
+
+        else 
+            {
+                if (Math.abs(velocity.x) > 20) 
+                    animation.play("walking");
+                else 
+                    animation.play("idle");
+            }
+
     }
 }

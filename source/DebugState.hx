@@ -2,18 +2,19 @@ package;
 
 import flixel.FlxG;
 import flixel.FlxState;
-import levels.StageDebug01;
+import levels.debuglevels.StageDebugMID;
+import levels.debuglevels.StageDebugUP;
+import levels.debuglevels.StageDebugRIGHT;
+import levels.debuglevels.StageDebugDOWN;
+import levels.debuglevels.StageDebugLEFT;
 
 class DebugState extends FlxState
 {        
     override public function create():Void
     {
-
-        
         super.create();
         
-        FlxG.switchState(() -> new StageDebug01());
-
+        FlxG.switchState(() -> new StageDebugMID());
 
     }
 
@@ -23,6 +24,5 @@ class DebugState extends FlxState
         
         super.update(elapsed);
         
-        if (FlxG.keys.justPressed.R) FlxG.resetState();
     }
 }
