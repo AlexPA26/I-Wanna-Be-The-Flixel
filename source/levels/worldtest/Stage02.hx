@@ -1,5 +1,8 @@
-package levels.debuglevels;
+package levels.worldtest;
 
+import flixel.util.FlxDirectionFlags;
+import flixel.util.FlxDirection;
+import flixel.util.FlxColor;
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -9,7 +12,7 @@ import flixel.tile.FlxTilemap;
 import flixel.addons.editors.tiled.TiledMap;
 import flixel.addons.editors.tiled.TiledTileLayer;
 
-class StageDebugLEFT extends FlxState
+class Stage02 extends FlxState
 {
     var player:Player;
     var map:FlxTilemap;
@@ -17,13 +20,16 @@ class StageDebugLEFT extends FlxState
     var DangerObjects:FlxGroup;
     var spikes:FlxGroup;
     //###################
+    var debugText:flixel.text.FlxText;
+    var entryTimer:Float = 0;
 
 override public function create():Void
 {
-    var tiledData = new TiledMap("assets/data/debug-maps/devmapLEFT.tmx");
+    var tiledData = new TiledMap("assets/data/testworld/map02.tmx");
     var layer:TiledTileLayer = cast tiledData.getLayer("tiles");
+    
 
-    FlxG.cameras.bgColor = 0xFF6EFF75;
+    FlxG.cameras.bgColor = 0xFF5B7B6A;
     FlxG.mouse.visible = true;
 
     DangerObjects = new FlxGroup();
@@ -38,7 +44,6 @@ override public function create():Void
     map.y = -90;
 
     map.setTileProperties(1, ANY, null, null, 1);
-    map.setTileProperties(8, UP);
     map.setTileProperties(25, NONE, TransitionUP, null,25);
     map.setTileProperties(26, ANY, TransitionRIGHT, null, 26);
     map.setTileProperties(27, NONE, TransitionDOWN, null,27);
@@ -63,10 +68,10 @@ override public function create():Void
 
     override public function update(elapsed:Float):Void
     {
+        
         FlxG.collide(player, map);
-
         super.update(elapsed);
-
+        
         map.objectOverlapsTiles(player, (tile, player) ->
         { if (tile.index == 25)
         {
@@ -100,8 +105,8 @@ override public function create():Void
             TransitionLEFT(tile, player);
             // trace("TOUCHED TILE 28");
         }
-        return true; 
-        });
+        return true;
+        });   
 
         if (FlxG.overlap(player, DangerObjects))
         {
@@ -115,7 +120,7 @@ override public function create():Void
 
         if (FlxG.keys.justPressed.R)
         {
-            FlxG.switchState(() -> new StageDebugMID());
+            FlxG.resetState();
         }
 
             
@@ -124,10 +129,11 @@ override public function create():Void
     function TransitionUP(tile:FlxObject, obj:FlxObject):Void
         {
             PlayerData.spawnX = player.x;
-            PlayerData.spawnY = FlxG.height -30;
+            PlayerData.spawnY = PlayerData.spawnY = FlxG.height - 50;
             PlayerData.lastVelX = player.acceleration.x;
             PlayerData.lastVelY = player.velocity.y;
-            FlxG.switchState(() -> new StageDebugUP());
+            PlayerData.savedCanDoubleJump = player.canDoubleJump;
+            FlxG.switchState(() -> new Stage02());
         }
 
     function TransitionRIGHT(tile:FlxObject, obj:FlxObject):Void
@@ -136,7 +142,8 @@ override public function create():Void
             PlayerData.spawnY = player.y;
             PlayerData.lastVelX = player.acceleration.x;
             PlayerData.lastVelY = player.velocity.y;
-            FlxG.switchState(() -> new StageDebugMID());
+            PlayerData.savedCanDoubleJump = player.canDoubleJump;
+            FlxG.switchState(() -> new Stage03());
         }
 
     function TransitionDOWN(tile:FlxObject, obj:FlxObject):Void
@@ -145,7 +152,8 @@ override public function create():Void
             PlayerData.spawnY = player.y = 0;
             PlayerData.lastVelX = player.acceleration.x;
             PlayerData.lastVelY = player.velocity.y;
-            FlxG.switchState(() -> new StageDebugDOWN());
+            PlayerData.savedCanDoubleJump = player.canDoubleJump;
+            FlxG.switchState(() -> new Stage02());
         }
 
     function TransitionLEFT(tile:FlxObject, obj:FlxObject):Void
@@ -155,7 +163,7 @@ override public function create():Void
             PlayerData.lastVelX = player.acceleration.x;
             PlayerData.lastVelY = player.velocity.y;
             PlayerData.savedCanDoubleJump = player.canDoubleJump;
-            FlxG.switchState(() -> new StageDebugLEFT());
+            FlxG.switchState(() -> new Stage01());
         }
 
     

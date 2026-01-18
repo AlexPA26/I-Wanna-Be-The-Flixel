@@ -1,5 +1,6 @@
 package;
 
+import levels.worldtest.Stage01;
 import flixel.FlxG;
 import flixel.FlxState;
 import levels.debuglevels.StageDebugMID;
@@ -14,7 +15,7 @@ class DebugState extends FlxState
     {
         super.create();
         
-        FlxG.switchState(() -> new StageDebugMID());
+        FlxG.switchState(() -> new Stage01());
 
     }
 

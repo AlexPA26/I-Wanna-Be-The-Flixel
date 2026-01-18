@@ -8,6 +8,7 @@ import levels.debuglevels.StageDebugUP;
 import levels.debuglevels.StageDebugRIGHT;
 import levels.debuglevels.StageDebugDOWN;
 import levels.debuglevels.StageDebugLEFT;
+import levels.worldtest.Stage01;
 
 class Main extends Sprite
 {
@@ -22,7 +23,7 @@ class Main extends Sprite
 		#end
 
 		#if debug
-		addChild(new FlxGame(0, 0, StageDebugMID, 60, 60, true, false));
+		addChild(new FlxGame(0, 0, Stage01, 60, 60, true, false));
 		// addChild(new FPS(10, 10, 0xffffff));
 		flixel.FlxG.autoPause = false;
 		#end

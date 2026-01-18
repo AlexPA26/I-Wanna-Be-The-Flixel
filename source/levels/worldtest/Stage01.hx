@@ -1,15 +1,15 @@
-package levels.debuglevels;
+package levels.worldtest;
 
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxState;
-import flixel.group.FlxGroup;
-import flixel.tile.FlxTilemap;
 import flixel.addons.editors.tiled.TiledMap;
 import flixel.addons.editors.tiled.TiledTileLayer;
+import flixel.group.FlxGroup;
+import flixel.tile.FlxTilemap;
 
-class StageDebugLEFT extends FlxState
+class Stage01 extends FlxState
 {
     var player:Player;
     var map:FlxTilemap;
@@ -20,10 +20,10 @@ class StageDebugLEFT extends FlxState
 
 override public function create():Void
 {
-    var tiledData = new TiledMap("assets/data/debug-maps/devmapLEFT.tmx");
+    var tiledData = new TiledMap("assets/data/testworld/map01.tmx");
     var layer:TiledTileLayer = cast tiledData.getLayer("tiles");
 
-    FlxG.cameras.bgColor = 0xFF6EFF75;
+    FlxG.cameras.bgColor = 0xFF5B7B6A;
     FlxG.mouse.visible = true;
 
     DangerObjects = new FlxGroup();
@@ -38,7 +38,6 @@ override public function create():Void
     map.y = -90;
 
     map.setTileProperties(1, ANY, null, null, 1);
-    map.setTileProperties(8, UP);
     map.setTileProperties(25, NONE, TransitionUP, null,25);
     map.setTileProperties(26, ANY, TransitionRIGHT, null, 26);
     map.setTileProperties(27, NONE, TransitionDOWN, null,27);
@@ -53,10 +52,12 @@ override public function create():Void
     player.velocity.x = PlayerData.lastVelX; 
     player.velocity.y = PlayerData.lastVelY;
     add(player);
-
+    
     #if debug
     FlxG.camera.follow(player, FlxCameraFollowStyle.LOCKON);
     #end
+
+    FlxG.sound.playMusic(AssetPaths.devmap__ogg, 0.2);
     
     super.create();
 }
@@ -115,7 +116,7 @@ override public function create():Void
 
         if (FlxG.keys.justPressed.R)
         {
-            FlxG.switchState(() -> new StageDebugMID());
+            FlxG.switchState(() -> new Stage01());
         }
 
             
@@ -124,10 +125,11 @@ override public function create():Void
     function TransitionUP(tile:FlxObject, obj:FlxObject):Void
         {
             PlayerData.spawnX = player.x;
-            PlayerData.spawnY = FlxG.height -30;
+            PlayerData.spawnY = player.y + 50;
             PlayerData.lastVelX = player.acceleration.x;
             PlayerData.lastVelY = player.velocity.y;
-            FlxG.switchState(() -> new StageDebugUP());
+            PlayerData.savedCanDoubleJump = player.canDoubleJump;
+            FlxG.switchState(() -> new Stage02());
         }
 
     function TransitionRIGHT(tile:FlxObject, obj:FlxObject):Void
@@ -136,7 +138,8 @@ override public function create():Void
             PlayerData.spawnY = player.y;
             PlayerData.lastVelX = player.acceleration.x;
             PlayerData.lastVelY = player.velocity.y;
-            FlxG.switchState(() -> new StageDebugMID());
+            PlayerData.savedCanDoubleJump = player.canDoubleJump;
+            FlxG.switchState(() -> new Stage02());
         }
 
     function TransitionDOWN(tile:FlxObject, obj:FlxObject):Void
@@ -145,7 +148,8 @@ override public function create():Void
             PlayerData.spawnY = player.y = 0;
             PlayerData.lastVelX = player.acceleration.x;
             PlayerData.lastVelY = player.velocity.y;
-            FlxG.switchState(() -> new StageDebugDOWN());
+            PlayerData.savedCanDoubleJump = player.canDoubleJump;
+            FlxG.switchState(() -> new Stage02());
         }
 
     function TransitionLEFT(tile:FlxObject, obj:FlxObject):Void
@@ -155,7 +159,7 @@ override public function create():Void
             PlayerData.lastVelX = player.acceleration.x;
             PlayerData.lastVelY = player.velocity.y;
             PlayerData.savedCanDoubleJump = player.canDoubleJump;
-            FlxG.switchState(() -> new StageDebugLEFT());
+            FlxG.switchState(() -> new Stage02());
         }
 
     
