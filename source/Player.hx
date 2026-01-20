@@ -40,23 +40,10 @@ class Player extends FlxSprite
         setFacingFlip(LEFT, true, false);
         setFacingFlip(RIGHT, false, false);
 
-        this.canDoubleJump = PlayerData.savedCanDoubleJump;
-        this.canDash = PlayerData.savedCanDash;
-
-        if (PlayerData.facingLeft) 
-            {
-                this.facing = LEFT;
-                offset.set(10, 20);
-            } 
-            else 
-            {
-                this.facing = RIGHT;
-                offset.set(20, 20);
-            }
-
         drag.x = 4000; 
         maxVelocity.set(400, 850);
         acceleration.y = 2000;
+
     }
 
     override public function update(elapsed:Float):Void
@@ -67,13 +54,12 @@ class Player extends FlxSprite
         {
             safeJump = safeJumpMax;
             canDoubleJump = true;
-            PlayerData.savedCanDoubleJump = true;
+
             canDash = true;
-            PlayerData.savedCanDash = true;
-            // this.canDash = this.canDash = PlayerData.savedCanDash;
+
             animationJumpUp = false;
             animationJumpDown = false;
-            PlayerData.savedCanDoubleJump = true;
+            
         }
         else
         {
@@ -91,21 +77,18 @@ class Player extends FlxSprite
             acceleration.x = -1500; 
             facing = LEFT;
             offset.set(10, 20);
-            PlayerData.facingLeft = true;
         }
         else if (right) 
         { 
             acceleration.x = 1500; 
             facing = RIGHT;
             offset.set(20, 20);
-            PlayerData.facingLeft = false;
         }
 
         if (dashPressed && canDash && !isDashing && !isTouching(DOWN))
         {
             isDashing = true;
             canDash = false;
-            PlayerData.savedCanDash = false;
             dashTimer = 0.2;
             
             if (left) dashDirection = -1;
@@ -172,11 +155,9 @@ class Player extends FlxSprite
 
         var hardwarePressed = (FlxG.keys.pressed.D || FlxG.keys.pressed.A);
 
-    // trace(
-    // "| IN: " + (hardwarePressed ? "YES" : "NO ") + 
-    // " | ACCEL: " + acceleration.x + 
-    // " | VEL: " + Math.round(velocity.x * 100) / 100);
         super.update(elapsed);
+
+        trace("PLAYER X: " + x + " PLAYER Y: " + y);
 
         if (FlxG.keys.anyJustReleased([SPACE, UP, W]) || FlxG.mouse.justReleased && velocity.y < 0)
         {

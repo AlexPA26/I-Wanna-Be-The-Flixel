@@ -34,17 +34,17 @@ class NormalSpike
 
                     switch (obj.gid)
                     {
-                        case 17: // SPIKE ARRIBA
-                            offX = 15; offY = 30; spikeweight = 20; spikeheight = 15;
+                        case 7: // SPIKE ARRIBA
+                            offX = 7; offY = 10; spikeweight = 35; spikeheight = 35;
                         
-                        case 18: // SPIKE DERECHA
-                            offX = 10; offY = 20; spikeweight = 20; spikeheight = 10;
+                        case 8: // SPIKE DERECHA
+                            offX = 4; offY = 15; spikeweight = 35; spikeheight = 20;
 
-                        case 19: // SPIKE ABAJO
-                            offX = 20; offY = 10; spikeweight = 10; spikeheight = 20;
+                        case 9: // SPIKE ABAJO
+                            offX = 10; offY = 4; spikeweight = 30; spikeheight = 35;
 
-                        case 20: // SPIKE IZQUIERDA
-                            offX = 25; offY = 20; spikeweight = 20; spikeheight = 10;
+                        case 10: // SPIKE IZQUIERDA
+                            offX = 11; offY = 15; spikeweight = 35; spikeheight = 20;
                             
                         default: // SPIKE DE REPUESTO
                             offX = 20; offY = 20; spikeweight = 10; spikeheight = 10;
@@ -58,7 +58,7 @@ class NormalSpike
                     
                     if (obj.gid != -1) 
                     {
-                        hitbox.loadGraphic(AssetPaths.dummy__png, true, 50, 50);
+                        hitbox.loadGraphic(AssetPaths.tiles__png, true, 50, 50);
                         hitbox.animation.frameIndex = obj.gid - 1; 
 
                         hitbox.width = spikeweight; 
