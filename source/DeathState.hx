@@ -16,17 +16,17 @@ class DeathState extends FlxSubState
 
     override public function create():Void
     {
-        FlxG.sound.play(AssetPaths.death_bgm__ogg, 0.5);
+        FlxG.sound.play(AssetPaths.death_bgm__ogg, 0.5, true);
         particles = new FlxSprite(0, 0);
         particles.loadGraphic("assets/images/shared/death.png", true, 243, 223);
         add(particles);
         particles.x = PlayerData.deathX - (particles.width / 2);
         particles.y = PlayerData.deathY - (particles.height / 2) + 50;
-        particles.animation.add("explosion", [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33], 60, false);
+        particles.animation.add("explosion", [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33], 80, false);
         particles.animation.play("explosion");
 
         bg = new FlxSprite();
-        bg.makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+        bg.makeGraphic(FlxG.width + 1, FlxG.height, FlxColor.BLACK);
         bg.screenCenter();
         bg.alpha = 0;
         add(bg);

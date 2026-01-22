@@ -157,11 +157,11 @@ class Player extends FlxSprite
 
         super.update(elapsed);
 
-        trace("PLAYER X: " + x + " PLAYER Y: " + y);
+        // trace("PLAYER X: " + x + " PLAYER Y: " + y);
 
         if (FlxG.keys.anyJustReleased([SPACE, UP, W]) || FlxG.mouse.justReleased && velocity.y < 0)
         {
-            velocity.y *= 0.5;
+            velocity.y *= 0.8;
             animationJumpDown = true;
             animationJumpUp = false;
         }
