@@ -1,80 +1,46 @@
 package leveldata;
 
 import flixel.FlxSprite;
-import flixel.group.FlxGroup;
-import flixel.addons.editors.tiled.TiledMap;
-import flixel.addons.editors.tiled.TiledObjectLayer;
-import flixel.util.FlxColor;
 
-class NormalSpike
+class NormalSpike extends FlxSprite
 {
-    public static function loadHazards(tiledData:TiledMap, spikesGroup:FlxGroup):Void
+    public function new(X:Float, Y:Float, LocalID:Int)
     {
-        var objectLayer = tiledData.getLayer("spike-normal");
+        super(X, Y);
 
-        if (objectLayer != null && Std.isOfType(objectLayer, TiledObjectLayer))
+        loadGraphic(AssetPaths.spikes__png, true, 50, 50);
+        this.animation.frameIndex = LocalID;
+
+        switch (LocalID)
         {
-            var castLayer:TiledObjectLayer = cast objectLayer;
+            case 0: // // SPIKE ARRIBA
+                width = 45; height = 25; offset.set(2, 25); 
+            
+            case 1: // // SPIKE DERECHA
+                width = 35; height = 35; offset.set(0, 8);
 
-            for (obj in castLayer.objects)
-            {
-                if (obj.type == "spike" || obj.gid != -1)
-                {
-                    var spikeY:Float = obj.y;
-                    if (obj.gid != -1) spikeY -= obj.height;
+            case 2: // SPIKE ABAJO
+                width = 35; height = 35; offset.set(8, 0);
 
-                    var offX:Float = 0;
-                    var offY:Float = 0;
-                    var spikeweight:Float = 10;
-                    var spikeheight:Float = 10;
+            case 3: // SPIKE IZQUIERDA
+                width = 35; height = 35; offset.set(12, 10);
 
-                // ######################
-                // HITBOX DEL SPIKE!!!!!!
-                // ######################
+            case 4: // SPIKE SMOL ARRIBA
+                width = 30; height = 15; offset.set(10, 32);
 
-                    switch (obj.gid)
-                    {
-                        case 31: // SPIKE ARRIBA
-                            offX = 7; offY = 10; spikeweight = 35; spikeheight = 35;
-                        
-                        case 32: // SPIKE DERECHA
-                            offX = 4; offY = 15; spikeweight = 35; spikeheight = 20;
+            case 5: // SPIKE SMOL DERECHA
+                width = 15; height = 30; offset.set(0, 10);
 
-                        case 33: // SPIKE ABAJO
-                            offX = 10; offY = 4; spikeweight = 30; spikeheight = 35;
+            case 6: // SPIKE SMOL ABAJO
+                width = 30; height = 15; offset.set(10, 0);
 
-                        case 34: // SPIKE IZQUIERDA
-                            offX = 11; offY = 15; spikeweight = 35; spikeheight = 20;
-                            
-                        default: // SPIKE DE REPUESTO
-                            offX = 20; offY = 20; spikeweight = 10; spikeheight = 10;
-                    }
-
-                // ######################
-                // HITBOX DEL SPIKE!!!!!!
-                // ######################
-
-                    var hitbox = new FlxSprite(obj.x + offX, spikeY + offY);
-                    
-                    if (obj.gid != -1) 
-                    {
-                        hitbox.loadGraphic(AssetPaths.ch1tiles__png, true, 50, 50);
-                        hitbox.animation.frameIndex = obj.gid - 1; 
-
-                        hitbox.width = spikeweight; 
-                        hitbox.height = spikeheight;
-
-                        hitbox.offset.set(offX, offY); 
-                    }
-                    else 
-                    {
-                        hitbox.makeGraphic(Std.int(obj.width), Std.int(obj.height), FlxColor.RED);
-                    }
-                    
-                    hitbox.immovable = true;
-                    spikesGroup.add(hitbox);
-                }
-            }
+            case 7: // SPIKE SMOL IZQUIERDA
+                width = 15; height = 30; offset.set(33, 10);
         }
+
+        x += offset.x;
+        y += offset.y;
+
+        immovable = true;
     }
 }

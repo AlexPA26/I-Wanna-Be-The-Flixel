@@ -1,9 +1,7 @@
 package;
 
-import flixel.util.FlxDirection;
 import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.util.FlxColor;
 import flixel.util.FlxDirectionFlags;
 import PlayerData;
 
@@ -41,7 +39,7 @@ class Player extends FlxSprite
         setFacingFlip(RIGHT, false, false);
 
         drag.x = 4000; 
-        maxVelocity.set(400, 850);
+        maxVelocity.set(400, 1000);
         acceleration.y = 2000;
 
     }

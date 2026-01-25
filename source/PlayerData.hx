@@ -5,7 +5,7 @@ import Player;
 class PlayerData
 {
     public static var spawnX:Float = 200;
-    public static var spawnY:Float = 500;
+    public static var spawnY:Float = 450;
     public static var deathX:Float;
     public static var deathY:Float;
     public static var lastVelX:Float = 0;
