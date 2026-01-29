@@ -12,4 +12,7 @@ class PlayerData
     public static var lastVelY:Float = 0;
     public static var totalDeaths:Int = 0;
     public static var currentRoom:String = "map01";
+    public static var currentSong:String = "";
+    public static var lastMusicTime:Float = 0;
+    public static var isRespawning:Bool = false;
 }

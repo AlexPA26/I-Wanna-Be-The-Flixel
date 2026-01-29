@@ -33,9 +33,16 @@ class ObjectLoader
                     switch (obj.name)
                     {
                         case "spike":
+                            var localID:Int = 0;
+                        if (obj.properties.contains("id")) 
+                        {
+                            localID = Std.parseInt(obj.properties.get("id"));
+                        } 
+                        else 
+                        {
                             var tileset = tiledData.getGidOwner(obj.gid);
-                            var localID:Int = obj.gid - tileset.firstGID;
-
+                            localID = obj.gid - tileset.firstGID;
+                        }
                             var spike = new NormalSpike(spawnX, spawnY, localID);
                             state.DangerObjects.add(spike);
 
@@ -55,8 +62,22 @@ class ObjectLoader
 
                         case "platform":
                             var dir = obj.properties.get("direction");
-                            var plat = new MovingBlock(spawnX, spawnY + 50, dir);
+                            var tileset = tiledData.getGidOwner(obj.gid);
+                            var localID:Int = obj.gid - tileset.firstGID;
+                            var plat = new MovingBlock(spawnX, spawnY, dir, localID);
                             state.platforms.add(plat);
+
+                        case "falling":
+                            var dir = obj.properties.get("direction");
+                            var fall = new FallingBlock(spawnX, spawnY, dir);
+                            state.fallingBlock.add(fall);
+
+                        case "light":
+                            var light = new LightTorch(spawnX, spawnY);
+                            light.x -= light.width / 2;
+                            light.y -= light.height / 2;
+                            
+                            state.lightsGroup.add(light);
                     }
                 }
             }
