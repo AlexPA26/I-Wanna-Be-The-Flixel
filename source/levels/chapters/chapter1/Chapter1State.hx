@@ -20,6 +20,7 @@ class Chapter1State extends FlxState
     // #########################
     var player:Player;
     var bullets:FlxTypedGroup<FlxSprite>;
+    var PlayerGlow:FlxSprite;
     // #########################
     var bg:FlxSprite;
     var currentBGName:String = "";
@@ -30,39 +31,48 @@ class Chapter1State extends FlxState
     var mapDeco2:FlxTilemap;
     // #########################
     var currentRoomName:String;
-    var warpUP:FlxTilemap;
-    var warpRIGHT:FlxTilemap;
-    var warpDOWN:FlxTilemap;
-    var warpLEFT:FlxTilemap;
+    public var warpsGroup:FlxTypedGroup<WarpTrigger>;
     // #########################
     var vignite:FlxSprite;
 
     public var savesGroup:FlxTypedGroup<SavePoint>;
     public var trampolines:FlxTypedGroup<NormalTrampoline>;
+    public var trampolinesMini:FlxTypedGroup<NormalTrampolineMini>;
     public var platforms:FlxTypedGroup<MovingBlock>;
     public var fallingBlock:FlxTypedGroup<FallingBlock>;
     public var lightsGroup:FlxTypedGroup<LightTorch>;
     public var DangerObjects:FlxGroup;
+    public var slabs:FlxTypedGroup<NormalSlab>;
+    public var slabsNight:FlxTypedGroup<NormalSlabNight>;
 
     // #########################
     var spikes:FlxGroup;
     var saveAnimation:FlxSprite;
     var tiledData:TiledMap;
-    var spawnTimer:Float = 0.2;
+    var spawnTimer:Float = 0.1;
     var playerDeaths:FlxText;
     var currentRoom:FlxText;
     // #########################
 
 override public function create():Void
 {
-
-    FlxG.mouse.visible = true;
+    #if !debug FlxG.mouse.visible = false; #end
+    #if debug FlxG.mouse.visible = true; #end
+    FlxG.fixedTimestep = true;
 
     FlxG.bitmap.add(AssetPaths.death__png);
     FlxG.bitmap.add(AssetPaths.spikes__png);
     FlxG.bitmap.add(AssetPaths.laser__png);
     FlxG.bitmap.add(AssetPaths.save__png);
-
+    FlxG.bitmap.add(AssetPaths.ch1tiles__png);
+    FlxG.bitmap.add(AssetPaths.trampoline__png);
+    FlxG.bitmap.add(AssetPaths.trampoline_mini__png);
+    FlxG.bitmap.add(AssetPaths.transitionTiles__png);
+    FlxG.bitmap.add(AssetPaths.playerGlow__png);
+    FlxG.bitmap.add(AssetPaths.light__png);
+    FlxG.bitmap.add(AssetPaths.slab__png);
+    FlxG.bitmap.add(AssetPaths.slab_night__png);
+    FlxG.bitmap.add(AssetPaths.vignite__png);
     FlxG.sound.cache(AssetPaths.death_bgm__ogg);
     FlxG.sound.cache(AssetPaths.rain__ogg);
     FlxG.sound.cache(AssetPaths.trampoline_bounce__ogg);
@@ -71,9 +81,25 @@ override public function create():Void
 
     savesGroup = new FlxTypedGroup<SavePoint>();
     trampolines = new FlxTypedGroup<NormalTrampoline>();
+    trampolinesMini = new FlxTypedGroup<NormalTrampolineMini>();
     platforms = new FlxTypedGroup<MovingBlock>();
     fallingBlock = new FlxTypedGroup<FallingBlock>();
     lightsGroup = new FlxTypedGroup<LightTorch>();
+    slabs = new FlxTypedGroup<NormalSlab>();
+    slabsNight = new FlxTypedGroup<NormalSlabNight>();
+    bullets = new FlxTypedGroup<FlxSprite>();
+
+    PlayerGlow = new FlxSprite();
+    PlayerGlow.loadGraphic(AssetPaths.playerGlow__png, false);
+    PlayerGlow.blend = flash.display.BlendMode.ADD;
+    PlayerGlow.alpha = 0.15;
+
+    warpsGroup = new FlxTypedGroup<WarpTrigger>(); add(warpsGroup);
+    player = new Player(PlayerData.spawnX, PlayerData.spawnY);
+
+    vignite = new FlxSprite();
+    vignite.loadGraphic(AssetPaths.vignite__png, false);
+    vignite.screenCenter();
 
     loadRoom(PlayerData.currentRoom);
 
@@ -82,13 +108,10 @@ override public function create():Void
     add(trampolines);
     add(platforms);
     add(fallingBlock);
-
-    bullets = new FlxTypedGroup<FlxSprite>(); add(bullets);
-    player = new Player(PlayerData.spawnX, PlayerData.spawnY); add(player);
-    vignite = new FlxSprite();
-    vignite.loadGraphic(AssetPaths.vignite__png, false);
-    vignite.screenCenter();
-    add(vignite);
+    add(lightsGroup);
+    add(slabs);
+    add(slabsNight);
+    add(bullets);
 
     #if debug
     FlxG.camera.follow(player, FlxCameraFollowStyle.LOCKON);
@@ -97,6 +120,7 @@ override public function create():Void
     saveAnimation = new FlxSprite();
     saveAnimation.makeGraphic(FlxG.width + 1, FlxG.height, FlxColor.WHITE, false);
     saveAnimation.alpha = 0;
+    add(vignite);
     add(saveAnimation);
 
     setupHUD();
@@ -107,65 +131,107 @@ override public function create():Void
 
 override public function update(elapsed:Float):Void
 {
+    // if (FlxG.keys.justPressed.ONE) {loadRoom("map26");};
 
-    // if (FlxG.keys.justPressed.ONE)
-    //     loadRoom("map11");
+    if (FlxG.keys.justPressed.F11)
+    {
+        if (FlxG.fullscreen == false) FlxG.fullscreen = true;
+        else FlxG.fullscreen = false;
+    }
 
     FlxG.collide(player, map);
-    FlxG.collide(player, mapDeco2);
-    playerDeaths.text = "Deaths: " + PlayerData.totalDeaths;
+    FlxG.collide(player, slabs);
+    FlxG.collide(player, slabsNight);
+    playerDeaths.text = "Total Deaths: " + PlayerData.totalDeaths;
     currentRoom.text = "Last Save: " + PlayerData.currentRoom;
 
     super.update(elapsed);
 
-    if (warpUP != null) 
-        warpUP.objectOverlapsTiles(player, (tile, player) -> { if (tile.index == 44) TransitionUP(tile, player); return true; });
-    if (warpRIGHT != null) 
-        warpRIGHT.objectOverlapsTiles(player, (tile, player) -> { if (tile.index == 45) TransitionRIGHT(tile, player); return true; });
-    if (warpDOWN != null) 
-        warpDOWN.objectOverlapsTiles(player, (tile, player) -> { if (tile.index == 46) TransitionDOWN(tile, player); return true; });
-    if (warpLEFT != null) 
-        warpLEFT.objectOverlapsTiles(player, (tile, player) -> { if (tile.index == 47) TransitionLEFT(tile, player); return true; });
-
+    FlxG.overlap(player, warpsGroup, (p, w) -> { handleWarp(cast w); });
     FlxG.overlap(player, savesGroup, (p, s) -> { saveLogicSprite(cast s); });
-    FlxG.collide(player, trampolines, (p, t) ->
-    { var tramp:NormalTrampoline = cast t;
+    FlxG.collide(player, trampolines, (p, t) -> { var tramp:NormalTrampoline = cast t;
         if (player.touching == DOWN && tramp.touching == UP)
             {
                 player.velocity.y = -1000; tramp.launch();
                 FlxG.sound.play(AssetPaths.trampoline_bounce__ogg, 0.5, false);
             }});
+FlxG.collide(player, trampolinesMini, (p:Player, t:NormalTrampolineMini) -> { 
+    var trampMini:NormalTrampolineMini = cast t;
+    
+    if (trampMini.animation.curAnim != null && 
+        StringTools.startsWith(trampMini.animation.curAnim.name, "jump") && 
+        !trampMini.animation.finished) return;
 
-FlxG.collide(player, platforms, function(p:Player, plat:MovingBlock)
-    {
-    if (p.touching.has(FlxDirectionFlags.DOWN) && plat.touching.has(FlxDirectionFlags.UP))
-    {
-        
-        if (plat.velocity.y != 0)
-        {
-            p.y = plat.y - p.height;
-        }
+    var hitFloor = p.touching.has(DOWN);
+    var hitPlayerLeft = p.touching.has(LEFT);
+    var hitPlayerRight = p.touching.has(RIGHT);
 
-        p.velocity.y = 0;
+    switch (trampMini.launchDir) 
+    {
+        case "up":
+            if (hitFloor) {
+                p.velocity.y = -730;
+                p.canDoubleJump = true; 
+                trampMini.launch();
+                FlxG.sound.play(AssetPaths.trampoline_bounce__ogg, 0.5);
+            }
+            
+        case "left":
+            if (hitPlayerLeft && !hitFloor) {
+                p.maxVelocity.x = 800; // Set the high limit
+                p.velocity.x = 800;    // Apply the burst
+                p.velocity.y = -600;
+                p.canDoubleJump = true;
+                p.canDash = true;
+                trampMini.launch();
+                FlxG.sound.play(AssetPaths.big_bounce__ogg, 0.5);
+                FlxG.sound.play(AssetPaths.lateral_bounce__ogg, 0.5);
+            }
+
+        case "right":
+            if (hitPlayerRight && !hitFloor) {
+                p.maxVelocity.x = 800; 
+                p.velocity.x = -800; 
+                p.velocity.y = -600;
+                p.canDoubleJump = true;
+                p.canDash = true;
+                trampMini.launch();
+                FlxG.sound.play(AssetPaths.big_bounce__ogg, 0.5);
+                FlxG.sound.play(AssetPaths.lateral_bounce__ogg, 0.5);
+            }
     }
-    });
+});
 
-FlxG.collide(platforms, map, function(plat:MovingBlock, wall:FlxObject)
-    { plat.stopMovement(); });
-
-FlxG.collide(player, fallingBlock, function(p:Player, plat:FallingBlock)
-    {
-    if (p.touching.has(FlxDirectionFlags.DOWN) && plat.touching.has(FlxDirectionFlags.UP))
-    {
-        FlxG.sound.play(AssetPaths.break_block__ogg, 1, false);
-        if (plat.velocity.y != 0)
+    FlxG.collide(player, platforms, function(p:Player, plat:MovingBlock)
         {
-            p.y = plat.y - p.height;
+        if (p.touching.has(FlxDirectionFlags.DOWN) && plat.touching.has(FlxDirectionFlags.UP))
+        {
+            
+            if (plat.velocity.y != 0)
+            {
+                
+                p.y = plat.y - p.height;
+            }
+            p.velocity.y = 0;
         }
+        });
 
-        p.velocity.y = 0;
-    }
-    });
+    FlxG.collide(platforms, map, function(plat:MovingBlock, wall:FlxObject)
+        { plat.stopMovement(); });
+
+    FlxG.collide(player, fallingBlock, function(p:Player, plat:FallingBlock)
+        {
+        if (p.touching.has(FlxDirectionFlags.DOWN) && plat.touching.has(FlxDirectionFlags.UP))
+        {
+            FlxG.sound.play(AssetPaths.break_block__ogg, 0.5, false);
+            if (plat.velocity.y != 0)
+            {
+                p.y = plat.y - p.height;
+            }
+
+            p.velocity.y = 0;
+        }
+        });
             
     if (spawnTimer > 0) { spawnTimer -= elapsed; }
     
@@ -190,6 +256,20 @@ FlxG.collide(player, fallingBlock, function(p:Player, plat:FallingBlock)
         if (FlxG.keys.justPressed.Z) PlayerShoot();
         FlxG.collide(bullets, map, (bullet, wall) -> { bullet.kill(); });  
 
+    if (player != null && player.exists && PlayerGlow != null)
+    {
+        PlayerGlow.exists = true;
+        PlayerGlow.x = player.x + (player.width / 2) - (PlayerGlow.width / 2);
+        PlayerGlow.y = player.y + (player.height / 2) - (PlayerGlow.height / 2);
+    }
+    else if (PlayerGlow != null)
+    {
+        PlayerGlow.exists = false;
+    }
+
+    #if !debug
+        if (player.x > map.width || player.y > map.height) killPlayer();
+    #end
 }
 
 function PlayerShoot():Void
@@ -257,24 +337,23 @@ function loadRoom(roomName:String):Void
 
     var path = "assets/data/chapters/chapter1/ch1-" + roomName + ".tmx";
     tiledData = new TiledMap(path);
-    updateBackground();
 
     if (map != null) { remove(map); map.destroy(); }
     if (mapDeco != null) { remove(mapDeco); mapDeco.destroy(); }
     if (mapDeco2 != null) { remove(mapDeco2); mapDeco2.destroy(); }
-    if (warpUP != null) { remove(warpUP); }
-    if (warpRIGHT != null) { remove(warpRIGHT); }
-    if (warpDOWN != null) { remove(warpDOWN); }
-    if (warpLEFT != null) { remove(warpLEFT); }
+
+    updateBackground(); // Esto siempre primero!!
 
     var mainLayer:TiledTileLayer = cast tiledData.getLayer("tiles-main");
     map = new FlxTilemap();
     map.loadMapFromArray(mainLayer.tileArray, tiledData.width, tiledData.height, AssetPaths.ch1tiles__png, 50, 50, OFF, 1);
     map.x = -60; map.y = -65;
+    FlxG.worldBounds.set(map.x, map.y, map.width, map.height);
     add(map);
 
     var decoLayer = tiledData.getLayer("tiles-deco");
-    if (decoLayer != null) {
+    if (decoLayer != null)
+    {
         mapDeco = new FlxTilemap();
         mapDeco.loadMapFromArray(cast(decoLayer, TiledTileLayer).tileArray, tiledData.width, tiledData.height, AssetPaths.ch1tiles__png, 50, 50, OFF, 1);
         mapDeco.x = -60; mapDeco.y = -65;
@@ -282,7 +361,8 @@ function loadRoom(roomName:String):Void
     }
 
     var decoLayer2 = tiledData.getLayer("tiles-deco2");
-    if (decoLayer2 != null) {
+    if (decoLayer2 != null)
+    {
         mapDeco2 = new FlxTilemap();
         mapDeco2.loadMapFromArray(cast(decoLayer2, TiledTileLayer).tileArray, tiledData.width, tiledData.height, AssetPaths.ch1tiles__png, 50, 50, OFF, 1);
         mapDeco2.x = -60; mapDeco2.y = -65;
@@ -291,17 +371,18 @@ function loadRoom(roomName:String):Void
 
     DangerObjects.clear();
     savesGroup.clear();
+    warpsGroup.clear();
     platforms.clear();
     trampolines.clear();
+    trampolinesMini.clear();
     lightsGroup.clear();
     fallingBlock.clear();
+    slabs.clear();
+    slabsNight.clear();
     
     ObjectLoader.loadEverything(tiledData, this, map.x, map.y);
-
-    loadWarpLayer("warps-up", 44, warpUP);
-    loadWarpLayer("warps-right", 45, warpRIGHT);
-    loadWarpLayer("warps-down", 46, warpDOWN);
-    loadWarpLayer("warps-left", 47, warpLEFT);
+    add(PlayerGlow);
+    add(player);
 
     updateMusic();
     updateEffect();
@@ -309,33 +390,35 @@ function loadRoom(roomName:String):Void
     add(platforms);
     add(savesGroup);
     add(trampolines);
-    
-    if (player != null) { remove(player); add(player); }
+    add(slabs);
+    add(slabsNight);
+    add(trampolinesMini);
+    add(warpsGroup);
     // updateCamera();
-    add(lightsGroup);
+
+    // if (player != null) { remove(player); add(player); }
     if (vignite != null) { remove(vignite); add(vignite); }
+    spawnTimer = 0.1;
+    add(lightsGroup);
+    add(vignite);
 }
 
-function loadWarpLayer(name:String, tileID:Int, warpMap:FlxTilemap):Void
+function handleWarp(w:WarpTrigger):Void
 {
-    var layer = tiledData.getLayer(name);
-    if (layer != null) {
-        warpMap = new FlxTilemap();
-        warpMap.loadMapFromArray(cast(layer, TiledTileLayer).tileArray, tiledData.width, tiledData.height, AssetPaths.ch1tiles__png, 50, 50, OFF, 1);
-        warpMap.setTileProperties(tileID, ANY);
-        warpMap.x = -60; warpMap.y = -65; warpMap.alpha = 0.5;
-        add(warpMap);
-        
-        if (name == "warps-up") warpUP = warpMap;
-        if (name == "warps-right") warpRIGHT = warpMap;
-        if (name == "warps-down") warpDOWN = warpMap;
-        if (name == "warps-left") warpLEFT = warpMap;
+    loadRoom(w.targetRoom);
+
+    switch (w.direction)
+    {
+        case "up":    player.y = FlxG.height - player.height - 10;
+        case "down":  player.y = 10;
+        case "left":  player.x = 1265;
+        case "right": player.x = 10;
     }
 }
 
 function setupHUD():Void
 {
-    playerDeaths = new FlxText(50, FlxG.height - 80, 0, "Deaths: 0", 22);
+    playerDeaths = new FlxText(50, FlxG.height - 80, 0, "Total Deaths: 0", 22);
     playerDeaths.setBorderStyle(OUTLINE, FlxColor.BLACK, 3);
     playerDeaths.scrollFactor.set(0, 0);
     add(playerDeaths);
@@ -343,7 +426,7 @@ function setupHUD():Void
     currentRoom = new FlxText(50, FlxG.height - 110, 0, "Last Save: ", 18);
     currentRoom.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
     currentRoom.scrollFactor.set(0, 0);
-    add(currentRoom);
+    // add(currentRoom);
 
 }
 
@@ -374,6 +457,7 @@ function killPlayer():Void
 
         PlayerData.deathX = player.x; PlayerData.deathY = player.y;
         PlayerData.totalDeaths++;
+        PlayerGlow.visible = false;
         remove(player);
 
         if (FlxG.sound.music != null) FlxG.sound.music.stop();
@@ -497,6 +581,7 @@ function updateMusic():Void
 
     var songName:String = musicLayer.properties.get("songName");
     var songPath = "assets/music/chapters/chapter1bgm/" + songName + ".ogg";
+    trace("Music Changed to: " + songName);
 
     if (PlayerData.currentSong == songPath && FlxG.sound.music != null && FlxG.sound.music.playing)
     {
@@ -509,7 +594,7 @@ function updateMusic():Void
     }
 
     PlayerData.currentSong = songPath;
-    FlxG.sound.playMusic(songPath, 0.3, true);
+    FlxG.sound.playMusic(songPath, 0.5, true);
 
     if (PlayerData.isRespawning)
     {

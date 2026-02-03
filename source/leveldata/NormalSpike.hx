@@ -20,7 +20,7 @@ class NormalSpike extends FlxSprite
                 width = 35; height = 35; offset.set(0, 8);
 
             case 2: // SPIKE ABAJO
-                width = 35; height = 35; offset.set(8, 0);
+                width = 40; height = 40; offset.set(6, 0);
 
             case 3: // SPIKE IZQUIERDA
                 width = 35; height = 35; offset.set(12, 10);

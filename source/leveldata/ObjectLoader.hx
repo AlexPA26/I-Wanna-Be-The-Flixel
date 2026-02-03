@@ -32,6 +32,13 @@ class ObjectLoader
 
                     switch (obj.name)
                     {
+                    case "warp":
+                        var target = obj.properties.get("target");
+                        var dir = obj.properties.get("direction");
+                        
+                        var warp = new WarpTrigger(spawnX, spawnY, obj.width, obj.height, target, dir);
+                        state.warpsGroup.add(warp);
+
                         case "spike":
                             var localID:Int = 0;
                         if (obj.properties.contains("id")) 
@@ -59,6 +66,16 @@ class ObjectLoader
                         case "trampoline":
                             var tramp = new NormalTrampoline(spawnX, spawnY);
                             state.trampolines.add(tramp);
+                        
+                        case "trampoline-mini":
+                            var dir:String = "up";
+                            if (obj.properties.contains("direction"))
+                            {
+                                dir = obj.properties.get("direction");
+                            } 
+                                
+                            var trampMini = new NormalTrampolineMini(spawnX, spawnY, dir);
+                                state.trampolinesMini.add(trampMini);
 
                         case "platform":
                             var dir = obj.properties.get("direction");
@@ -76,8 +93,13 @@ class ObjectLoader
                             var light = new LightTorch(spawnX, spawnY);
                             light.x -= light.width / 2;
                             light.y -= light.height / 2;
-                            
                             state.lightsGroup.add(light);
+                        case "slab":
+                            var slab = new NormalSlab(spawnX, spawnY);
+                            state.slabs.add(slab);
+                        case "slab-night":
+                            var slabNight = new NormalSlabNight(spawnX, spawnY);
+                            state.slabsNight.add(slabNight);
                     }
                 }
             }

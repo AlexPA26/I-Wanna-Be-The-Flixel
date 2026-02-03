@@ -2,6 +2,7 @@ package leveldata;
 
 import flixel.FlxSprite;
 using flixel.util.FlxDirectionFlags;
+using flixel.FlxG;
 
 class MovingBlock extends FlxSprite
 {
@@ -30,6 +31,7 @@ class MovingBlock extends FlxSprite
     {
         if (!activeMoving && touching.has(FlxDirectionFlags.UP))
         {
+            FlxG.sound.play(AssetPaths.platform_activated__ogg, 0.5, false);
             activeMoving = true;
         }
 

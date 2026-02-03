@@ -52,7 +52,7 @@ class Player extends FlxSprite
         {
             safeJump = safeJumpMax;
             canDoubleJump = true;
-
+            drag.x = 4000;
             canDash = true;
 
             animationJumpUp = false;
@@ -87,7 +87,7 @@ class Player extends FlxSprite
         {
             isDashing = true;
             canDash = false;
-            dashTimer = 0.2;
+            dashTimer = 0.15;
             
             if (left) dashDirection = -1;
             else if (right) dashDirection = 1;
@@ -151,7 +151,20 @@ class Player extends FlxSprite
             }
         }
 
-        var hardwarePressed = (FlxG.keys.pressed.D || FlxG.keys.pressed.A);
+        // ##############################
+        // TRAMPOLINE RED ADJUSTMENTS!!!!
+        // ##############################
+        if (maxVelocity.x > 400)
+        {
+            maxVelocity.x -= 600 * elapsed; 
+            if (maxVelocity.x < 400) maxVelocity.x = 400;
+        }
+
+        if (isTouching(DOWN))
+        {
+            maxVelocity.x = 400;
+            drag.x = 4000;
+        }
 
         super.update(elapsed);
 

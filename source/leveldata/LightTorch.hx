@@ -1,6 +1,7 @@
 package leveldata;
 
 import flixel.FlxSprite;
+import openfl.display.BlendMode;
 
 class LightTorch extends FlxSprite
 {
@@ -9,13 +10,14 @@ class LightTorch extends FlxSprite
         super(x, y);
         loadGraphic(AssetPaths.light__png, true, 200, 200);
         offset.set(-100, -100);
+        this.blend = BlendMode.ADD;
         immovable = true;
     }
 
     override function update(elapsed:Float):Void
         {
             super.update(elapsed);
-            alpha = 1 - Math.random() * 0.2;
+            alpha = 0.525 - Math.random() * 0.2;
     }
 
 }

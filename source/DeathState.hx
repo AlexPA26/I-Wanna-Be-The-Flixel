@@ -72,7 +72,6 @@ class DeathState extends FlxSubState
         {
             bg.alpha += 0.005; 
         }
-
         if (FlxG.keys.justPressed.R)
         {
             if (FlxG.sound.music != null) FlxG.sound.music.stop();

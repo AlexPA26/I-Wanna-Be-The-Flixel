@@ -10,7 +10,7 @@ class NormalTrampoline extends FlxSprite
         loadGraphic(AssetPaths.trampoline__png, true, 50, 50);
         
         animation.add("idle", [0], 0, false);
-        animation.add("jump", [1, 0], 10, false);
+        animation.add("jump", [2, 1, 0], 16, false);
         animation.play("idle");
 
         immovable = true;

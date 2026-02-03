@@ -13,7 +13,7 @@ class Main extends Sprite
 
 		#if !debug
 		addChild(new FlxGame(0, 0, Chapter1State, 60, 60, true, false));
-		addChild(new FPS(10, 10, 0xffffff));
+		// addChild(new FPS(10, 10, 0xffffff));
 		flixel.FlxG.autoPause = false;
 		#end
 

@@ -32,10 +32,10 @@ class FallingBlock extends FlxSprite
         {
             switch (moveDir)
             {
-                case "up":    velocity.y = -600;
-                case "down":  velocity.y = 600;
-                case "left":  velocity.x = -600;
-                case "right": velocity.x = 600;
+                case "up":    velocity.y = -700;
+                case "down":  velocity.y = 700;
+                case "left":  velocity.x = -700;
+                case "right": velocity.x = 700;
             }
         }
 
