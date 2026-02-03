@@ -178,8 +178,8 @@ FlxG.collide(player, trampolinesMini, (p:Player, t:NormalTrampolineMini) -> {
             
         case "left":
             if (hitPlayerLeft && !hitFloor) {
-                p.maxVelocity.x = 800; // Set the high limit
-                p.velocity.x = 800;    // Apply the burst
+                p.maxVelocity.x = 800;
+                p.velocity.x = 800;
                 p.velocity.y = -600;
                 p.canDoubleJump = true;
                 p.canDash = true;

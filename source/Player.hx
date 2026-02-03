@@ -3,7 +3,7 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.util.FlxDirectionFlags;
-import PlayerData;
+// import PlayerData;
 
 class Player extends FlxSprite
 {
