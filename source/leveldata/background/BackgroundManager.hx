@@ -1,6 +1,6 @@
 package leveldata.background;
 
-import levels.chapters.chapter1.Chapter1State;
+import levels.chapters.datachapter.ChapterState;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.display.FlxBackdrop;
@@ -25,7 +25,7 @@ class BackgroundManager
         return 0;
     }
 
-    public static function updateAllEffects(state:Chapter1State, tiledData:TiledMap):Void
+    public static function updateAllEffects(state:ChapterState, tiledData:TiledMap):Void
     {
         updateBackground(state, tiledData);
         bgDecoEffect(state, tiledData);
@@ -35,7 +35,7 @@ class BackgroundManager
         topEffect(state, tiledData);
     }
 
-    public static function updateBackground(state:Chapter1State, tiledData:TiledMap):Void
+    public static function updateBackground(state:ChapterState, tiledData:TiledMap):Void
     {
         var bgLayer = tiledData.getLayer("bg");
         if (bgLayer == null || !bgLayer.properties.contains("bgName")) return;
@@ -54,7 +54,7 @@ class BackgroundManager
         }
     }
 
-    public static function bgDecoEffect(state:Chapter1State, tiledData:TiledMap):Void
+    public static function bgDecoEffect(state:ChapterState, tiledData:TiledMap):Void
         {
         var layer = tiledData.getLayer("mapDecoEffect");
         var boost = getScrollBoost(tiledData);
@@ -96,7 +96,7 @@ class BackgroundManager
         }
     }
 
-    public static function bgEffect(state:Chapter1State, tiledData:TiledMap):Void
+    public static function bgEffect(state:ChapterState, tiledData:TiledMap):Void
         {
         var layer = tiledData.getLayer("mapEffect");
         var boost = getScrollBoost(tiledData);
@@ -138,7 +138,7 @@ class BackgroundManager
         }
     }
 
-    public static function bgEffectDouble(state:Chapter1State, tiledData:TiledMap):Void
+    public static function bgEffectDouble(state:ChapterState, tiledData:TiledMap):Void
     {
         var layer = tiledData.getLayer("doubleEffect");
         var boost = getScrollBoost(tiledData);
@@ -180,7 +180,7 @@ class BackgroundManager
         }
     }
 
-    public static function foregroundEffect(state:Chapter1State, tiledData:TiledMap):Void
+    public static function foregroundEffect(state:ChapterState, tiledData:TiledMap):Void
         {
         var layer = tiledData.getLayer("foregroundEffect");
         var boost = getScrollBoost(tiledData);
@@ -220,7 +220,7 @@ class BackgroundManager
         }
     }
 
-    public static function topEffect(state:Chapter1State, tiledData:TiledMap):Void
+    public static function topEffect(state:ChapterState, tiledData:TiledMap):Void
         {
         var layer = tiledData.getLayer("topEffect");
         var boost = getScrollBoost(tiledData);

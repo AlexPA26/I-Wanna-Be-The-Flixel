@@ -8,11 +8,11 @@ import flixel.addons.editors.tiled.TiledLayer;
 import flixel.FlxSprite;
 import leveldata.*;
 import leveldata.misc.*;
-import levels.chapters.chapter1.Chapter1State;
+import levels.chapters.datachapter.ChapterState;
 
 class ObjectLoader
 {
-    public static function loadEverything(tiledData:TiledMap, state:Chapter1State, offsetX:Float, offsetY:Float):Void
+    public static function loadEverything(tiledData:TiledMap, state:ChapterState, offsetX:Float, offsetY:Float):Void
     {
 
         for (layer in tiledData.layers)

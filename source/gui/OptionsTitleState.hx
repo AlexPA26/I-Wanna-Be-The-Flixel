@@ -1,4 +1,4 @@
-package;
+package gui;
 
 import flixel.FlxG;
 import flixel.FlxSprite;

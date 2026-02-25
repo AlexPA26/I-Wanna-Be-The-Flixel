@@ -4,7 +4,6 @@ import flixel.FlxSprite;
 
 class NormalTrampolineMini extends FlxSprite
 {
-    // Store the direction: "up", "left", or "right"
     public var launchDir:String;
 
     public function new(x:Float, y:Float, dir:String)

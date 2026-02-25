@@ -1,4 +1,4 @@
-package levels.chapters.chapter1;
+package levels.chapters.datachapter;
 
 import leveldata.background.BackgroundManager;
 import gui.DeathState;
@@ -19,7 +19,7 @@ import flixel.addons.display.FlxBackdrop;
 import leveldata.*;
 import leveldata.misc.*;
 
-class Chapter1State extends FlxState
+class ChapterState extends FlxState
 {
     // #########################
     var player:Player;
