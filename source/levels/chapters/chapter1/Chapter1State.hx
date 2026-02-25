@@ -1,19 +1,23 @@
 package levels.chapters.chapter1;
 
+import leveldata.background.BackgroundManager;
+import gui.DeathState;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
+import flixel.addons.editors.tiled.*;
+import flixel.addons.editors.tiled.TiledLayer;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.group.FlxGroup;
+// import leveldata.MapSettings;
 import flixel.tile.FlxTilemap;
-import flixel.addons.editors.tiled.TiledMap;
-import flixel.addons.editors.tiled.TiledTileLayer;
 import flixel.util.FlxDirectionFlags;
 import flixel.addons.display.FlxBackdrop;
 import leveldata.*;
+import leveldata.misc.*;
 
 class Chapter1State extends FlxState
 {
@@ -21,11 +25,12 @@ class Chapter1State extends FlxState
     var player:Player;
     var bullets:FlxTypedGroup<FlxSprite>;
     var PlayerGlow:FlxSprite;
+    var cameraTarget:FlxObject;
+    var scrollSpeed:Float = 0;
+    var isAutoscrolling:Bool = false;
     // #########################
-    var bg:FlxSprite;
-    var currentBGName:String = "";
-    var mapEffect:FlxBackdrop;
-    var currentEffectName:String = "";
+    public var bg:FlxSprite;
+    public var currentBGName:String = "";
     var map:FlxTilemap;
     var mapDeco:FlxTilemap;
     var mapDeco2:FlxTilemap;
@@ -35,7 +40,31 @@ class Chapter1State extends FlxState
     // #########################
     var vignite:FlxSprite;
 
+    // #########################
+    public var backEffectObj:FlxBackdrop;
+    public var currentBackEffectName:String = "";
+    public var lastBackScrollBoost:Float = 0;
+
+    public var backDecoEffectObj:FlxBackdrop;
+    public var currentBackDecoEffectName:String = "";
+    public var lastDecoScrollBoost:Float = 0;
+
+    public var doubleEffectObj:FlxBackdrop;
+    public var currentDoubleEffectName:String = "";
+    public var lastDoubleScrollBoost:Float = 0;
+
+    public var frontEffectObj:FlxBackdrop;
+    public var currentFrontEffectName:String = "";
+    public var lastFrontScrollBoost:Float = 0;
+
+    public var topEffectObj:FlxBackdrop;
+    public var currentTopEffectName:String = "";
+    public var lastTopScrollBoost:Float = 0;
+
     public var savesGroup:FlxTypedGroup<SavePoint>;
+    public var doubleJumpGroup:FlxTypedGroup<DoubleJumpObj>;
+    public var flipGroup:FlxTypedGroup<FlipSwitch>;
+    public var portalGroup:FlxTypedGroup<PortalWarp>;
     public var trampolines:FlxTypedGroup<NormalTrampoline>;
     public var trampolinesMini:FlxTypedGroup<NormalTrampolineMini>;
     public var platforms:FlxTypedGroup<MovingBlock>;
@@ -60,26 +89,15 @@ override public function create():Void
     #if debug FlxG.mouse.visible = true; #end
     FlxG.fixedTimestep = true;
 
-    FlxG.bitmap.add(AssetPaths.death__png);
-    FlxG.bitmap.add(AssetPaths.spikes__png);
-    FlxG.bitmap.add(AssetPaths.laser__png);
-    FlxG.bitmap.add(AssetPaths.save__png);
-    FlxG.bitmap.add(AssetPaths.ch1tiles__png);
-    FlxG.bitmap.add(AssetPaths.trampoline__png);
-    FlxG.bitmap.add(AssetPaths.trampoline_mini__png);
-    FlxG.bitmap.add(AssetPaths.transitionTiles__png);
-    FlxG.bitmap.add(AssetPaths.playerGlow__png);
-    FlxG.bitmap.add(AssetPaths.light__png);
-    FlxG.bitmap.add(AssetPaths.slab__png);
-    FlxG.bitmap.add(AssetPaths.slab_night__png);
-    FlxG.bitmap.add(AssetPaths.vignite__png);
-    FlxG.sound.cache(AssetPaths.death_bgm__ogg);
-    FlxG.sound.cache(AssetPaths.rain__ogg);
-    FlxG.sound.cache(AssetPaths.trampoline_bounce__ogg);
+    imgCache();
+    sfxCache();
 
     DangerObjects = new FlxGroup(); 
 
     savesGroup = new FlxTypedGroup<SavePoint>();
+    doubleJumpGroup = new FlxTypedGroup<DoubleJumpObj>();
+    flipGroup = new FlxTypedGroup<FlipSwitch>();
+    portalGroup = new FlxTypedGroup<PortalWarp>();
     trampolines = new FlxTypedGroup<NormalTrampoline>();
     trampolinesMini = new FlxTypedGroup<NormalTrampolineMini>();
     platforms = new FlxTypedGroup<MovingBlock>();
@@ -99,12 +117,19 @@ override public function create():Void
 
     vignite = new FlxSprite();
     vignite.loadGraphic(AssetPaths.vignite__png, false);
+    vignite.scrollFactor.set(0, 0);
     vignite.screenCenter();
+
+    saveAnimation = new FlxSprite();
+    saveAnimation.makeGraphic(FlxG.width + 1, FlxG.height, FlxColor.WHITE, false);
+    saveAnimation.alpha = 0;
+    saveAnimation.scrollFactor.set(0,0);
 
     loadRoom(PlayerData.currentRoom);
 
     add(DangerObjects);
     add(savesGroup);
+    add(doubleJumpGroup);
     add(trampolines);
     add(platforms);
     add(fallingBlock);
@@ -112,18 +137,12 @@ override public function create():Void
     add(slabs);
     add(slabsNight);
     add(bullets);
+    add(vignite);
+    add(saveAnimation);
 
     #if debug
     FlxG.camera.follow(player, FlxCameraFollowStyle.LOCKON);
     #end
-
-    saveAnimation = new FlxSprite();
-    saveAnimation.makeGraphic(FlxG.width + 1, FlxG.height, FlxColor.WHITE, false);
-    saveAnimation.alpha = 0;
-    add(vignite);
-    add(saveAnimation);
-
-    setupHUD();
 
     super.create();
 
@@ -131,7 +150,22 @@ override public function create():Void
 
 override public function update(elapsed:Float):Void
 {
-    // if (FlxG.keys.justPressed.ONE) {loadRoom("map26");};
+    if (FlxG.keys.justPressed.ONE) {loadRoom("map36");};
+    if (FlxG.keys.justPressed.TWO) {loadRoom("map101");};
+    if (FlxG.keys.justPressed.THREE) {loadRoom("map10");};
+    if (FlxG.keys.justPressed.FOUR) {loadRoom("map10");};
+    if (FlxG.keys.justPressed.NINE) {loadRoom("mapTest01");};
+
+    if (isAutoscrolling && cameraTarget != null) 
+    {
+        cameraTarget.x += scrollSpeed * elapsed;
+        cameraTarget.y = 300;
+        
+        if (player.x + player.width < FlxG.camera.scroll.x) 
+        {
+            killPlayer(); 
+        }
+    }
 
     if (FlxG.keys.justPressed.F11)
     {
@@ -142,13 +176,17 @@ override public function update(elapsed:Float):Void
     FlxG.collide(player, map);
     FlxG.collide(player, slabs);
     FlxG.collide(player, slabsNight);
-    playerDeaths.text = "Total Deaths: " + PlayerData.totalDeaths;
+    playerDeaths.text = "Total Resets: " + PlayerData.totalDeaths;
     currentRoom.text = "Last Save: " + PlayerData.currentRoom;
 
     super.update(elapsed);
 
     FlxG.overlap(player, warpsGroup, (p, w) -> { handleWarp(cast w); });
     FlxG.overlap(player, savesGroup, (p, s) -> { saveLogicSprite(cast s); });
+    FlxG.overlap(player, doubleJumpGroup, (p, d) -> { doubleJumpObjLogic(cast d); });
+    FlxG.overlap(player, portalGroup, (p, pw) -> { portalWarpLogic(cast pw); });
+    FlxG.overlap(player, flipGroup, (p, sw) -> { FlipSwitchObjLogic(cast sw); });
+
     FlxG.collide(player, trampolines, (p, t) -> { var tramp:NormalTrampoline = cast t;
         if (player.touching == DOWN && tramp.touching == UP)
             {
@@ -200,7 +238,7 @@ FlxG.collide(player, trampolinesMini, (p:Player, t:NormalTrampolineMini) -> {
                 FlxG.sound.play(AssetPaths.lateral_bounce__ogg, 0.5);
             }
     }
-});
+    });
 
     FlxG.collide(player, platforms, function(p:Player, plat:MovingBlock)
         {
@@ -246,6 +284,7 @@ FlxG.collide(player, trampolinesMini, (p:Player, t:NormalTrampolineMini) -> {
         if (FlxG.keys.justPressed.R)
         {
             FlxG.resetState();
+            PlayerData.totalDeaths++;
         }
 
         if (saveAnimation.alpha > 0)
@@ -253,7 +292,7 @@ FlxG.collide(player, trampolinesMini, (p:Player, t:NormalTrampolineMini) -> {
             saveAnimation.alpha -= 0.01;
         }
 
-        if (FlxG.keys.justPressed.Z) PlayerShoot();
+    if (FlxG.keys.justPressed.Z) PlayerShoot();
         FlxG.collide(bullets, map, (bullet, wall) -> { bullet.kill(); });  
 
     if (player != null && player.exists && PlayerGlow != null)
@@ -268,8 +307,50 @@ FlxG.collide(player, trampolinesMini, (p:Player, t:NormalTrampolineMini) -> {
     }
 
     #if !debug
-        if (player.x > map.width || player.y > map.height) killPlayer();
+        if (player.x > map.width || player.y > map.height - 50) killPlayer();
     #end
+}
+
+function imgCache():Void
+{
+    FlxG.bitmap.add(AssetPaths.death__png);
+    FlxG.bitmap.add(AssetPaths.spikes__png);
+    FlxG.bitmap.add(AssetPaths.laser__png);
+    FlxG.bitmap.add(AssetPaths.save__png);
+    FlxG.bitmap.add(AssetPaths.ch1tiles__png);
+    FlxG.bitmap.add(AssetPaths.trampoline__png);
+    FlxG.bitmap.add(AssetPaths.trampoline_mini__png);
+    FlxG.bitmap.add(AssetPaths.transitionTiles__png);
+    FlxG.bitmap.add(AssetPaths.playerGlow__png);
+    FlxG.bitmap.add(AssetPaths.light__png);
+    FlxG.bitmap.add(AssetPaths.slab__png);
+    FlxG.bitmap.add(AssetPaths.slab_night__png);
+    FlxG.bitmap.add(AssetPaths.vignite__png);
+    FlxG.bitmap.add(AssetPaths.cloudsBack__png);
+    FlxG.bitmap.add(AssetPaths.cloudsDouble__png);
+    FlxG.bitmap.add(AssetPaths.white_fog__png);
+    FlxG.bitmap.add(AssetPaths.sandstorm__png);
+    FlxG.bitmap.add(AssetPaths.moon__png);
+    FlxG.bitmap.add(AssetPaths.speed_lines__png);
+    FlxG.bitmap.add(AssetPaths.bgMountainsDay__png);
+    FlxG.bitmap.add(AssetPaths.bgMountains__png);
+}
+
+function sfxCache():Void
+{
+    FlxG.sound.cache(AssetPaths.jump__ogg);
+    FlxG.sound.cache(AssetPaths.doublejump__ogg);
+    FlxG.sound.cache(AssetPaths.dash__ogg);
+    FlxG.sound.cache(AssetPaths.break_block__ogg);
+    FlxG.sound.cache(AssetPaths.savedgame__ogg);
+    FlxG.sound.cache(AssetPaths.lateral_bounce__ogg);
+    FlxG.sound.cache(AssetPaths.platform_activated__ogg);
+    FlxG.sound.cache(AssetPaths.death_bgm__ogg);
+    FlxG.sound.cache(AssetPaths.rain__ogg);
+    FlxG.sound.cache(AssetPaths.castle1__ogg);
+    FlxG.sound.cache(AssetPaths.castle2__ogg);
+    FlxG.sound.cache(AssetPaths.trampoline_bounce__ogg);
+    FlxG.sound.cache(AssetPaths.kid_determination__ogg);
 }
 
 function PlayerShoot():Void
@@ -279,14 +360,14 @@ function PlayerShoot():Void
     bullet.makeGraphic(4,4, FlxColor.YELLOW);
     add(bullet);
 
-    if (Player.lastFacing == LEFT)
+    if (Player.isFacingRIGHT == false)
     {
-        bullet.velocity.x = -400;
+        bullet.velocity.x = -600;
     }
 
-    else if (Player.lastFacing != LEFT)
+    else if (Player.isFacingRIGHT == true)
     {
-        bullet.velocity.x = 400;
+        bullet.velocity.x = 600;
         bullet.x -= 20;
     }
 
@@ -331,6 +412,15 @@ function TransitionLEFT(tile:FlxObject, obj:FlxObject):Void
 
 }
 
+// function TransitionScroll(tile:FlxObject, obj:FlxObject):Void
+// {
+//         var layer = tiledData.getLayer("warps-scroll");
+//         var destination = layer.properties.get("target");
+//         loadRoom(destination);
+//         player.x = 200;
+
+// }
+
 function loadRoom(roomName:String):Void
 {
     currentRoomName = roomName;
@@ -341,8 +431,6 @@ function loadRoom(roomName:String):Void
     if (map != null) { remove(map); map.destroy(); }
     if (mapDeco != null) { remove(mapDeco); mapDeco.destroy(); }
     if (mapDeco2 != null) { remove(mapDeco2); mapDeco2.destroy(); }
-
-    updateBackground(); // Esto siempre primero!!
 
     var mainLayer:TiledTileLayer = cast tiledData.getLayer("tiles-main");
     map = new FlxTilemap();
@@ -371,6 +459,9 @@ function loadRoom(roomName:String):Void
 
     DangerObjects.clear();
     savesGroup.clear();
+    doubleJumpGroup.clear();
+    flipGroup.clear();
+    portalGroup.clear();
     warpsGroup.clear();
     platforms.clear();
     trampolines.clear();
@@ -379,28 +470,36 @@ function loadRoom(roomName:String):Void
     fallingBlock.clear();
     slabs.clear();
     slabsNight.clear();
+
     
     ObjectLoader.loadEverything(tiledData, this, map.x, map.y);
+    add(slabs);
+    add(slabsNight);
     add(PlayerGlow);
     add(player);
-
-    updateMusic();
-    updateEffect();
     add(DangerObjects);
     add(platforms);
     add(savesGroup);
+    add(doubleJumpGroup);
+    add(flipGroup);
+    add(portalGroup);
     add(trampolines);
-    add(slabs);
-    add(slabsNight);
     add(trampolinesMini);
     add(warpsGroup);
-    // updateCamera();
 
-    // if (player != null) { remove(player); add(player); }
-    if (vignite != null) { remove(vignite); add(vignite); }
-    spawnTimer = 0.1;
+    BackgroundManager.updateAllEffects(this, tiledData);
+
     add(lightsGroup);
+    if (vignite != null) { remove(vignite); add(vignite); }
     add(vignite);
+    setupHUD();
+
+    autoScroll();
+    cameraScroll();
+    updateMusic();
+
+    spawnTimer = 0.1;
+
 }
 
 function handleWarp(w:WarpTrigger):Void
@@ -418,15 +517,16 @@ function handleWarp(w:WarpTrigger):Void
 
 function setupHUD():Void
 {
-    playerDeaths = new FlxText(50, FlxG.height - 80, 0, "Total Deaths: 0", 22);
+    playerDeaths = new FlxText(50, FlxG.height - 80, 0, "Total Resets: 0", 22);
     playerDeaths.setBorderStyle(OUTLINE, FlxColor.BLACK, 3);
+    playerDeaths.scrollFactor.set(0, 0);
     playerDeaths.scrollFactor.set(0, 0);
     add(playerDeaths);
 
     currentRoom = new FlxText(50, FlxG.height - 110, 0, "Last Save: ", 18);
     currentRoom.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
     currentRoom.scrollFactor.set(0, 0);
-    // add(currentRoom);
+    add(currentRoom);
 
 }
 
@@ -442,6 +542,60 @@ function saveLogicSprite(saveObj:SavePoint):Void
         FlxG.sound.play(AssetPaths.savedgame__ogg, 0.5, false);
         saveObj.kill(); 
     }
+}
+
+function doubleJumpObjLogic(doublejObj:DoubleJumpObj):Void
+{
+    if (doublejObj.alive)
+    {
+        if (player.canDoubleJump == false) { player.canDoubleJump = true; }
+        doublejObj.kill();
+    }
+}
+
+function FlipSwitchObjLogic(flipSwitchObj:FlipSwitch):Void
+{
+    if (flipSwitchObj.alive)
+    {
+        if (FlxG.camera.canvas.scaleX == 1)
+        {
+            FlxG.camera.canvas.scaleX = -1;
+            FlxG.camera.canvas.x = FlxG.width;
+        }
+        
+        else
+        
+        {
+            FlxG.camera.canvas.scaleX = 1;
+            FlxG.camera.canvas.x = 0;
+        }
+
+        if (FlxG.camera.canvas.scaleY == 1)
+        {
+            FlxG.camera.canvas.scaleY = -1;
+            FlxG.camera.canvas.y = FlxG.height;
+        }
+        
+        else
+            
+        {
+            FlxG.camera.canvas.scaleY = 1;
+            FlxG.camera.canvas.y = 0;
+        }
+
+        flipSwitchObj.kill();
+        FlxG.sound.play(AssetPaths.flip__ogg);
+    }
+}
+
+function portalWarpLogic(portalLogic:PortalWarp):Void
+{
+    loadRoom("mapTest02");
+    FlxG.camera.shake(0.005, 0.25);
+    saveAnimation.alpha = 0.5;
+    FlxG.sound.play(AssetPaths.warp__ogg, 0.85, false);
+    player.x = 150;
+    player.y = 300;
 }
 
 function killPlayer():Void
@@ -466,114 +620,6 @@ function killPlayer():Void
 
 }
 
-function updateBackground():Void
-{
-    var bgLayer = tiledData.getLayer("bg");
-    
-    if (bgLayer != null)
-    {
-        if (bgLayer.properties.contains("bgName"))
-        {
-            var newBG:String = bgLayer.properties.get("bgName");
-            if (newBG != currentBGName)
-            {
-                trace("Changing Background to: " + newBG);
-                
-                if (bg != null) { remove(bg); bg.destroy(); }
-
-                bg = new FlxSprite(0, 0);
-                bg.loadGraphic("assets/images/backgrounds/" + newBG + ".png");
-                bg.screenCenter();
-                bg.scrollFactor.set(0, 0);
-                bg.active = false;
-                
-                currentBGName = newBG;
-                insert(0, bg);
-            }
-        }
-        else { trace("Layer 'bg' found, but it has no 'bgName' property in Tiled!"); }
-    }
-    else 
-    {
-        trace("Could not find a layer named 'bg' in this map.");
-    }
-}
-
-function updateEffect():Void
-{
-    var effectLayer = tiledData.getLayer("mapEffect");
-    
-    if (effectLayer != null && effectLayer.properties.contains("effectType"))
-    {
-        var newEffect = effectLayer.properties.get("effectType");
-        if (newEffect != currentEffectName)
-        {
-            if (mapEffect != null)
-            { remove(mapEffect); mapEffect.destroy(); mapEffect = null; }
-
-            switch (newEffect)
-            {
-                case "fog":
-                    mapEffect = new FlxBackdrop(AssetPaths.white_fog__png, X);
-                    mapEffect.velocity.set(40, 0);
-                    mapEffect.alpha = 0.25;
-                    mapEffect.scrollFactor.set(0, 0);
-
-                case "rain":
-                    mapEffect = new FlxBackdrop(AssetPaths.rain__png, XY);
-                    mapEffect.velocity.set(-100, 500);
-                    mapEffect.alpha = 0.6;
-                    mapEffect.scrollFactor.set(0, 0);
-                
-                case "none":
-                    newEffect = "";
-            }
-
-            if (mapEffect != null)
-            {
-                currentEffectName = newEffect;
-                insert(1, mapEffect);
-            }
-        }
-    }
-    else if (mapEffect != null) 
-    {
-        remove(mapEffect);
-        mapEffect.destroy();
-        mapEffect = null;
-        currentEffectName = "";
-    }
-}
-
-// function updateCamera():Void
-// {
-//     var camLayer = tiledData.getLayer("camera");
-//     FlxG.camera.follow(player, LOCKON, 1);
-
-//     if (camLayer != null && camLayer.properties.contains("followmode"))
-//     {
-//         var mode:String = camLayer.properties.get("followmode");
-
-//         switch (mode)
-//         {
-//             case "onlyX":
-//                 FlxG.camera.setScrollBoundsRect(0, 0, tiledData.fullWidth, tiledData.fullHeight, true);
-//                 FlxG.camera.follow(player, LOCKON, 1);
-
-//             case "onlyY":
-//                 FlxG.camera.setScrollBoundsRect(0, 0, tiledData.fullWidth, tiledData.fullHeight, true);
-//                 FlxG.camera.follow(player, LOCKON, 1);
-//             case "XY":
-//                 FlxG.camera.setScrollBoundsRect(0, 0, tiledData.fullWidth, tiledData.fullHeight, true);
-//                 FlxG.camera.follow(player, LOCKON, 1);
-//         }
-//     }
-//     else 
-//     {
-//         FlxG.camera.setScrollBoundsRect(0, 0, tiledData.fullWidth, tiledData.fullHeight, true);
-//     }
-// }
-
 function updateMusic():Void
 {
     var musicLayer = tiledData.getLayer("music");
@@ -596,10 +642,65 @@ function updateMusic():Void
     PlayerData.currentSong = songPath;
     FlxG.sound.playMusic(songPath, 0.5, true);
 
+    // FlxG.sound.music.onComplete = function() 
+    //     {
+    //         trace("REACHES HERE!");
+    //         var loopTime:Float = 0;
+    //         switch (songName)
+    //         {
+    //             case "castle3":
+    //                 trace("REACHES HERE TOO!");
+    //                 FlxG.sound.playMusic(songPath, 0.5, false);
+    //                 FlxG.sound.music.time = 21000;
+    //             default:
+    //                 FlxG.sound.music.time = 0;
+    //         }
+            
+            
+    //     };
+
     if (PlayerData.isRespawning)
     {
         FlxG.sound.music.time = PlayerData.lastMusicTime;
         PlayerData.isRespawning = false;
+    }
+}
+
+function autoScroll():Void
+{
+    for (layer in tiledData.layers)
+    {
+        if (layer.name == "Autoscroll")
+        {
+            this.isAutoscrolling = true;
+        }
+
+        if (layer.type == TiledLayerType.OBJECT)
+        {
+            var objLayer:TiledObjectLayer = cast layer;
+            
+            if (layer.name == "ScrollSettings" && objLayer.properties.contains("speed"))
+            {
+                this.scrollSpeed = Std.parseFloat(objLayer.properties.get("speed"));
+            }
+            
+            if (layer.name == "PlayerSpeed" && objLayer.properties.contains("value"))
+            {
+                var pSpeed = Std.parseFloat(objLayer.properties.get("value"));
+                player.mapMaxSpeed = pSpeed;
+                player.maxVelocity.x = pSpeed;
+            }
+        }
+    }
+}
+
+function cameraScroll():Void
+{
+    if (this.isAutoscrolling)
+    {
+        cameraTarget = new flixel.FlxObject(player.x + 465, player.y, 1, 1);
+        add(cameraTarget);
+        FlxG.camera.follow(cameraTarget, LOCKON, 1);
     }
 }
 

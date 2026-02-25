@@ -7,6 +7,7 @@ import flixel.addons.editors.tiled.TiledObjectLayer;
 import flixel.addons.editors.tiled.TiledLayer;
 import flixel.FlxSprite;
 import leveldata.*;
+import leveldata.misc.*;
 import levels.chapters.chapter1.Chapter1State;
 
 class ObjectLoader
@@ -56,6 +57,18 @@ class ObjectLoader
                         case "save":
                             var save = new SavePoint(spawnX, spawnY);
                             state.savesGroup.add(save);
+
+                        case "doubleJump":
+                            var doubleJump = new DoubleJumpObj(spawnX, spawnY);
+                            state.doubleJumpGroup.add(doubleJump);
+                            
+                        case "flip":
+                            var flip = new FlipSwitch(spawnX, spawnY);
+                            state.flipGroup.add(flip);
+
+                        case "portal":
+                            var portal = new PortalWarp(spawnX, spawnY);
+                            state.portalGroup.add(portal);
 
                         case "laser":
                             var dir:String = "hor";

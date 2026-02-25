@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="19" nextobjectid="25">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="23" nextobjectid="31">
  <properties>
-  <property name="songName" value="outside_castle2"/>
+  <property name="songName" value="rain"/>
  </properties>
  <tileset firstgid="1" source="ch1-tiles.tsx"/>
  <tileset firstgid="49" source="../../textures/light.tsx"/>
  <tileset firstgid="50" source="../../textures/spike.tsx"/>
  <tileset firstgid="58" source="../../textures/transition-tiles.tsx"/>
+ <tileset firstgid="63" source="../../textures/double_jump.tsx"/>
+ <tileset firstgid="64" source="../../textures/misc/portal.tsx"/>
  <layer id="1" name="tiles-main" width="28" height="18">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,
@@ -102,5 +104,8 @@
   <properties>
    <property name="songName" value="rain"/>
   </properties>
+ </objectgroup>
+ <objectgroup id="21" name="portal">
+  <object id="30" name="portal" gid="64" x="810" y="588" width="128" height="128"/>
  </objectgroup>
 </map>

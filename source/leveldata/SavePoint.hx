@@ -6,6 +6,7 @@ import flixel.tweens.FlxEase;
 
 class SavePoint extends FlxSprite
 {
+	var onTweenComplete(default, null):Null<TweenCallback>;
     public function new(x:Float, y:Float)
         {
         super(x, y);

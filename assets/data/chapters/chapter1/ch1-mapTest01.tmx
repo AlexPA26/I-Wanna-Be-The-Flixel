@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="9" nextobjectid="26">
+ <tileset firstgid="1" source="ch1-tiles.tsx"/>
+ <tileset firstgid="49" source="../../textures/double_jump.tsx"/>
+ <tileset firstgid="50" source="../../textures/save.tsx"/>
+ <layer id="1" name="tiles-main" width="28" height="18">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,
+0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,
+0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,
+0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,
+0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,
+0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,
+0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,
+0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,
+0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,
+0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,
+0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,
+0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,
+0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="3" name="tiles-deco" width="28" height="18">
+  <data encoding="csv">
+9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,
+9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,
+9,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,9,
+9,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,9,
+9,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,9,
+9,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,9,
+9,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,9,
+9,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,9,
+9,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,9,
+9,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,9,
+9,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,9,
+9,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,9,
+9,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,9,
+9,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,9,
+9,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,9,
+9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,
+9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,
+9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9
+</data>
+ </layer>
+ <objectgroup id="4" name="mapEffect">
+  <properties>
+   <property name="effectType" value="none"/>
+  </properties>
+ </objectgroup>
+ <objectgroup id="5" name="bg">
+  <properties>
+   <property name="bgName" value="castleBG"/>
+  </properties>
+ </objectgroup>
+ <objectgroup id="6" name="music">
+  <properties>
+   <property name="songName" value="none"/>
+  </properties>
+ </objectgroup>
+ <objectgroup id="7" name="doubleJump">
+  <object id="1" name="doubleJump" gid="49" x="550" y="650" width="32" height="32"/>
+  <object id="2" name="doubleJump" gid="49" x="600" y="550" width="32" height="32"/>
+  <object id="3" name="doubleJump" gid="49" x="550" y="450" width="32" height="32"/>
+  <object id="4" name="doubleJump" gid="49" x="600" y="350" width="32" height="32"/>
+  <object id="5" name="doubleJump" gid="49" x="750" y="350" width="32" height="32"/>
+  <object id="6" name="doubleJump" gid="49" x="900" y="350" width="32" height="32"/>
+  <object id="7" name="doubleJump" gid="49" x="1000" y="300" width="32" height="32"/>
+  <object id="8" name="doubleJump" gid="49" x="1100" y="300" width="32" height="32"/>
+  <object id="9" name="doubleJump" gid="49" x="1150" y="500" width="32" height="32"/>
+  <object id="10" name="doubleJump" gid="49" x="1000" y="500" width="32" height="32"/>
+  <object id="11" name="doubleJump" gid="49" x="850" y="500" width="32" height="32"/>
+  <object id="12" name="doubleJump" gid="49" x="950" y="600" width="32" height="32"/>
+  <object id="13" name="doubleJump" gid="49" x="400" y="450" width="32" height="32"/>
+  <object id="14" name="doubleJump" gid="49" x="300" y="350" width="32" height="32"/>
+  <object id="15" name="doubleJump" gid="49" x="222" y="310" width="32" height="32"/>
+  <object id="16" name="doubleJump" gid="49" x="396" y="226" width="32" height="32"/>
+  <object id="17" name="doubleJump" gid="49" x="490" y="330" width="32" height="32"/>
+  <object id="18" name="doubleJump" gid="49" x="464" y="404" width="32" height="32"/>
+  <object id="19" name="doubleJump" gid="49" x="294" y="490" width="32" height="32"/>
+  <object id="20" name="doubleJump" gid="49" x="320" y="604" width="32" height="32"/>
+  <object id="21" name="doubleJump" gid="49" x="402" y="662" width="32" height="32"/>
+  <object id="22" name="doubleJump" gid="49" x="744" y="452" width="32" height="32"/>
+  <object id="23" name="doubleJump" gid="49" x="732" y="608" width="32" height="32"/>
+  <object id="24" name="doubleJump" gid="49" x="992" y="424" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup id="8" name="save">
+  <object id="25" name="save" gid="50" x="150" y="600" width="50" height="50"/>
+ </objectgroup>
+</map>

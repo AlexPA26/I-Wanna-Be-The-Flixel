@@ -11,6 +11,7 @@ class Player extends FlxSprite
     var safeJump:Float = 0;
     var safeJumpMax:Float = 0.15;
     var playerSprite:FlxSprite;
+    public var mapMaxSpeed:Float = 400;
 
     public var canDash:Bool = false;
     var dashTimer:Float = 0;
@@ -19,6 +20,8 @@ class Player extends FlxSprite
 
     var animationJumpUp:Bool = false;
     var animationJumpDown:Bool = false;
+
+    public static var isFacingRIGHT:Bool = false;
 
     public static var lastFacing:FlxDirectionFlags = RIGHT;
 
@@ -39,14 +42,15 @@ class Player extends FlxSprite
         setFacingFlip(RIGHT, false, false);
 
         drag.x = 4000; 
-        maxVelocity.set(400, 1000);
-        acceleration.y = 2000;
+        maxVelocity.set(mapMaxSpeed, 1000);
+        acceleration.y = 2500;
 
     }
 
     override public function update(elapsed:Float):Void
     {
         acceleration.x = 0;
+        maxVelocity.x = mapMaxSpeed;
          
         if (isTouching(DOWN))
         {
@@ -75,12 +79,14 @@ class Player extends FlxSprite
             acceleration.x = -1500; 
             facing = LEFT;
             offset.set(10, 20);
+            isFacingRIGHT = false;
         }
         else if (right) 
         { 
             acceleration.x = 1500; 
             facing = RIGHT;
             offset.set(20, 20);
+            isFacingRIGHT = true;
         }
 
         if (dashPressed && canDash && !isDashing && !isTouching(DOWN))
@@ -109,7 +115,7 @@ class Player extends FlxSprite
             if (isDashing) 
             {
                 isDashing = false;
-                maxVelocity.x = 400;
+                maxVelocity.x = mapMaxSpeed;
             }
 
             acceleration.y = 2000;
@@ -162,7 +168,7 @@ class Player extends FlxSprite
 
         if (isTouching(DOWN))
         {
-            maxVelocity.x = 400;
+            maxVelocity.x = mapMaxSpeed;
             drag.x = 4000;
         }
 
