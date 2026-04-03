@@ -1,4 +1,5 @@
 package gui;
+import flixel.effects.particles.FlxEmitter;
 import flixel.FlxState;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -13,17 +14,23 @@ class DeathState extends FlxSubState
     var bg:FlxSprite;
     var maintext:FlxText;
     var subtext:FlxText;
+    var blood:FlxEmitter;
 
     override public function create():Void
     {
         FlxG.sound.play(AssetPaths.death_bgm__ogg, 0.5, false);
-        particles = new FlxSprite(0, 0);
-        particles.loadGraphic("assets/images/shared/death.png", true, 243, 223);
-        add(particles);
-        particles.x = PlayerData.deathX - (particles.width / 2);
-        particles.y = PlayerData.deathY - (particles.height / 2) + 50;
-        particles.animation.add("explosion", [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33], 80, false);
-        particles.animation.play("explosion");
+
+        blood = new FlxEmitter(PlayerData.deathX, PlayerData.deathY, 150);
+        blood.makeParticles(3, 3, FlxColor.RED, 150);
+        blood.launchMode = CIRCLE;
+        blood.speed.set(300, 700); 
+        blood.acceleration.set(0, 1200); 
+        blood.lifespan.set(2, 4);
+        blood.alpha.set(1, 1, 0, 0);
+        
+        blood.scale.set(0.5, 0.5, 1.5, 1.5);
+        add(blood);
+        blood.start(true, 0, 150);
 
         bg = new FlxSprite();
         bg.makeGraphic(FlxG.width + 1, FlxG.height, FlxColor.BLACK);
@@ -60,16 +67,6 @@ class DeathState extends FlxSubState
     {
         
         super.update(elapsed);
-
-        if (particles.alpha > 0)
-        {
-            particles.alpha -= elapsed; 
-        }
-
-        if (particles.alpha <= 0)
-        {
-            particles.alpha = 0;
-        }
 
         if (bg.alpha < 1)
         {

@@ -154,7 +154,7 @@ class Player extends FlxSprite
                 {
                     velocity.y = -650; 
                     safeJump = 0;
-                    FlxG.sound.play(AssetPaths.jump__ogg, 0.5);
+                    FlxG.sound.play(AssetPaths.jump__ogg, 1);
                     animationJumpUp = true;
                     animationJumpDown = false;
                 }
@@ -164,7 +164,7 @@ class Player extends FlxSprite
                     doubleJumpEffect.start(true, 0, 10);
                     canDoubleJump = false;
                     velocity.y = -600;
-                    FlxG.sound.play(AssetPaths.doublejump__ogg, 0.5);
+                    FlxG.sound.play(AssetPaths.doublejump__ogg, 1);
                     animationJumpUp = true;
                     animationJumpDown = false;
                 }

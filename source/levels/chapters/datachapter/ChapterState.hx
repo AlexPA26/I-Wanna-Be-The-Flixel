@@ -1,5 +1,6 @@
 package levels.chapters.datachapter;
 
+import flixel.effects.particles.FlxEmitter;
 import leveldata.background.BackgroundManager;
 import gui.DeathState;
 import flixel.text.FlxText;
@@ -21,10 +22,10 @@ import leveldata.misc.*;
 
 class ChapterState extends FlxState
 {
-    // #########################
     var player:Player;
     var bullets:FlxTypedGroup<FlxSprite>;
     var PlayerGlow:FlxSprite;
+    var saveParticle:FlxEmitter;
     var cameraTarget:FlxObject;
     var scrollSpeed:Float = 0;
     var isAutoscrolling:Bool = false;
@@ -108,6 +109,15 @@ override public function create():Void
     PlayerGlow.blend = flash.display.BlendMode.ADD;
     PlayerGlow.alpha = 0.15;
 
+    saveParticle = new FlxEmitter(0,0, 25);
+    saveParticle.loadParticles(AssetPaths.particleSave__png, 5, 0, true);
+    saveParticle.setSize(10, 10);
+    saveParticle.lifespan.set(0.4, 0.8);
+    saveParticle.velocity.set(-100, -50, 100, 50);
+    saveParticle.scale.set(1.2, 1.2, 1.2, 1.2);
+    saveParticle.alpha.set(1, 1, 0, 0);
+    saveParticle.launchMode = CIRCLE;
+
     warpsGroup = new FlxTypedGroup<WarpTrigger>(); add(warpsGroup);
     player = new Player(PlayerData.spawnX, PlayerData.spawnY);
 
@@ -186,56 +196,56 @@ override public function update(elapsed:Float):Void
                 player.velocity.y = -1000; tramp.launch();
                 FlxG.sound.play(AssetPaths.trampoline_bounce__ogg, 0.5, false);
             }});
-FlxG.collide(player, trampolinesMini, (p:Player, t:NormalTrampolineMini) ->
-{ 
-    var trampMini:NormalTrampolineMini = cast t;
-    
-    if (trampMini.animation.curAnim != null && 
-        StringTools.startsWith(trampMini.animation.curAnim.name, "jump") && 
-        !trampMini.animation.finished) return;
+    FlxG.collide(player, trampolinesMini, (p:Player, t:NormalTrampolineMini) ->
+    { 
+        var trampMini:NormalTrampolineMini = cast t;
+        
+        if (trampMini.animation.curAnim != null && 
+            StringTools.startsWith(trampMini.animation.curAnim.name, "jump") && 
+            !trampMini.animation.finished) return;
 
-    var hitFloor = p.touching.has(DOWN);
-    var hitPlayerLeft = p.touching.has(LEFT);
-    var hitPlayerRight = p.touching.has(RIGHT);
+        var hitFloor = p.touching.has(DOWN);
+        var hitPlayerLeft = p.touching.has(LEFT);
+        var hitPlayerRight = p.touching.has(RIGHT);
 
-    switch (trampMini.launchDir) 
-    {
-        case "up":
-            if (hitFloor)
-            {
-                p.velocity.y = -730;
-                p.canDoubleJump = true; 
-                trampMini.launch();
-                FlxG.sound.play(AssetPaths.trampoline_bounce__ogg, 0.5);
-            }
-            
-        case "left":
-            if (hitPlayerLeft && !hitFloor)
-            {
-                p.maxVelocity.x = 800;
-                p.velocity.x = 800;
-                p.velocity.y = -600;
-                p.canDoubleJump = true;
-                p.canDash = true;
-                trampMini.launch();
-                FlxG.sound.play(AssetPaths.big_bounce__ogg, 0.5);
-                FlxG.sound.play(AssetPaths.lateral_bounce__ogg, 0.5);
-            }
+        switch (trampMini.launchDir) 
+        {
+            case "up":
+                if (hitFloor)
+                {
+                    p.velocity.y = -730;
+                    p.canDoubleJump = true; 
+                    trampMini.launch();
+                    FlxG.sound.play(AssetPaths.trampoline_bounce__ogg, 0.5);
+                }
+                
+            case "left":
+                if (hitPlayerLeft && !hitFloor)
+                {
+                    p.maxVelocity.x = 800;
+                    p.velocity.x = 800;
+                    p.velocity.y = -600;
+                    p.canDoubleJump = true;
+                    p.canDash = true;
+                    trampMini.launch();
+                    FlxG.sound.play(AssetPaths.big_bounce__ogg, 0.5);
+                    FlxG.sound.play(AssetPaths.lateral_bounce__ogg, 0.5);
+                }
 
-        case "right":
-            if (hitPlayerRight && !hitFloor)
-            {
-                p.maxVelocity.x = 800; 
-                p.velocity.x = -800; 
-                p.velocity.y = -600;
-                p.canDoubleJump = true;
-                p.canDash = true;
-                trampMini.launch();
-                FlxG.sound.play(AssetPaths.big_bounce__ogg, 0.5);
-                FlxG.sound.play(AssetPaths.lateral_bounce__ogg, 0.5);
-            }
-    }
-    });
+            case "right":
+                if (hitPlayerRight && !hitFloor)
+                {
+                    p.maxVelocity.x = 800; 
+                    p.velocity.x = -800; 
+                    p.velocity.y = -600;
+                    p.canDoubleJump = true;
+                    p.canDash = true;
+                    trampMini.launch();
+                    FlxG.sound.play(AssetPaths.big_bounce__ogg, 0.5);
+                    FlxG.sound.play(AssetPaths.lateral_bounce__ogg, 0.5);
+                }
+        }
+        });
 
     FlxG.collide(player, platforms, function(p:Player, plat:MovingBlock)
         {
@@ -283,6 +293,8 @@ FlxG.collide(player, trampolinesMini, (p:Player, t:NormalTrampolineMini) ->
             FlxG.resetState();
             PlayerData.totalDeaths++;
         }
+
+        if (FlxG.keys.justPressed.K) { killPlayer(); }
 
         if (saveAnimation.alpha > 0)
         {
@@ -527,6 +539,10 @@ function saveLogicSprite(saveObj:SavePoint):Void
         PlayerData.currentRoom = currentRoomName;
         
         saveAnimation.alpha = 0.5;
+
+        saveParticle.setPosition(player.x + (player.width / 2), player.y + player.height);
+        saveParticle.start(true, 0, 10);
+
         FlxG.sound.play(AssetPaths.savedgame__ogg, 0.5, false);
         saveObj.kill(); 
     }
