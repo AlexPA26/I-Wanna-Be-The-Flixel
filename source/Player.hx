@@ -3,11 +3,15 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.util.FlxDirectionFlags;
+import flixel.effects.particles.FlxEmitter;
+import flixel.util.FlxColor;
 // import PlayerData;
 
 class Player extends FlxSprite
 {
     public var canDoubleJump:Bool = true;
+    public var doubleJumpEffect:FlxEmitter;
+
     var safeJump:Float = 0;
     var safeJumpMax:Float = 0.15;
     var playerSprite:FlxSprite;
@@ -44,6 +48,14 @@ class Player extends FlxSprite
         drag.x = 4000; 
         maxVelocity.set(mapMaxSpeed, 1000);
         acceleration.y = 2500;
+
+        doubleJumpEffect = new FlxEmitter(0, 0, 50);
+        doubleJumpEffect.loadParticles(AssetPaths.particle__png, 5);
+        doubleJumpEffect.lifespan.set(0.4, 0.8);
+        doubleJumpEffect.velocity.set(-100, -50, 100, 50);
+        doubleJumpEffect.scale.set(1.2, 1.2, 1.2, 1.2);
+        doubleJumpEffect.alpha.set(1, 1, 0, 0);
+        doubleJumpEffect.launchMode = CIRCLE;
 
     }
 
@@ -148,6 +160,8 @@ class Player extends FlxSprite
                 }
                 else if (canDoubleJump) 
                 {
+                    doubleJumpEffect.setPosition(x + (width / 2), y + height);
+                    doubleJumpEffect.start(true, 0, 10);
                     canDoubleJump = false;
                     velocity.y = -600;
                     FlxG.sound.play(AssetPaths.doublejump__ogg, 0.5);

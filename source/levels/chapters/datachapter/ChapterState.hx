@@ -464,6 +464,7 @@ function loadRoom(roomName:String):Void
     add(slabsNight);
     add(PlayerGlow);
     add(player);
+    add(player.doubleJumpEffect);
     add(DangerObjects);
     add(platforms);
     add(savesGroup);
