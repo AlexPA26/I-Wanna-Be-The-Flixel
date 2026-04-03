@@ -25,7 +25,6 @@ class ChapterState extends FlxState
     var player:Player;
     var bullets:FlxTypedGroup<FlxSprite>;
     var PlayerGlow:FlxSprite;
-    var saveParticle:FlxEmitter;
     var cameraTarget:FlxObject;
     var scrollSpeed:Float = 0;
     var isAutoscrolling:Bool = false;
@@ -109,15 +108,6 @@ override public function create():Void
     PlayerGlow.blend = flash.display.BlendMode.ADD;
     PlayerGlow.alpha = 0.15;
 
-    saveParticle = new FlxEmitter(0,0, 25);
-    saveParticle.loadParticles(AssetPaths.particleSave__png, 5, 0, true);
-    saveParticle.setSize(10, 10);
-    saveParticle.lifespan.set(0.4, 0.8);
-    saveParticle.velocity.set(-100, -50, 100, 50);
-    saveParticle.scale.set(1.2, 1.2, 1.2, 1.2);
-    saveParticle.alpha.set(1, 1, 0, 0);
-    saveParticle.launchMode = CIRCLE;
-
     warpsGroup = new FlxTypedGroup<WarpTrigger>(); add(warpsGroup);
     player = new Player(PlayerData.spawnX, PlayerData.spawnY);
 
@@ -181,6 +171,12 @@ override public function update(elapsed:Float):Void
     FlxG.collide(player, slabsNight);
     playerDeaths.text = "Total Resets: " + PlayerData.totalDeaths;
     currentRoom.text = "Last Save: " + PlayerData.currentRoom;
+
+    if (PlayerData.saveCooldown > 0)
+    {
+        PlayerData.saveCooldown -= elapsed;
+        if (PlayerData.saveCooldown < 0) PlayerData.saveCooldown = 0;
+    }
 
     super.update(elapsed);
 
@@ -314,6 +310,10 @@ override public function update(elapsed:Float):Void
     {
         PlayerGlow.exists = false;
     }
+
+    
+
+    trace("RESPAWN VALUE: " + PlayerData.saveCooldown);
 
     #if !debug
     if (player.x > map.width || player.y > map.height - 50) killPlayer();
@@ -487,6 +487,11 @@ function loadRoom(roomName:String):Void
     add(trampolinesMini);
     add(warpsGroup);
 
+    savesGroup.forEach(function(save:SavePoint)
+    {
+        add(save.particle); 
+    });
+
     BackgroundManager.updateAllEffects(this, tiledData);
 
     add(lightsGroup);
@@ -498,6 +503,7 @@ function loadRoom(roomName:String):Void
     cameraScroll();
     updateMusic();
 
+    PlayerData.saveCooldown = 0.1;
     spawnTimer = 0.1;
 
 }
@@ -537,14 +543,19 @@ function saveLogicSprite(saveObj:SavePoint):Void
         PlayerData.spawnX = player.x; 
         PlayerData.spawnY = player.y;
         PlayerData.currentRoom = currentRoomName;
-        
-        saveAnimation.alpha = 0.5;
 
-        saveParticle.setPosition(player.x + (player.width / 2), player.y + player.height);
-        saveParticle.start(true, 0, 10);
+        if (PlayerData.saveCooldown <= 0)
+        {
+            saveObj.pop(player);
+            saveAnimation.alpha = 0.5;
+            FlxG.sound.play(AssetPaths.savedgame__ogg, 0.5, false);
+            
 
-        FlxG.sound.play(AssetPaths.savedgame__ogg, 0.5, false);
-        saveObj.kill(); 
+        }
+
+        saveObj.alive = false;
+        saveObj.visible = false;
+        saveObj.kill();
     }
 }
 
@@ -612,6 +623,7 @@ function killPlayer():Void
         }
 
         PlayerData.isRespawning = true;
+        PlayerData.saveCooldown = 1.0;
 
         PlayerData.deathX = player.x; PlayerData.deathY = player.y;
         PlayerData.totalDeaths++;
@@ -645,23 +657,6 @@ function updateMusic():Void
 
     PlayerData.currentSong = songPath;
     FlxG.sound.playMusic(songPath, 0.5, true);
-
-    // FlxG.sound.music.onComplete = function() 
-    //     {
-    //         trace("REACHES HERE!");
-    //         var loopTime:Float = 0;
-    //         switch (songName)
-    //         {
-    //             case "castle3":
-    //                 trace("REACHES HERE TOO!");
-    //                 FlxG.sound.playMusic(songPath, 0.5, false);
-    //                 FlxG.sound.music.time = 21000;
-    //             default:
-    //                 FlxG.sound.music.time = 0;
-    //         }
-            
-            
-    //     };
 
     if (PlayerData.isRespawning)
     {
