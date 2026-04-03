@@ -28,19 +28,17 @@ class ChapterState extends FlxState
     var cameraTarget:FlxObject;
     var scrollSpeed:Float = 0;
     var isAutoscrolling:Bool = false;
-    // #########################
+
     public var bg:FlxSprite;
     public var currentBGName:String = "";
     var map:FlxTilemap;
     var mapDeco:FlxTilemap;
     var mapDeco2:FlxTilemap;
-    // #########################
+
     var currentRoomName:String;
     public var warpsGroup:FlxTypedGroup<WarpTrigger>;
-    // #########################
     var vignite:FlxSprite;
 
-    // #########################
     public var backEffectObj:FlxBackdrop;
     public var currentBackEffectName:String = "";
     public var lastBackScrollBoost:Float = 0;
@@ -74,14 +72,12 @@ class ChapterState extends FlxState
     public var slabs:FlxTypedGroup<NormalSlab>;
     public var slabsNight:FlxTypedGroup<NormalSlabNight>;
 
-    // #########################
     var spikes:FlxGroup;
     var saveAnimation:FlxSprite;
     var tiledData:TiledMap;
     var spawnTimer:Float = 0.1;
     var playerDeaths:FlxText;
     var currentRoom:FlxText;
-    // #########################
 
 override public function create():Void
 {
@@ -161,10 +157,7 @@ override public function update(elapsed:Float):Void
         cameraTarget.x += scrollSpeed * elapsed;
         cameraTarget.y = 300;
         
-        if (player.x + player.width < FlxG.camera.scroll.x) 
-        {
-            killPlayer(); 
-        }
+        if (player.x + player.width < FlxG.camera.scroll.x) { killPlayer(); }
     }
 
     if (FlxG.keys.justPressed.F11)
@@ -193,7 +186,8 @@ override public function update(elapsed:Float):Void
                 player.velocity.y = -1000; tramp.launch();
                 FlxG.sound.play(AssetPaths.trampoline_bounce__ogg, 0.5, false);
             }});
-FlxG.collide(player, trampolinesMini, (p:Player, t:NormalTrampolineMini) -> { 
+FlxG.collide(player, trampolinesMini, (p:Player, t:NormalTrampolineMini) ->
+{ 
     var trampMini:NormalTrampolineMini = cast t;
     
     if (trampMini.animation.curAnim != null && 
@@ -207,7 +201,8 @@ FlxG.collide(player, trampolinesMini, (p:Player, t:NormalTrampolineMini) -> {
     switch (trampMini.launchDir) 
     {
         case "up":
-            if (hitFloor) {
+            if (hitFloor)
+            {
                 p.velocity.y = -730;
                 p.canDoubleJump = true; 
                 trampMini.launch();
@@ -215,7 +210,8 @@ FlxG.collide(player, trampolinesMini, (p:Player, t:NormalTrampolineMini) -> {
             }
             
         case "left":
-            if (hitPlayerLeft && !hitFloor) {
+            if (hitPlayerLeft && !hitFloor)
+            {
                 p.maxVelocity.x = 800;
                 p.velocity.x = 800;
                 p.velocity.y = -600;
@@ -227,7 +223,8 @@ FlxG.collide(player, trampolinesMini, (p:Player, t:NormalTrampolineMini) -> {
             }
 
         case "right":
-            if (hitPlayerRight && !hitFloor) {
+            if (hitPlayerRight && !hitFloor)
+            {
                 p.maxVelocity.x = 800; 
                 p.velocity.x = -800; 
                 p.velocity.y = -600;
@@ -307,7 +304,7 @@ FlxG.collide(player, trampolinesMini, (p:Player, t:NormalTrampolineMini) -> {
     }
 
     #if !debug
-        if (player.x > map.width || player.y > map.height - 50) killPlayer();
+    if (player.x > map.width || player.y > map.height - 50) killPlayer();
     #end
 }
 
@@ -412,15 +409,6 @@ function TransitionLEFT(tile:FlxObject, obj:FlxObject):Void
 
 }
 
-// function TransitionScroll(tile:FlxObject, obj:FlxObject):Void
-// {
-//         var layer = tiledData.getLayer("warps-scroll");
-//         var destination = layer.properties.get("target");
-//         loadRoom(destination);
-//         player.x = 200;
-
-// }
-
 function loadRoom(roomName:String):Void
 {
     currentRoomName = roomName;
@@ -470,7 +458,6 @@ function loadRoom(roomName:String):Void
     fallingBlock.clear();
     slabs.clear();
     slabsNight.clear();
-
     
     ObjectLoader.loadEverything(tiledData, this, map.x, map.y);
     add(slabs);
