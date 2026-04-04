@@ -1,5 +1,6 @@
 package levels.chapters.datachapter;
 
+import gui.MenuState;
 import flixel.effects.particles.FlxEmitter;
 import leveldata.background.BackgroundManager;
 import gui.DeathState;
@@ -282,26 +283,31 @@ override public function update(elapsed:Float):Void
     else
         { if (FlxG.overlap(player, DangerObjects)) { killPlayer(); } }
 
-        if (FlxG.keys.justPressed.TAB)
+    if (FlxG.keys.justPressed.TAB)
         {
             FlxG.debugger.drawDebug = !FlxG.debugger.drawDebug;
         }
 
-        if (FlxG.keys.justPressed.R)
+    if (FlxG.keys.justPressed.R)
         {
             FlxG.resetState();
             PlayerData.totalDeaths++;
         }
 
-        if (FlxG.keys.justPressed.K) { killPlayer(); }
+    if (FlxG.keys.justPressed.K) { killPlayer(); }
 
-        if (saveAnimation.alpha > 0)
+    if (saveAnimation.alpha > 0)
         {
             saveAnimation.alpha -= 0.01;
         }
 
     if (FlxG.keys.justPressed.Z) PlayerShoot();
         FlxG.collide(bullets, map, (bullet, wall) -> { bullet.kill(); });  
+
+    if (FlxG.keys.justPressed.ESCAPE)
+    {
+        FlxG.resetGame();
+    }
 
     if (player != null && player.exists && PlayerGlow != null)
     {
@@ -571,8 +577,8 @@ function saveLogicSprite(saveObj:SavePoint):Void
             saveObj.pop(player);
             saveAnimation.alpha = 0.5;
             FlxG.sound.play(AssetPaths.savedgame__ogg, 0.5, false);
+            SaveManager.saveGame();
             
-
         }
 
         saveObj.alive = false;

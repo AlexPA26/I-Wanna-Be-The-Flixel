@@ -11,13 +11,13 @@ class Main extends Sprite
 		super();
 
 		#if !debug
-		addChild(new FlxGame(0, 0, ChapterState, 60, 60, true, false));
+		addChild(new FlxGame(0, 0, MenuState, 60, 60, true, false));
 		addChild(new FPS(10, 10, 0xffffff));
 		flixel.FlxG.autoPause = false;
 		#end
 
 		#if debug
-		addChild(new FlxGame(0, 0, MenuState, 60, 60, true, false));
+		addChild(new FlxGame(0, 0, ChapterState, 60, 60, true, false));
 		addChild(new FPS(10, 10, 0xFFFFFF));
 		flixel.FlxG.autoPause = false;
 		#end
