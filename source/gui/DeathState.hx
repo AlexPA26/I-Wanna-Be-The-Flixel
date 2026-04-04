@@ -1,4 +1,6 @@
 package gui;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 import flixel.effects.particles.FlxEmitter;
 import flixel.FlxState;
 import flixel.FlxG;
@@ -18,6 +20,57 @@ class DeathState extends FlxSubState
 
     override public function create():Void
     {
+        var tips:Array<String> =
+        [
+        "Don't die :)",
+        "Spikes kill you",
+        "Ctrl + Shift + Alt + Win + L",
+        "Lasers are bad too",
+        "Press Start to play!",
+        "Just a pixel off",
+        "Play Kill The Guy instead",
+        "Look behind you.",
+        "You shouldn't die",
+        "You need Dream's luck",
+        "Is this screen scary?",
+        "Alt + F4",
+        "Blind jumps are cool",
+        "Hahahaha",
+        "Shoot them!!",
+        "The Guy? THE GUUUYY?!",
+        "Error 404: Skill Not Found",
+        "Maybe restarting the router?",
+        "I saw that..",
+        "Better luck next time!",
+        "Oops! You slipped!",
+        "Why so bad?",
+        "That was the attempt?",
+        "69420th Attempt soon?",
+        "Friday Guy Funkin'",
+        "DO NOT REDEEM THE CARD!",
+        "Soo... Yeah..",
+        "I didn't see that..",
+        "Just jump better",
+        "A and D to move BTW",
+        "Stop playing the game.",
+        "Next room is even worse..",
+        "This is the easy part!",
+        "Not your game.. At all.",
+        "Easier than Boshy",
+        "YOU HAVE ONE LIFE LEFT!",
+        "Inhale.. Exhale..",
+        "Don't you love this music?",
+        "The Guy deserved better.",
+        "IDK just play Minecraft",
+        "The Binding Of The Guy...",
+        "You're creepy",
+        "You forgot to survive",
+        "Try no hits next time!",
+        "Are you sad?",
+        "Glitches are intentional"
+        ];
+
+        var proTip:String = FlxG.random.getObject(tips);
         FlxG.sound.play(AssetPaths.death_bgm__ogg, 0.5, false);
 
         blood = new FlxEmitter(PlayerData.deathX, PlayerData.deathY, 150);
@@ -46,16 +99,19 @@ class DeathState extends FlxSubState
 		maintext.screenCenter();
 		maintext.y -= 120;
         maintext.scrollFactor.set(0, 0);
+        FlxTween.angle(maintext, -20, 20, 1, {type: PINGPONG, ease: FlxEase.sineInOut});
 		add(maintext);
 
-        subtext = new FlxText("PRESS 'R' TO RESPAWN");
+        subtext = new FlxText("PRO TIP: " + proTip);
 		subtext.size = 26;
 		subtext.color = FlxColor.WHITE;
 		subtext.setBorderStyle(OUTLINE, FlxColor.BLACK, 3);
         subtext.screenCenter();
-		subtext.y -= 50;
+		subtext.y = 450;
         subtext.scrollFactor.set(0, 0);
+        FlxTween.tween(subtext, {y: subtext.y - 5}, 1, {type: PINGPONG, ease: FlxEase.sineInOut});
 		add(subtext);
+        
 
         super.create();
         

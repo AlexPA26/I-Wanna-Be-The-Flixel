@@ -117,6 +117,8 @@ override public function create():Void
     vignite = new FlxSprite();
     vignite.loadGraphic(AssetPaths.vignite__png, false);
     vignite.scrollFactor.set(0, 0);
+    vignite.alpha = 1;
+    vignite.visible = true;
     vignite.screenCenter();
 
     saveAnimation = new FlxSprite();
@@ -137,7 +139,6 @@ override public function create():Void
     add(slabs);
     add(slabsNight);
     add(bullets);
-    add(vignite);
     add(saveAnimation);
 
     #if debug
@@ -150,11 +151,11 @@ override public function create():Void
 
 override public function update(elapsed:Float):Void
 {
-    if (FlxG.keys.justPressed.ONE) {loadRoom("map36");};
-    if (FlxG.keys.justPressed.TWO) {loadRoom("map101");};
-    if (FlxG.keys.justPressed.THREE) {loadRoom("map10");};
-    if (FlxG.keys.justPressed.FOUR) {loadRoom("map10");};
-    if (FlxG.keys.justPressed.NINE) {loadRoom("mapTest01");};
+    // if (FlxG.keys.justPressed.ONE) {loadRoom("map36");};
+    // if (FlxG.keys.justPressed.TWO) {loadRoom("map101");};
+    // if (FlxG.keys.justPressed.THREE) {loadRoom("map10");};
+    // if (FlxG.keys.justPressed.FOUR) {loadRoom("map10");};
+    // if (FlxG.keys.justPressed.NINE) {loadRoom("mapTest01");};
 
     if (isAutoscrolling && cameraTarget != null) 
     {
@@ -524,7 +525,12 @@ function loadRoom(roomName:String):Void
     BackgroundManager.updateAllEffects(this, tiledData);
 
     add(lightsGroup);
-    if (vignite != null) { remove(vignite); add(vignite); }
+
+    if (vignite != null)
+    { 
+        if (members.contains(vignite)) remove(vignite);
+        add(vignite);
+    }
     add(vignite);
     setupHUD();
 
