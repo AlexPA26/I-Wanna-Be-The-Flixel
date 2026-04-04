@@ -386,6 +386,7 @@ function PlayerShoot():Void
     }
 
     bullets.add(bullet);
+    FlxG.sound.play(AssetPaths.playershoot__ogg, 0.5, false);
 
 }
 
