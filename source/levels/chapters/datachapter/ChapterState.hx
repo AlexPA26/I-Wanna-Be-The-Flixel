@@ -60,6 +60,7 @@ class ChapterState extends FlxState
     public var lastTopScrollBoost:Float = 0;
 
     public var savesGroup:FlxTypedGroup<SavePoint>;
+    public var saveParticlesGroup:FlxTypedGroup<FlxEmitter>;
     public var doubleJumpGroup:FlxTypedGroup<DoubleJumpObj>;
     public var flipGroup:FlxTypedGroup<FlipSwitch>;
     public var portalGroup:FlxTypedGroup<PortalWarp>;
@@ -91,6 +92,7 @@ override public function create():Void
     DangerObjects = new FlxGroup(); 
 
     savesGroup = new FlxTypedGroup<SavePoint>();
+    saveParticlesGroup = new FlxTypedGroup<FlxEmitter>();
     doubleJumpGroup = new FlxTypedGroup<DoubleJumpObj>();
     flipGroup = new FlxTypedGroup<FlipSwitch>();
     portalGroup = new FlxTypedGroup<PortalWarp>();
@@ -125,6 +127,7 @@ override public function create():Void
 
     add(DangerObjects);
     add(savesGroup);
+    add(saveParticlesGroup);
     add(doubleJumpGroup);
     add(trampolines);
     add(platforms);
@@ -311,10 +314,6 @@ override public function update(elapsed:Float):Void
         PlayerGlow.exists = false;
     }
 
-    
-
-    trace("RESPAWN VALUE: " + PlayerData.saveCooldown);
-
     #if !debug
     if (player.x > map.width || player.y > map.height - 50) killPlayer();
     #end
@@ -423,6 +422,8 @@ function TransitionLEFT(tile:FlxObject, obj:FlxObject):Void
 
 function loadRoom(roomName:String):Void
 {
+    flixel.tweens.FlxTween.globalManager.forEach(function(twn) twn.cancel());
+
     currentRoomName = roomName;
 
     var path = "assets/data/chapters/chapter1/ch1-" + roomName + ".tmx";
@@ -458,7 +459,6 @@ function loadRoom(roomName:String):Void
     }
 
     DangerObjects.clear();
-    savesGroup.clear();
     doubleJumpGroup.clear();
     flipGroup.clear();
     portalGroup.clear();
@@ -470,6 +470,28 @@ function loadRoom(roomName:String):Void
     fallingBlock.clear();
     slabs.clear();
     slabsNight.clear();
+    
+
+    if (saveParticlesGroup != null)
+    {
+        saveParticlesGroup.forEachExists(function(p:FlxEmitter)
+        {
+            p.active = false;
+            p.visible = false;
+            p.exists = false;
+        });
+        
+        saveParticlesGroup.clear(); 
+    }
+    
+    if (savesGroup != null)
+    {
+        savesGroup.forEachExists(function(s:SavePoint)
+        {
+            s.exists = false;
+        });
+        savesGroup.clear();
+    }
     
     ObjectLoader.loadEverything(tiledData, this, map.x, map.y);
     add(slabs);
@@ -489,7 +511,7 @@ function loadRoom(roomName:String):Void
 
     savesGroup.forEach(function(save:SavePoint)
     {
-        add(save.particle); 
+        saveParticlesGroup.add(save.particle);
     });
 
     BackgroundManager.updateAllEffects(this, tiledData);
@@ -605,7 +627,7 @@ function FlipSwitchObjLogic(flipSwitchObj:FlipSwitch):Void
 
 function portalWarpLogic(portalLogic:PortalWarp):Void
 {
-    loadRoom("mapTest02");
+    loadRoom("map10");
     FlxG.camera.shake(0.005, 0.25);
     saveAnimation.alpha = 0.5;
     FlxG.sound.play(AssetPaths.warp__ogg, 0.85, false);

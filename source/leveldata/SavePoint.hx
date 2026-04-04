@@ -64,11 +64,12 @@ class SavePoint extends FlxSprite
         offset = vertical;
         popup.alpha = 1 - (vertical / 80);
         
-        if (playerRef != null && playerRef.exists)
-        {
-            popup.x = playerRef.x + (playerRef.width / 2) - (popup.width / 2);
-            popup.y = playerRef.y - 0 - offset;
-        }
+    if (popup != null && popup.exists && playerRef != null && playerRef.exists)
+    {
+        popup.alpha = 1 - (vertical / 80);
+        popup.x = playerRef.x + (playerRef.width / 2) - (popup.width / 2);
+        popup.y = playerRef.y - 30 - vertical;
+    }
     });
 }
     
@@ -77,4 +78,5 @@ class SavePoint extends FlxSprite
         super.destroy();
         if (particle != null) particle.destroy();
     }
+    
 }

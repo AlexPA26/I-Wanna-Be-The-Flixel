@@ -1,325 +1,92 @@
-package;
+package gui;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.addons.display.FlxBackdrop;
+import flixel.addons.effects.chainable.FlxEffectSprite;
+import flixel.addons.effects.chainable.FlxGlitchEffect;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
-import lime.system.System;
+import flixel.util.FlxTimer;
 
 class MenuState extends FlxState
 {
-	
-	var isActivaGlobal:Bool = false;
-	var isActiveStart:Bool = false;
-	var isActiveOption:Bool = false;
-	var isActiveQuit:Bool = false;
-	var isActiveDebug:Bool = false;
+    var scanline:FlxBackdrop;
+    var titleText:FlxText;
+	var versionText:FlxText;
+    var vignite:FlxSprite;
+    var logo:FlxSprite;
+    var effectLogo:FlxEffectSprite;
+    var glitchEffect:FlxGlitchEffect;
 
-	var tituloTexto:FlxText;
-	var botonStart:FlxSprite;
-	var botonStartText:FlxText;
-	var botonOption:FlxSprite;
-	var botonOptionText:FlxText;
-	var botonQuit:FlxSprite;
-	var botonQuitText:FlxText;
-	var botonDebug:FlxSprite;
-	var botonDebugText:FlxText;
+    var outlineColors:Array<FlxColor> =
+	[
+        FlxColor.RED, FlxColor.GREEN, FlxColor.BLUE, FlxColor.YELLOW, FlxColor.CYAN
+    ];
 
-	var timeclock:FlxText;
-
-	override public function create()
-	{
-		super.create();
-
-		// #########################
-		// ######TEXTO TITULO#######
-		// #########################
-
-		tituloTexto = new FlxText("Juego EPICO");
-		tituloTexto.size = 64;
-		tituloTexto.color = FlxColor.ORANGE;
-		tituloTexto.setBorderStyle(OUTLINE, FlxColor.WHITE, 6);
-
-		tituloTexto.screenCenter();
-		tituloTexto.y -= 200; // Importante!!!!11
-		add(tituloTexto);
-
-		// #########################
-		// ######BOTON START########
-		// #########################
-
-		botonStart = new FlxSprite();
-
-		botonStart.loadGraphic(AssetPaths.buttonTitleV2__png, true, 444, 58);
-		botonStart.animation.add("normal", [0], 1, false);
-		botonStart.animation.add("active", [1], 1, false);
-		botonStart.animation.play("normal");
-
-		botonStart.screenCenter();
-		botonStart.updateHitbox();
-		botonStart.y += 30;
-		add(botonStart);
-
-		// #########################
-		// #######TEXTO START#######
-		// #########################
-
-		botonStartText = new FlxText("[1] Start");
-		botonStartText.size = 16;
-		botonStartText.color = FlxColor.WHITE;
-		botonStartText.screenCenter();
-		botonStartText.y += 30;
-		add(botonStartText);
-
-		// #########################
-		// ######BOTON OPTION#######
-		// #########################
-
-		botonOption = new FlxSprite();
-
-		botonOption.loadGraphic(AssetPaths.buttonTitleV2__png, true, 444, 58);
-		botonOption.animation.add("normal", [0], 1, false);
-		botonOption.animation.add("active", [1], 1, false);
-		botonOption.animation.play("normal");
-
-		botonOption.screenCenter();
-		botonOption.updateHitbox();
-		botonOption.y += 100;
-		add(botonOption);
-
-		// #########################
-		// #######TEXTO OPTION######
-		// #########################
-
-		botonOptionText = new FlxText("[2] Game Options");
-		botonOptionText.size = 16;
-		botonOptionText.color = FlxColor.WHITE;
-		botonOptionText.screenCenter();
-		botonOptionText.y += 100;
-		add(botonOptionText);
-
-		// #########################
-		// #######QUIT  OPTION######
-		// #########################
-
-		botonQuit = new FlxSprite();
-
-		botonQuit.loadGraphic(AssetPaths.miniClickV2__png, true, 213, 58);
-		botonQuit.animation.add("normal", [0], 1, false);
-		botonQuit.animation.add("active", [1], 1, false);
-		botonQuit.animation.play("normal");
-
-		botonQuit.screenCenter();
-		botonQuit.updateHitbox();
-		botonQuit.x += 115;
-		botonQuit.y += 170;
-		add(botonQuit);
-
-		// #########################
-		// #######TEXTO QUIT########
-		// #########################
-
-		botonOptionText = new FlxText("[ESC] Quit Game");
-		botonOptionText.size = 16;
-		botonOptionText.color = FlxColor.WHITE;
-		botonOptionText.screenCenter();
-		botonOptionText.x += 115;
-		botonOptionText.y += 170;
-		add(botonOptionText);
-
-		// #########################
-		// #######????  OPTION######
-		// #########################
-
-		botonDebug = new FlxSprite();
-
-		botonDebug.loadGraphic(AssetPaths.miniClickV2__png, true, 213, 58);
-		botonDebug.animation.add("normal", [0], 1, false);
-		botonDebug.animation.add("active", [1], 1, false);
-		botonDebug.animation.play("normal");
-
-		botonDebug.screenCenter();
-		botonDebug.updateHitbox();
-		botonDebug.x -= 115;
-		botonDebug.y += 170;
-		add(botonDebug);
-
-		// #########################
-		// #######TEXTO ????########
-		// #########################
-
-		botonDebugText = new FlxText("[3] Debug");
-		botonDebugText.size = 16;
-		botonDebugText.color = FlxColor.WHITE;
-		botonDebugText.screenCenter();
-		botonDebugText.x -= 115;
-		botonDebugText.y += 170;
-		add(botonDebugText);
-
-		// #########################
-		// #######HORA ACTUAL#######
-		// #########################
-
-		timeclock = new FlxText("00:00:00");
-		timeclock.size = 20;
-		timeclock.color = FlxColor.WHITE;
-		timeclock.setBorderStyle(OUTLINE, FlxColor.RED, 2);
-		timeclock.screenCenter();
-		timeclock.x -= 570;
-		timeclock.y += 340;
-		add(timeclock);	
-
-	}
-
-	override public function update(elapsed:Float)
-	{
-		super.update(elapsed);
-
-		// HACER CURSOR CUSTOM!!!!!!111
-		checkTituloTexto();
-		// checkTituloShadow();
-		checkBotonOption();
-		checkBotonStart();
-		checkBotonQuit();
-		checkBotonDebug();
-
-	}
-
-		// #########################
-		// ########FUNCIONES########
-		// #########################
-
-
-function checkBotonStart():Void
-{
-    if (FlxG.keys.justPressed.ONE)
+    override public function create():Void
     {
-        isActiveStart = !isActiveStart;
-		isActiveDebug = false;
-		isActiveOption = false;
-		isActiveQuit = false;
-    }
+        scanline = new FlxBackdrop(AssetPaths.scanline__png, Y);
+        scanline.velocity.set(0, 40);
+        scanline.scrollFactor.set(0, 0);
+        scanline.alpha = 0.1;
+        add(scanline);
 
+        titleText = new FlxText(0, 75, FlxG.width, "I Wanna Be The Flixel");
+        titleText.setFormat(null, 60, FlxColor.WHITE, CENTER);
+        titleText.setBorderStyle(OUTLINE, FlxColor.RED, 2);
+		titleText.y = 75;
+        add(titleText);
 
-    if (FlxG.mouse.overlaps(botonStart) || isActiveStart)
-    {
-        botonStart.animation.play("active");
+		versionText = new FlxText(0, 100, FlxG.width, "v.0.1.3");
+        versionText.setFormat(null, 24, FlxColor.WHITE, CENTER);
+        versionText.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
+		versionText.x = 350;
+		versionText.y = 145;
+        add(versionText);
 
-        if (FlxG.mouse.justPressed || FlxG.keys.justPressed.ENTER || FlxG.keys.justPressed.SPACE)
-
-        {
-            openSubState(new LoadingState());
-        }
-    }
-    else
-    {
-
-        botonStart.animation.play("normal");
-    }
-
-
-}
-
-function checkBotonOption():Void
-{
-    if (FlxG.keys.justPressed.TWO)
-    {
-        isActiveOption = !isActiveOption;
-		isActiveDebug = false;
-		isActiveStart = false;
-		isActiveQuit = false;
-    }
-
-    if (FlxG.mouse.overlaps(botonOption) || isActiveOption)
-    {
-        botonOption.animation.play("active");
-
-        if (FlxG.mouse.justPressed || FlxG.keys.justPressed.ENTER || FlxG.keys.justPressed.SPACE)
-
-        {
-			
-            openSubState(new OptionsTitleState());
-        }
-    }
-    else
-    {
-
-        botonOption.animation.play("normal");
-    }
-
-
-}
-
-function checkBotonQuit():Void
-{
-    if (FlxG.keys.justPressed.ESCAPE)
-    {
-        isActiveQuit = !isActiveQuit;
-		isActiveDebug = false;
-		isActiveStart = false;
-		isActiveOption = false;
-    }
-
-    if (FlxG.mouse.overlaps(botonQuit) || isActiveQuit)
-    {
-        botonQuit.animation.play("active");
-
-        if (FlxG.mouse.justPressed || FlxG.keys.justPressed.ENTER || FlxG.keys.justPressed.SPACE)
-
-        {
-            System.exit(0);
-        }
-    }
-    else
-    {
-
-        botonQuit.animation.play("normal");
-    }
-
-
-}
-
-function checkBotonDebug():Void
-{
-    if (FlxG.keys.justPressed.THREE)
-    {
-        isActiveDebug = !isActiveDebug;
-		isActiveOption = false;
-		isActiveStart = false;
-		isActiveQuit = false;
-    }
-
-    if (FlxG.mouse.overlaps(botonDebug) || isActiveDebug)
-    {
-        botonDebug.animation.play("active");
-
-        if (FlxG.mouse.justPressed || FlxG.keys.justPressed.ENTER || FlxG.keys.justPressed.SPACE)
-			
-        {
-            FlxG.switchState(() -> new DebugState());
-        }
-    }
-    else
+        new FlxTimer().start(1, function(tmr:FlxTimer)
 		{
-			botonDebug.animation.play("normal");
-		}
+            titleText.borderColor = FlxG.random.getObject(outlineColors);
+        }, 0);
 
-}
+        logo = new FlxSprite();
+        logo.loadGraphic(AssetPaths.haxeflixelLogo__png);
+		logo.updateHitbox();
+        effectLogo = new FlxEffectSprite(logo);
+        glitchEffect = new FlxGlitchEffect(10, 2, 0.035);
+        effectLogo.effects = [glitchEffect];
+        effectLogo.x = 360;
+		effectLogo.y = 100;
+		effectLogo.scale.set(0.65, 0.65);
+        add(effectLogo);
 
-function checkTituloTexto():Void
-{
-		if (FlxG.mouse.overlaps(tituloTexto))
+		vignite = new FlxSprite();
+		vignite.loadGraphic(AssetPaths.vigniteTitle__png, false);
+		vignite.scrollFactor.set(0, 0);
+		vignite.screenCenter();
+		vignite.alpha = 0.5;
+		add(vignite);
+
+        super.create();
+    }
+
+    override public function update(elapsed:Float):Void
+    {
+        super.update(elapsed);
+
+        if (FlxG.random.bool(10))
 		{
-			tituloTexto.color = FlxColor.YELLOW;
-		}
-
+            glitchEffect.strength = FlxG.random.int(5, 20);
+        }
+		
 		else
 		{
-			tituloTexto.color = FlxColor.ORANGE;
-		}
-}
+            glitchEffect.strength = 3;
+        }
 
-
-
+        scanline.alpha = 0.1 - (Math.random() * 0.05);
+		effectLogo.alpha = 0.65 - (Math.random() * 0.2);
+    }
 }

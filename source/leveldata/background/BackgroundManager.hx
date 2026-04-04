@@ -43,7 +43,12 @@ class BackgroundManager
         var newBG:String = bgLayer.properties.get("bgName");
         if (newBG != state.currentBGName)
             {
-            if (state.bg != null) { state.remove(state.bg); state.bg.destroy(); }
+            if (state.bg != null)
+                {
+                    state.remove(state.bg);
+                    state.bg.destroy();
+                    state.bg = null;
+                }
             state.bg = new FlxSprite(0, 0);
             state.bg.loadGraphic("assets/images/backgrounds/" + newBG + ".png");
             state.bg.screenCenter();
@@ -66,7 +71,10 @@ class BackgroundManager
 
             if (effect == "none" || effect == "")
             { 
-                state.remove(state.backDecoEffectObj);
+                if (state.backDecoEffectObj != null && state.members.indexOf(state.backDecoEffectObj) != -1)
+                {   
+                    state.remove(state.backDecoEffectObj);
+                }
                 return;
             }
 
@@ -108,7 +116,10 @@ class BackgroundManager
 
             if (effect == "none" || effect == "")
             { 
-                state.remove(state.backEffectObj);
+                if (state.backEffectObj != null && state.members.indexOf(state.backEffectObj) != -1)
+                {           
+                    state.remove(state.backEffectObj);
+                }
                 return;
             }
 

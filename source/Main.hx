@@ -2,6 +2,7 @@ import flixel.FlxGame;
 import openfl.display.FPS;
 import openfl.display.Sprite;
 import levels.chapters.datachapter.ChapterState;
+import gui.MenuState;
 
 class Main extends Sprite
 {
@@ -16,7 +17,7 @@ class Main extends Sprite
 		#end
 
 		#if debug
-		addChild(new FlxGame(0, 0, ChapterState, 60, 60, true, false));
+		addChild(new FlxGame(0, 0, MenuState, 60, 60, true, false));
 		addChild(new FPS(10, 10, 0xFFFFFF));
 		flixel.FlxG.autoPause = false;
 		#end
