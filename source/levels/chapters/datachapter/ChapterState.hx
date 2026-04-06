@@ -515,6 +515,7 @@ function loadRoom(roomName:String):Void
     add(PlayerGlow);
     add(player);
     add(player.doubleJumpEffect);
+    add(player.dashEffect);
     add(DangerObjects);
     add(platforms);
     add(savesGroup);

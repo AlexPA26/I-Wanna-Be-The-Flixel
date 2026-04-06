@@ -11,6 +11,7 @@ class Player extends FlxSprite
 {
     public var canDoubleJump:Bool = true;
     public var doubleJumpEffect:FlxEmitter;
+    public var dashEffect:FlxEmitter;
 
     var safeJump:Float = 0;
     var safeJumpMax:Float = 0.15;
@@ -56,6 +57,16 @@ class Player extends FlxSprite
         doubleJumpEffect.scale.set(1.2, 1.2, 1.2, 1.2);
         doubleJumpEffect.alpha.set(1, 1, 0, 0);
         doubleJumpEffect.launchMode = CIRCLE;
+
+        dashEffect = new FlxEmitter(-10, -10, 5);
+        dashEffect.makeParticles(4, 4, FlxColor.WHITE, 5);
+        dashEffect.color.set(FlxColor.RED, FlxColor.YELLOW, 0xFF820000, 0xFFC92727);
+        dashEffect.lifespan.set(0.4, 0.8);
+        dashEffect.velocity.set(-100, -50, 100, 50);
+        dashEffect.scale.set(1.2, 1.2, 1.2, 1.2);
+        dashEffect.alpha.set(1, 1, 0, 0);
+        dashEffect.launchMode = CIRCLE;
+        dashEffect.angularVelocity.set(-300, 300);
 
     }
 
@@ -112,6 +123,10 @@ class Player extends FlxSprite
             else dashDirection = (facing == LEFT) ? -1 : 1;
             
             maxVelocity.x = 800;
+            dashEffect.setPosition(x + (width / 2), y + (height / 2));
+            if (left) dashEffect.acceleration.set(200, 0);
+            if (right) dashEffect.acceleration.set(-200, 0); 
+            dashEffect.start(true, 0, 5);
             FlxG.sound.play(AssetPaths.dash__ogg, 0.5);
         }
 

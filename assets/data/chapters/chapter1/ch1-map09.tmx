@@ -97,9 +97,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="8" name="save">
-  <object id="213" name="save" gid="52" x="450" y="350" width="50" height="50"/>
- </objectgroup>
+ <objectgroup id="8" name="save"/>
  <objectgroup id="16" name="warps">
   <object id="221" name="warp" gid="83" x="0" y="300" width="50" height="50">
    <properties>
