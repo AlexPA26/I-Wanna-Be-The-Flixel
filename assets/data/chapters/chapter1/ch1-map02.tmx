@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="23" nextobjectid="43">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="23" nextobjectid="44">
  <tileset firstgid="1" source="ch1-tiles.tsx"/>
  <tileset firstgid="49" source="../../textures/spike.tsx"/>
  <tileset firstgid="57" source="../../textures/save.tsx"/>
@@ -50,13 +50,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="11" name="save">
-  <object id="24" name="save" gid="57" x="250" y="250" width="50" height="50">
-   <properties>
-    <property name="bgName" value="bgMountains"/>
-   </properties>
-  </object>
- </objectgroup>
+ <objectgroup id="11" name="save"/>
  <objectgroup id="20" name="trampoline-mini"/>
  <objectgroup id="22" name="slab-night">
   <object id="39" name="slab-night" gid="72" x="600" y="450" width="50" height="50"/>

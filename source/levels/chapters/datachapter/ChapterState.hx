@@ -66,6 +66,7 @@ class ChapterState extends FlxState
     public var lastTopScrollBoost:Float = 0;
 
     public var savesGroup:FlxTypedGroup<SavePoint>;
+    public var popups:FlxTypedGroup<FlxText>;
     public var saveParticlesGroup:FlxTypedGroup<FlxEmitter>;
     public var doubleJumpGroup:FlxTypedGroup<DoubleJumpObj>;
     public var flipGroup:FlxTypedGroup<FlipSwitch>;
@@ -98,6 +99,7 @@ override public function create():Void
     DangerObjects = new FlxGroup(); 
 
     savesGroup = new FlxTypedGroup<SavePoint>();
+    popups = new FlxTypedGroup<FlxText>();
     saveParticlesGroup = new FlxTypedGroup<FlxEmitter>();
     doubleJumpGroup = new FlxTypedGroup<DoubleJumpObj>();
     flipGroup = new FlxTypedGroup<FlipSwitch>();
@@ -483,6 +485,7 @@ function loadRoom(roomName:String):Void
     fallingBlock.clear();
     slabs.clear();
     slabsNight.clear();
+    popups.clear();
     
 
     if (saveParticlesGroup != null)
@@ -515,6 +518,7 @@ function loadRoom(roomName:String):Void
     add(DangerObjects);
     add(platforms);
     add(savesGroup);
+    add(popups);
     add(doubleJumpGroup);
     add(flipGroup);
     add(portalGroup);
