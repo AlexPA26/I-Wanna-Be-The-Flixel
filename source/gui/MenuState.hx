@@ -62,14 +62,14 @@ class MenuState extends FlxState
         titleText.setBorderStyle(OUTLINE, FlxColor.RED, 2);
         add(titleText);
 
-        versionText = new FlxText(0, 100, FlxG.width, "v.0.1.4");
+        versionText = new FlxText(0, 100, FlxG.width, "v.0.1.31");
         versionText.setFormat(null, 24, FlxColor.WHITE, CENTER);
         versionText.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
-        versionText.x = 350;
+        versionText.x = 345;
         versionText.y = 145;
         add(versionText);
 
-        new FlxTimer().start(1, function(tmr:FlxTimer)
+        new FlxTimer().start(0.5, function(tmr:FlxTimer)
         {
             titleText.borderColor = FlxG.random.getObject(outlineColors);
         }, 0);
@@ -116,12 +116,12 @@ class MenuState extends FlxState
     {
         super.update(elapsed);
 
-        if (FlxG.random.bool(10)) glitchEffect.strength = FlxG.random.int(5, 20);
+        if (FlxG.random.bool(10)) glitchEffect.strength = FlxG.random.int(5, 40);
         else glitchEffect.strength = 3;
 
         scanline.alpha = 0.1 - (Math.random() * 0.05);
         scanline2.alpha = 0.1 - (Math.random() * 0.1);
-        effectLogo.alpha = 0.65 - (Math.random() * 0.2);
+        effectLogo.alpha = 0.55 - (Math.random() * 0.4);
     }
 
     function customizeButton(btn:FlxButton):Void
@@ -141,10 +141,12 @@ class MenuState extends FlxState
         {
             openfl.ui.Mouse.cursor = MouseCursor.BUTTON;
 
-            FlxTween.tween(btn.label.scale, {x: 1.2, y: 1.2}, 0.1, {ease: FlxEase.quadOut});
+            FlxTween.tween(btn.label.scale, {x: 1.1, y: 1.1}, 0.05, {ease: FlxEase.quadOut});
 
             var twn = FlxTween.angle(btn, -5, 5, 0.6, {type: PINGPONG, ease: FlxEase.sineInOut});
             activeTweens.set(btn, twn);
+
+            
             
         };
 
@@ -161,6 +163,8 @@ class MenuState extends FlxState
             }
             FlxTween.tween(btn, {angle: 0}, 0.1, {ease: FlxEase.quadOut});
             btn.label.angle = 0;
+
+            FlxG.sound.play(AssetPaths.trigger__ogg, 0.1, false);
         };
     }
 
@@ -170,6 +174,7 @@ class MenuState extends FlxState
         PlayerData.spawnX = 300;
         PlayerData.spawnY = 400;
         PlayerData.totalDeaths = 0;
+        if (FlxG.sound.music != null) { FlxG.sound.music.stop(); }
         FlxG.switchState(ChapterState.new);
     }
 
@@ -177,6 +182,7 @@ class MenuState extends FlxState
     {
         if (SaveManager.loadGame())
         {
+            if (FlxG.sound.music != null) { FlxG.sound.music.stop(); }
             FlxG.switchState(ChapterState.new);
         }
             
@@ -191,7 +197,8 @@ class MenuState extends FlxState
     function clickQuit():Void
     {
         #if sys
-            Sys.exit(0); #else trace("Quit not supported.");
+            Sys.exit(0);
+        #else trace("Quit not supported.");
         #end
     }
 
