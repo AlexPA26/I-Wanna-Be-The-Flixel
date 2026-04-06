@@ -1,4 +1,4 @@
-package leveldata;
+package leveldata.deco;
 
 import flixel.FlxSprite;
 import openfl.display.BlendMode;

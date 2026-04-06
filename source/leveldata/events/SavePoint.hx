@@ -1,4 +1,4 @@
-package leveldata;
+package leveldata.events;
 
 import flixel.FlxSprite;
 import flixel.effects.particles.FlxEmitter;

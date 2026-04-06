@@ -1,4 +1,4 @@
-package leveldata;
+package leveldata.blockdata;
 
 import flixel.FlxSprite;
 using flixel.util.FlxDirectionFlags;

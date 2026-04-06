@@ -102,7 +102,7 @@ class DeathState extends FlxSubState
         FlxTween.angle(maintext, -20, 20, 1, {type: PINGPONG, ease: FlxEase.sineInOut});
 		add(maintext);
 
-        subtext = new FlxText("PRO TIP: " + proTip);
+        subtext = new FlxText("Pro Tip: " + proTip);
 		subtext.size = 26;
 		subtext.color = FlxColor.WHITE;
 		subtext.setBorderStyle(OUTLINE, FlxColor.BLACK, 3);

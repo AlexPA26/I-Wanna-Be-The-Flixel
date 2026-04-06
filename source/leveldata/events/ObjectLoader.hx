@@ -1,4 +1,4 @@
-package leveldata;
+package leveldata.events;
 
 import flixel.FlxState;
 import flixel.group.FlxGroup;
@@ -8,6 +8,11 @@ import flixel.addons.editors.tiled.TiledLayer;
 import flixel.FlxSprite;
 import leveldata.*;
 import leveldata.misc.*;
+import leveldata.blockdata.*;
+import leveldata.events.*;
+import leveldata.hazards.*;
+import leveldata.misc.*;
+import leveldata.deco.*;
 import levels.chapters.datachapter.ChapterState;
 
 class ObjectLoader

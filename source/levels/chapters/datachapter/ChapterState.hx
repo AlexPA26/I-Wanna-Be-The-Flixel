@@ -18,8 +18,13 @@ import flixel.group.FlxGroup;
 import flixel.tile.FlxTilemap;
 import flixel.util.FlxDirectionFlags;
 import flixel.addons.display.FlxBackdrop;
+import leveldata.background.*;
 import leveldata.*;
+import leveldata.deco.*;
+import leveldata.events.*;
 import leveldata.misc.*;
+import leveldata.hazards.*;
+import leveldata.blockdata.*;
 
 class ChapterState extends FlxState
 {

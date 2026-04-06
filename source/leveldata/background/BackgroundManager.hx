@@ -104,50 +104,59 @@ class BackgroundManager
         }
     }
 
-    public static function bgEffect(state:ChapterState, tiledData:TiledMap):Void
+public static function bgEffect(state:ChapterState, tiledData:TiledMap):Void
+{
+    var layer = tiledData.getLayer("mapEffect");
+    var boost = getScrollBoost(tiledData);
+
+    if (layer != null && layer.properties.contains("effectType"))
+    {
+        var effect = layer.properties.get("effectType");
+
+        if (effect == state.currentBackEffectName && boost == state.lastBackScrollBoost)
         {
-        var layer = tiledData.getLayer("mapEffect");
-        var boost = getScrollBoost(tiledData);
+            return;
+        }
 
-        if (layer != null && layer.properties.contains("effectType"))
-            {
-            var effect = layer.properties.get("effectType");
-            if (effect != state.currentBackEffectName || boost != state.lastBackScrollBoost)
-
-            if (effect == "none" || effect == "")
-            { 
-                if (state.backEffectObj != null && state.members.indexOf(state.backEffectObj) != -1)
-                {           
-                    state.remove(state.backEffectObj);
-                }
-                return;
+        if (effect == "none" || effect == "") // There's no BG effect here
+        { 
+            if (state.backEffectObj != null)
+            {           
+                state.remove(state.backEffectObj);
+                state.backEffectObj.destroy();
+                state.backEffectObj = null;
+                state.currentBackEffectName = "";
             }
+            return;
+        }
 
-            {
-                if (state.backEffectObj != null) { state.remove(state.backEffectObj); state.backEffectObj.destroy(); }
+        if (state.backEffectObj != null) // The effect IS DIFFERENT
+        { 
+            state.remove(state.backEffectObj); 
+            state.backEffectObj.destroy(); 
+        }
 
-                switch (effect)
-                {
-                    case "fog":
-                        state.backEffectObj = new FlxBackdrop(AssetPaths.white_fog__png, X);
-                        state.backEffectObj.velocity.set(50 - boost, 0);
-                        state.backEffectObj.alpha = 0.25;
-                    case "clouds":
-                        state.backEffectObj = new FlxBackdrop(AssetPaths.cloudsBack__png, XY);
-                        state.backEffectObj.velocity.set(-60, 0);
-                        state.backEffectObj.alpha = 0.65;
+        switch (effect)
+        {
+            case "fog":
+                state.backEffectObj = new FlxBackdrop(AssetPaths.white_fog__png, X);
+                state.backEffectObj.velocity.set(50 - boost, 0);
+                state.backEffectObj.alpha = 0.25;
+            case "clouds":
+                state.backEffectObj = new FlxBackdrop(AssetPaths.cloudsBack__png, XY);
+                state.backEffectObj.velocity.set(-60, 0);
+                state.backEffectObj.alpha = 0.65;
+        }
 
-                }
-                    if (state.backEffectObj != null)
-                {
-                    state.backEffectObj.scrollFactor.set(0, 0);
-                    state.currentBackEffectName = effect;
-                    state.lastBackScrollBoost = boost;
-                    state.insert(2, state.backEffectObj);
-                }
-            }
+        if (state.backEffectObj != null)
+        {
+            state.backEffectObj.scrollFactor.set(0, 0);
+            state.currentBackEffectName = effect;
+            state.lastBackScrollBoost = boost;
+            state.insert(2, state.backEffectObj);
         }
     }
+}
 
     public static function bgEffectDouble(state:ChapterState, tiledData:TiledMap):Void
     {
