@@ -27,6 +27,7 @@ class MenuState extends FlxState
     var logo:FlxSprite;
     var effectLogo:FlxEffectSprite;
     var glitchEffect:FlxGlitchEffect;
+    var bg:FlxSprite;
 
     var btnNewGame:FlxButton;
     var btnContinue:FlxButton;
@@ -42,7 +43,13 @@ class MenuState extends FlxState
     override public function create():Void
     {
         FlxG.mouse.visible = true;
-        FlxG.mouse.useSystemCursor = true; 
+        FlxG.mouse.useSystemCursor = true;
+
+        bg = new FlxSprite();
+        bg.makeGraphic(1280, 720, 0xFF3787FF, false);
+        bg.screenCenter();
+        bg.alpha = 0.1;
+        add(bg);
 
         scanline = new FlxBackdrop(AssetPaths.scanline__png, Y);
         scanline.velocity.set(0, 40);
@@ -62,10 +69,10 @@ class MenuState extends FlxState
         titleText.setBorderStyle(OUTLINE, FlxColor.RED, 2);
         add(titleText);
 
-        versionText = new FlxText(0, 100, FlxG.width, "v.0.1.31");
+        versionText = new FlxText(0, 100, FlxG.width, "v.0.1.4");
         versionText.setFormat(null, 24, FlxColor.WHITE, CENTER);
         versionText.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
-        versionText.x = 345;
+        versionText.x = 350;
         versionText.y = 145;
         add(versionText);
 
@@ -164,7 +171,7 @@ class MenuState extends FlxState
             FlxTween.tween(btn, {angle: 0}, 0.1, {ease: FlxEase.quadOut});
             btn.label.angle = 0;
 
-            FlxG.sound.play(AssetPaths.trigger__ogg, 0.1, false);
+            FlxG.sound.play(AssetPaths.trigger__ogg, 0.025, false);
         };
     }
 

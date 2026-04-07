@@ -4,7 +4,7 @@
 
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="I Wanna Be The Flixel" file="IWBTF" main="Main" version="1.3.1" company="darkuganda" />
+	<app title="I Wanna Be The Flixel" file="IWBTF v.0131" main="Main" version="1.3.1" company="darkuganda" />
 
 	<!--The flixel preloader is not accurate in Chrome. You can use it regularly if you embed the swf into a html file
 		or you can set the actual size of your file manually at "FlxPreloaderBase-onUpdate-bytesTotal"-->
@@ -83,5 +83,5 @@
 	<!-- _________________________________ Custom _______________________________ -->
 
 	<!--Place custom nodes like icons here-->
-	<icon path="assets/images/shared/icon.png" size="64" />
+	<icon path="assets/images/shared/icon.png" force="true"/>
 </project>
