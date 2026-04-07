@@ -124,6 +124,12 @@ class DeathState extends FlxSubState
         
         super.update(elapsed);
 
+        if (FlxG.keys.justPressed.F11)
+        {
+            if (FlxG.fullscreen == false) FlxG.fullscreen = true;
+            else FlxG.fullscreen = false;
+        }
+
         if (bg.alpha < 1)
         {
             bg.alpha += 0.005; 

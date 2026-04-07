@@ -160,8 +160,8 @@ override public function update(elapsed:Float):Void
 {
     if (FlxG.keys.justPressed.ONE) {loadRoom("map36");};
     if (FlxG.keys.justPressed.TWO) {loadRoom("map101");};
-    if (FlxG.keys.justPressed.THREE) {loadRoom("map10");};
-    // if (FlxG.keys.justPressed.FOUR) {loadRoom("map10");};
+    if (FlxG.keys.justPressed.THREE) {loadRoom("map16");};
+    if (FlxG.keys.justPressed.FOUR) {loadRoom("map27");};
     // if (FlxG.keys.justPressed.NINE) {loadRoom("mapTest01");};
 
     if (isAutoscrolling && cameraTarget != null) 

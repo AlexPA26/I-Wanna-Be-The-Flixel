@@ -123,6 +123,12 @@ class MenuState extends FlxState
     {
         super.update(elapsed);
 
+        if (FlxG.keys.justPressed.F11)
+        {
+            if (FlxG.fullscreen == false) FlxG.fullscreen = true;
+            else FlxG.fullscreen = false;
+        }
+
         if (FlxG.random.bool(10)) glitchEffect.strength = FlxG.random.int(5, 40);
         else glitchEffect.strength = 3;
 
