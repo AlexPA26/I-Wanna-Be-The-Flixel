@@ -158,10 +158,10 @@ override public function create():Void
 
 override public function update(elapsed:Float):Void
 {
-    if (FlxG.keys.justPressed.ONE) {loadRoom("map36");};
-    if (FlxG.keys.justPressed.TWO) {loadRoom("map101");};
-    if (FlxG.keys.justPressed.THREE) {loadRoom("map16");};
-    if (FlxG.keys.justPressed.FOUR) {loadRoom("map27");};
+    // if (FlxG.keys.justPressed.ONE) {loadRoom("map36");};
+    // if (FlxG.keys.justPressed.TWO) {loadRoom("map101");};
+    // if (FlxG.keys.justPressed.THREE) {loadRoom("map16");};
+    // if (FlxG.keys.justPressed.FOUR) {loadRoom("map27");};
     // if (FlxG.keys.justPressed.NINE) {loadRoom("mapTest01");};
 
     if (isAutoscrolling && cameraTarget != null) 
@@ -441,8 +441,18 @@ function loadRoom(roomName:String):Void
 
     currentRoomName = roomName;
 
-    var path = "assets/data/chapters/chapter1/ch1-" + roomName + ".tmx";
-    tiledData = new TiledMap(path);
+    var chartPath = "assets/data/chapters/chapter" + PlayerData.currentChapter + "/ch" + PlayerData.currentChapter + "-" + roomName + ".tmx";
+    var tilesPath:String = "assets/images/levels/tiles/ch" + PlayerData.currentChapter + "tiles.png";
+
+    trace("Attempting to load TMX: " + chartPath);
+    trace("Attempting to load Tiles: " + tilesPath);
+    
+    if (!openfl.utils.Assets.exists(tilesPath))
+    {
+        trace("CRITICAL ERROR: Tileset image not found!");
+    }
+
+    tiledData = new TiledMap(chartPath);
 
     if (map != null) { remove(map); map.destroy(); }
     if (mapDeco != null) { remove(mapDeco); mapDeco.destroy(); }
@@ -450,7 +460,7 @@ function loadRoom(roomName:String):Void
 
     var mainLayer:TiledTileLayer = cast tiledData.getLayer("tiles-main");
     map = new FlxTilemap();
-    map.loadMapFromArray(mainLayer.tileArray, tiledData.width, tiledData.height, AssetPaths.ch1tiles__png, 50, 50, OFF, 1);
+    map.loadMapFromArray(mainLayer.tileArray, tiledData.width, tiledData.height, tilesPath, 50, 50, OFF, 1);
     map.x = -60; map.y = -65;
     FlxG.worldBounds.set(map.x, map.y, map.width, map.height);
     add(map);
@@ -459,7 +469,7 @@ function loadRoom(roomName:String):Void
     if (decoLayer != null)
     {
         mapDeco = new FlxTilemap();
-        mapDeco.loadMapFromArray(cast(decoLayer, TiledTileLayer).tileArray, tiledData.width, tiledData.height, AssetPaths.ch1tiles__png, 50, 50, OFF, 1);
+        mapDeco.loadMapFromArray(cast(decoLayer, TiledTileLayer).tileArray, tiledData.width, tiledData.height, tilesPath, 50, 50, OFF, 1);
         mapDeco.x = -60; mapDeco.y = -65;
         add(mapDeco);
     }
@@ -468,7 +478,7 @@ function loadRoom(roomName:String):Void
     if (decoLayer2 != null)
     {
         mapDeco2 = new FlxTilemap();
-        mapDeco2.loadMapFromArray(cast(decoLayer2, TiledTileLayer).tileArray, tiledData.width, tiledData.height, AssetPaths.ch1tiles__png, 50, 50, OFF, 1);
+        mapDeco2.loadMapFromArray(cast(decoLayer2, TiledTileLayer).tileArray, tiledData.width, tiledData.height, tilesPath, 50, 50, OFF, 1);
         mapDeco2.x = -60; mapDeco2.y = -65;
         add(mapDeco2);
     }

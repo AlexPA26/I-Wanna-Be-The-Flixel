@@ -46,9 +46,9 @@ class MenuState extends FlxState
         FlxG.mouse.useSystemCursor = true;
 
         bg = new FlxSprite();
-        bg.makeGraphic(1280, 720, 0xFF3787FF, false);
+        bg.makeGraphic(1280, 720, 0xFF1B76FF, false);
         bg.screenCenter();
-        bg.alpha = 0.1;
+        bg.alpha = 0.15;
         add(bg);
 
         scanline = new FlxBackdrop(AssetPaths.scanline__png, Y);
