@@ -37,6 +37,7 @@ class ChapterState extends FlxState
 
     public var bg:FlxSprite;
     public var currentBGName:String = "";
+    public var tilesPath:String = "assets/images/levels/tiles/ch" + PlayerData.currentChapter + "tiles.png";
     var map:FlxTilemap;
     var mapDeco:FlxTilemap;
     var mapDeco2:FlxTilemap;
@@ -158,11 +159,11 @@ override public function create():Void
 
 override public function update(elapsed:Float):Void
 {
-    // if (FlxG.keys.justPressed.ONE) {loadRoom("map36");};
-    // if (FlxG.keys.justPressed.TWO) {loadRoom("map101");};
-    // if (FlxG.keys.justPressed.THREE) {loadRoom("map16");};
-    // if (FlxG.keys.justPressed.FOUR) {loadRoom("map27");};
-    // if (FlxG.keys.justPressed.NINE) {loadRoom("mapTest01");};
+    if (FlxG.keys.justPressed.ONE) {loadRoom("map36");};
+    if (FlxG.keys.justPressed.TWO) {loadRoom("map101");};
+    if (FlxG.keys.justPressed.THREE) {loadRoom("map16");};
+    if (FlxG.keys.justPressed.FOUR) {loadRoom("map27");};
+    if (FlxG.keys.justPressed.NINE) {loadRoom("mapTest01");};
 
     if (isAutoscrolling && cameraTarget != null) 
     {
@@ -438,19 +439,9 @@ function TransitionLEFT(tile:FlxObject, obj:FlxObject):Void
 function loadRoom(roomName:String):Void
 {
     flixel.tweens.FlxTween.globalManager.forEach(function(twn) twn.cancel());
+    var chartPath = "assets/data/chapters/chapter" + PlayerData.currentChapter + "/ch" + PlayerData.currentChapter + "-" + roomName + ".tmx";
 
     currentRoomName = roomName;
-
-    var chartPath = "assets/data/chapters/chapter" + PlayerData.currentChapter + "/ch" + PlayerData.currentChapter + "-" + roomName + ".tmx";
-    var tilesPath:String = "assets/images/levels/tiles/ch" + PlayerData.currentChapter + "tiles.png";
-
-    trace("Attempting to load TMX: " + chartPath);
-    trace("Attempting to load Tiles: " + tilesPath);
-    
-    if (!openfl.utils.Assets.exists(tilesPath))
-    {
-        trace("CRITICAL ERROR: Tileset image not found!");
-    }
 
     tiledData = new TiledMap(chartPath);
 
@@ -697,7 +688,7 @@ function updateMusic():Void
     if (musicLayer == null) return;
 
     var songName:String = musicLayer.properties.get("songName");
-    var songPath = "assets/music/chapters/chapter1bgm/" + songName + ".ogg";
+    var songPath = "assets/music/chapters/chapter1" + PlayerData.currentChapter + "bgm/" + songName + ".ogg";
     trace("Music Changed to: " + songName);
 
     if (PlayerData.currentSong == songPath && FlxG.sound.music != null && FlxG.sound.music.playing)
