@@ -67,6 +67,7 @@ class MenuState extends FlxState
         titleText = new FlxText(0, 75, FlxG.width, "I Wanna Be The Flixel");
         titleText.setFormat(null, 60, FlxColor.WHITE, CENTER);
         titleText.setBorderStyle(OUTLINE, FlxColor.RED, 2);
+        FlxTween.tween(titleText, {y: titleText.y - 3}, 0.8, {type: PINGPONG, ease: FlxEase.sineInOut});
         add(titleText);
 
         versionText = new FlxText(0, 100, FlxG.width, "v.0.1.4");
