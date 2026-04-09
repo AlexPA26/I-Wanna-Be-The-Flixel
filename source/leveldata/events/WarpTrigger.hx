@@ -4,6 +4,7 @@ import flixel.FlxObject;
 
 class WarpTrigger extends FlxObject
 {
+    public var newChapter:String = "";
     public var targetRoom:String;
     public var direction:String;
 

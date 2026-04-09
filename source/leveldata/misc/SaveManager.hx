@@ -23,6 +23,8 @@ class SaveManager
         
         if (save.data.roomID != null)
         {
+            PlayerData.timeElapsed = save.data.playtime;
+            PlayerData.currentChapter = save.data.chapterID;
             PlayerData.currentRoom = save.data.roomID;
             PlayerData.totalDeaths = save.data.deaths;
             PlayerData.spawnX = save.data.spawnX;

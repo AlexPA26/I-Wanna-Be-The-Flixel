@@ -1,6 +1,5 @@
 package levels.chapters.datachapter;
 
-import gui.MenuState;
 import flixel.effects.particles.FlxEmitter;
 import leveldata.background.BackgroundManager;
 import gui.DeathState;
@@ -14,12 +13,9 @@ import flixel.addons.editors.tiled.TiledLayer;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.group.FlxGroup;
-// import leveldata.MapSettings;
 import flixel.tile.FlxTilemap;
 import flixel.util.FlxDirectionFlags;
 import flixel.addons.display.FlxBackdrop;
-import leveldata.background.*;
-import leveldata.*;
 import leveldata.deco.*;
 import leveldata.events.*;
 import leveldata.misc.*;
@@ -85,8 +81,10 @@ class ChapterState extends FlxState
     var saveAnimation:FlxSprite;
     var tiledData:TiledMap;
     var spawnTimer:Float = 0.1;
+    var timeElapsed:FlxText;
+    var currentChapter:FlxText;
     var playerDeaths:FlxText;
-    var currentRoom:FlxText;
+    var lastSave:FlxText;
 
 override public function create():Void
 {
@@ -94,6 +92,7 @@ override public function create():Void
     #if debug FlxG.mouse.visible = true; #end
     FlxG.fixedTimestep = true;
 
+    FlxG.bitmap.clearUnused();
     imgCache();
     sfxCache();
 
@@ -159,11 +158,11 @@ override public function create():Void
 
 override public function update(elapsed:Float):Void
 {
-    if (FlxG.keys.justPressed.ONE) {loadRoom("map36");};
-    if (FlxG.keys.justPressed.TWO) {loadRoom("map101");};
-    if (FlxG.keys.justPressed.THREE) {loadRoom("map16");};
-    if (FlxG.keys.justPressed.FOUR) {loadRoom("map27");};
-    if (FlxG.keys.justPressed.NINE) {loadRoom("mapTest01");};
+    // if (FlxG.keys.justPressed.ONE) {loadRoom("map36");}
+    // if (FlxG.keys.justPressed.TWO) { PlayerData.currentChapter = 2; loadRoom("map01"); }
+    // if (FlxG.keys.justPressed.THREE) {loadRoom("map16");}
+    // if (FlxG.keys.justPressed.FOUR) {loadRoom("map27");}
+    // if (FlxG.keys.justPressed.NINE) {loadRoom("mapTest01");}
 
     if (isAutoscrolling && cameraTarget != null) 
     {
@@ -182,8 +181,11 @@ override public function update(elapsed:Float):Void
     FlxG.collide(player, map);
     FlxG.collide(player, slabs);
     FlxG.collide(player, slabsNight);
+
+    timeElapsed.text = "Time: " + PlayerData.timeElapsed;
+    currentChapter.text = "Current Chapter: " + PlayerData.currentChapter;
     playerDeaths.text = "Total Resets: " + PlayerData.totalDeaths;
-    currentRoom.text = "Last Save: " + PlayerData.currentRoom;
+    lastSave.text = "Last Save: " + PlayerData.currentRoom;
 
     if (PlayerData.saveCooldown > 0)
     {
@@ -329,6 +331,12 @@ override public function update(elapsed:Float):Void
         PlayerGlow.exists = false;
     }
 
+    switch(PlayerData.currentChapter)
+    {
+        case 1: chapter1Cache();
+        case 2: chapter2Cache();
+    }
+
     #if !debug
     if (player.x > map.width || player.y > map.height - 50) killPlayer();
     #end
@@ -337,26 +345,10 @@ override public function update(elapsed:Float):Void
 function imgCache():Void
 {
     FlxG.bitmap.add(AssetPaths.death__png);
-    FlxG.bitmap.add(AssetPaths.spikes__png);
-    FlxG.bitmap.add(AssetPaths.laser__png);
     FlxG.bitmap.add(AssetPaths.save__png);
-    FlxG.bitmap.add(AssetPaths.ch1tiles__png);
-    FlxG.bitmap.add(AssetPaths.trampoline__png);
-    FlxG.bitmap.add(AssetPaths.trampoline_mini__png);
     FlxG.bitmap.add(AssetPaths.transitionTiles__png);
     FlxG.bitmap.add(AssetPaths.playerGlow__png);
-    FlxG.bitmap.add(AssetPaths.light__png);
-    FlxG.bitmap.add(AssetPaths.slab__png);
-    FlxG.bitmap.add(AssetPaths.slab_night__png);
-    FlxG.bitmap.add(AssetPaths.vignite__png);
-    FlxG.bitmap.add(AssetPaths.cloudsBack__png);
-    FlxG.bitmap.add(AssetPaths.cloudsDouble__png);
-    FlxG.bitmap.add(AssetPaths.white_fog__png);
-    FlxG.bitmap.add(AssetPaths.sandstorm__png);
-    FlxG.bitmap.add(AssetPaths.moon__png);
-    FlxG.bitmap.add(AssetPaths.speed_lines__png);
-    FlxG.bitmap.add(AssetPaths.bgMountainsDay__png);
-    FlxG.bitmap.add(AssetPaths.bgMountains__png);
+
 }
 
 function sfxCache():Void
@@ -369,11 +361,26 @@ function sfxCache():Void
     FlxG.sound.cache(AssetPaths.lateral_bounce__ogg);
     FlxG.sound.cache(AssetPaths.platform_activated__ogg);
     FlxG.sound.cache(AssetPaths.death_bgm__ogg);
-    FlxG.sound.cache(AssetPaths.rain__ogg);
-    FlxG.sound.cache(AssetPaths.castle1__ogg);
-    FlxG.sound.cache(AssetPaths.castle2__ogg);
     FlxG.sound.cache(AssetPaths.trampoline_bounce__ogg);
-    FlxG.sound.cache(AssetPaths.kid_determination__ogg);
+}
+
+function chapter1Cache():Void
+{
+    FlxG.bitmap.add(AssetPaths.ch1tiles__png);
+    FlxG.bitmap.add(AssetPaths.spikes__png);
+    FlxG.bitmap.add(AssetPaths.laser__png);
+    FlxG.bitmap.add(AssetPaths.trampoline_mini__png);
+    FlxG.bitmap.add(AssetPaths.trampoline__png);
+    FlxG.bitmap.add(AssetPaths.light__png);
+    FlxG.bitmap.add(AssetPaths.slab__png);
+    FlxG.bitmap.add(AssetPaths.slab_night__png);
+}
+
+function chapter2Cache():Void
+{
+    FlxG.bitmap.add(AssetPaths.ch2tiles__png);
+    FlxG.bitmap.add(AssetPaths.sandstorm__png);
+    FlxG.bitmap.add(AssetPaths.double_jump__png);
 }
 
 function PlayerShoot():Void
@@ -396,43 +403,6 @@ function PlayerShoot():Void
 
     bullets.add(bullet);
     FlxG.sound.play(AssetPaths.playershoot__ogg, 0.5, false);
-
-}
-
-function TransitionUP(tile:FlxObject, obj:FlxObject):Void
-{
-        var layer = tiledData.getLayer("warps-up");
-        var destination = layer.properties.get("target");
-        loadRoom(destination);
-        player.y = FlxG.height - 20;
-
-}
-
-function TransitionRIGHT(tile:FlxObject, obj:FlxObject):Void
-{
-
-    var layer = tiledData.getLayer("warps-right");
-    var destination = layer.properties.get("target");
-    loadRoom(destination);
-    player.x = 0;
-
-}
-
-function TransitionDOWN(tile:FlxObject, obj:FlxObject):Void
-{
-        var layer = tiledData.getLayer("warps-down");
-        var destination = layer.properties.get("target");
-        loadRoom(destination);
-        player.y = -20;
-
-}
-
-function TransitionLEFT(tile:FlxObject, obj:FlxObject):Void
-{
-        var layer = tiledData.getLayer("warps-left");
-        var destination = layer.properties.get("target");
-        loadRoom(destination);
-        player.x = 1265;
 
 }
 
@@ -556,6 +526,11 @@ function loadRoom(roomName:String):Void
 
 function handleWarp(w:WarpTrigger):Void
 {
+    if (w.newChapter != null && w.newChapter != "")
+    {
+        PlayerData.currentChapter = Std.parseInt(w.newChapter);
+    }
+
     loadRoom(w.targetRoom);
 
     switch (w.direction)
@@ -569,16 +544,29 @@ function handleWarp(w:WarpTrigger):Void
 
 function setupHUD():Void
 {
-    playerDeaths = new FlxText(50, FlxG.height - 80, 0, "Total Resets: 0", 22);
-    playerDeaths.setBorderStyle(OUTLINE, FlxColor.BLACK, 3);
+
+    // timeElapsed = new FlxText(50, 20, 0, "Time: ", 22);
+    // timeElapsed.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
+    // timeElapsed.scrollFactor.set(0, 0);
+    // timeElapsed.scrollFactor.set(0, 0);
+    // add(timeElapsed);
+
+    currentChapter = new FlxText(50, FlxG.height - 140, 0, "Current Chapter: ", 18);
+    currentChapter.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
+    currentChapter.scrollFactor.set(0, 0);
+    currentChapter.scrollFactor.set(0, 0);
+    add(currentChapter);
+
+    lastSave = new FlxText(50, FlxG.height - 110, 0, "Last Save: ", 18);
+    lastSave.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
+    lastSave.scrollFactor.set(0, 0);
+    add(lastSave);
+
+    playerDeaths = new FlxText(50, FlxG.height - 80, 0, "Total Resets: ", 22);
+    playerDeaths.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
     playerDeaths.scrollFactor.set(0, 0);
     playerDeaths.scrollFactor.set(0, 0);
     add(playerDeaths);
-
-    currentRoom = new FlxText(50, FlxG.height - 110, 0, "Last Save: ", 18);
-    currentRoom.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
-    currentRoom.scrollFactor.set(0, 0);
-    add(currentRoom);
 
 }
 
@@ -688,7 +676,7 @@ function updateMusic():Void
     if (musicLayer == null) return;
 
     var songName:String = musicLayer.properties.get("songName");
-    var songPath = "assets/music/chapters/chapter1" + PlayerData.currentChapter + "bgm/" + songName + ".ogg";
+    var songPath = "assets/music/chapters/chapter" + PlayerData.currentChapter + "bgm/" + songName + ".ogg";
     trace("Music Changed to: " + songName);
 
     if (PlayerData.currentSong == songPath && FlxG.sound.music != null && FlxG.sound.music.playing)

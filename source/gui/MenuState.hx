@@ -183,6 +183,7 @@ class MenuState extends FlxState
 
     function clickNewGame():Void
     {
+        PlayerData.currentChapter = 1;
         PlayerData.currentRoom = "map01";
         PlayerData.spawnX = 300;
         PlayerData.spawnY = 400;

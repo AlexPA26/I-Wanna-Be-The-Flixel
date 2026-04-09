@@ -1,13 +1,8 @@
 package leveldata.events;
 
-import flixel.FlxState;
-import flixel.group.FlxGroup;
 import flixel.addons.editors.tiled.TiledMap;
 import flixel.addons.editors.tiled.TiledObjectLayer;
 import flixel.addons.editors.tiled.TiledLayer;
-import flixel.FlxSprite;
-import leveldata.*;
-import leveldata.misc.*;
 import leveldata.blockdata.*;
 import leveldata.events.*;
 import leveldata.hazards.*;
@@ -38,11 +33,13 @@ class ObjectLoader
 
                     switch (obj.name)
                     {
-                    case "warp":
+                        case "warp":
                         var target = obj.properties.get("target");
                         var dir = obj.properties.get("direction");
+                        var newChapter = obj.properties.get("newChapter");
                         
                         var warp = new WarpTrigger(spawnX, spawnY, obj.width, obj.height, target, dir);
+                        warp.newChapter = newChapter;
                         state.warpsGroup.add(warp);
 
                         case "spike":

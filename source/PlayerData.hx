@@ -1,12 +1,11 @@
 package;
 
-import Player;
-
 class PlayerData
 {
     public static var currentChapter:Int = 1;
     public static var currentRoom:String = "01";
     public static var currentSong:String = "";
+    public static var timeElapsed:String = "00:00:00";
 
     public static var spawnX:Float = 200;
     public static var spawnY:Float = 250;

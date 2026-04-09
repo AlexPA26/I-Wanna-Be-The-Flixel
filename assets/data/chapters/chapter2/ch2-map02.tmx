@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="20" nextobjectid="245">
- <tileset firstgid="1" source="ch1-tiles.tsx"/>
+ <tileset firstgid="1" source="../chapter1/ch1-tiles.tsx"/>
  <tileset firstgid="49" source="../../textures/transition-tiles.tsx"/>
  <tileset firstgid="54" source="../../textures/spike.tsx"/>
  <tileset firstgid="62" source="../../textures/slab.tsx"/>
@@ -166,217 +166,217 @@
   <object id="190" name="warp" gid="52" x="0" y="350" width="50" height="50">
    <properties>
     <property name="direction" value="left"/>
-    <property name="target" value="map101"/>
+    <property name="target" value="map01"/>
    </properties>
   </object>
   <object id="191" name="warp" gid="52" x="0" y="300" width="50" height="50">
    <properties>
     <property name="direction" value="left"/>
-    <property name="target" value="map101"/>
+    <property name="target" value="map01"/>
    </properties>
   </object>
   <object id="192" name="warp" gid="52" x="0" y="250" width="50" height="50">
    <properties>
     <property name="direction" value="left"/>
-    <property name="target" value="map101"/>
+    <property name="target" value="map01"/>
    </properties>
   </object>
   <object id="193" name="warp" gid="52" x="0" y="200" width="50" height="50">
    <properties>
     <property name="direction" value="left"/>
-    <property name="target" value="map101"/>
+    <property name="target" value="map01"/>
    </properties>
   </object>
   <object id="194" name="warp" gid="52" x="0" y="150" width="50" height="50">
    <properties>
     <property name="direction" value="left"/>
-    <property name="target" value="map101"/>
+    <property name="target" value="map01"/>
    </properties>
   </object>
   <object id="195" name="warp" gid="52" x="0" y="100" width="50" height="50">
    <properties>
     <property name="direction" value="left"/>
-    <property name="target" value="map101"/>
+    <property name="target" value="map01"/>
    </properties>
   </object>
   <object id="196" name="warp" gid="52" x="0" y="50" width="50" height="50">
    <properties>
     <property name="direction" value="left"/>
-    <property name="target" value="map101"/>
+    <property name="target" value="map01"/>
    </properties>
   </object>
   <object id="200" name="warp" gid="51" x="350" y="900" width="50" height="50">
    <properties>
     <property name="direction" value="down"/>
-    <property name="target" value="map102a"/>
+    <property name="target" value="map02a"/>
    </properties>
   </object>
   <object id="201" name="warp" gid="51" x="400" y="900" width="50" height="50">
    <properties>
     <property name="direction" value="down"/>
-    <property name="target" value="map102a"/>
+    <property name="target" value="map02a"/>
    </properties>
   </object>
   <object id="202" name="warp" gid="51" x="450" y="900" width="50" height="50">
    <properties>
     <property name="direction" value="down"/>
-    <property name="target" value="map102a"/>
+    <property name="target" value="map02a"/>
    </properties>
   </object>
   <object id="203" name="warp" gid="51" x="500" y="900" width="50" height="50">
    <properties>
     <property name="direction" value="down"/>
-    <property name="target" value="map102a"/>
+    <property name="target" value="map02a"/>
    </properties>
   </object>
   <object id="204" name="warp" gid="51" x="550" y="900" width="50" height="50">
    <properties>
     <property name="direction" value="down"/>
-    <property name="target" value="map102a"/>
+    <property name="target" value="map02a"/>
    </properties>
   </object>
   <object id="205" name="warp" gid="51" x="550" y="900" width="50" height="50">
    <properties>
     <property name="direction" value="down"/>
-    <property name="target" value="map102a"/>
+    <property name="target" value="map02a"/>
    </properties>
   </object>
   <object id="206" name="warp" gid="51" x="650" y="900" width="50" height="50">
    <properties>
     <property name="direction" value="down"/>
-    <property name="target" value="map102a"/>
+    <property name="target" value="map02a"/>
    </properties>
   </object>
   <object id="207" name="warp" gid="51" x="700" y="900" width="50" height="50">
    <properties>
     <property name="direction" value="down"/>
-    <property name="target" value="map102a"/>
+    <property name="target" value="map02a"/>
    </properties>
   </object>
   <object id="208" name="warp" gid="51" x="750" y="900" width="50" height="50">
    <properties>
     <property name="direction" value="down"/>
-    <property name="target" value="map102a"/>
+    <property name="target" value="map02a"/>
    </properties>
   </object>
   <object id="209" name="warp" gid="51" x="800" y="900" width="50" height="50">
    <properties>
     <property name="direction" value="down"/>
-    <property name="target" value="map102a"/>
+    <property name="target" value="map02a"/>
    </properties>
   </object>
   <object id="210" name="warp" gid="51" x="650" y="900" width="50" height="50">
    <properties>
     <property name="direction" value="down"/>
-    <property name="target" value="map102a"/>
+    <property name="target" value="map02a"/>
    </properties>
   </object>
   <object id="211" name="warp" gid="51" x="650" y="900" width="50" height="50">
    <properties>
     <property name="direction" value="down"/>
-    <property name="target" value="map102a"/>
+    <property name="target" value="map02a"/>
    </properties>
   </object>
   <object id="212" name="warp" gid="51" x="850" y="900" width="50" height="50">
    <properties>
     <property name="direction" value="down"/>
-    <property name="target" value="map102a"/>
+    <property name="target" value="map02a"/>
    </properties>
   </object>
   <object id="213" name="warp" gid="51" x="900" y="900" width="50" height="50">
    <properties>
     <property name="direction" value="down"/>
-    <property name="target" value="map102a"/>
+    <property name="target" value="map02a"/>
    </properties>
   </object>
   <object id="214" name="warp" gid="51" x="950" y="900" width="50" height="50">
    <properties>
     <property name="direction" value="down"/>
-    <property name="target" value="map102a"/>
+    <property name="target" value="map02a"/>
    </properties>
   </object>
   <object id="215" name="warp" gid="51" x="600" y="900" width="50" height="50">
    <properties>
     <property name="direction" value="down"/>
-    <property name="target" value="map102a"/>
+    <property name="target" value="map02a"/>
    </properties>
   </object>
   <object id="216" name="warp" gid="51" x="1100" y="900" width="50" height="50">
    <properties>
     <property name="direction" value="down"/>
-    <property name="target" value="map102a"/>
+    <property name="target" value="map02a"/>
    </properties>
   </object>
   <object id="217" name="warp" gid="51" x="1150" y="900" width="50" height="50">
    <properties>
     <property name="direction" value="down"/>
-    <property name="target" value="map102a"/>
+    <property name="target" value="map02a"/>
    </properties>
   </object>
   <object id="218" name="warp" gid="51" x="1200" y="900" width="50" height="50">
    <properties>
     <property name="direction" value="down"/>
-    <property name="target" value="map102a"/>
+    <property name="target" value="map02a"/>
    </properties>
   </object>
   <object id="220" name="warp" gid="50" x="1350" y="150" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
-    <property name="target" value="map103"/>
+    <property name="target" value="map03"/>
    </properties>
   </object>
   <object id="221" name="warp" gid="50" x="1350" y="200" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
-    <property name="target" value="map103"/>
+    <property name="target" value="map03"/>
    </properties>
   </object>
   <object id="222" name="warp" gid="50" x="1350" y="250" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
-    <property name="target" value="map103"/>
+    <property name="target" value="map03"/>
    </properties>
   </object>
   <object id="223" name="warp" gid="50" x="1350" y="300" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
-    <property name="target" value="map103"/>
+    <property name="target" value="map03"/>
    </properties>
   </object>
   <object id="224" name="warp" gid="50" x="1350" y="350" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
-    <property name="target" value="map103"/>
+    <property name="target" value="map03"/>
    </properties>
   </object>
   <object id="225" name="warp" gid="50" x="1350" y="400" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
-    <property name="target" value="map103"/>
+    <property name="target" value="map03"/>
    </properties>
   </object>
   <object id="226" name="warp" gid="50" x="1350" y="450" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
-    <property name="target" value="map103"/>
+    <property name="target" value="map03"/>
    </properties>
   </object>
   <object id="227" name="warp" gid="50" x="1350" y="500" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
-    <property name="target" value="map103"/>
+    <property name="target" value="map03"/>
    </properties>
   </object>
   <object id="228" name="warp" gid="50" x="1350" y="500" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
-    <property name="target" value="map103"/>
+    <property name="target" value="map03"/>
    </properties>
   </object>
   <object id="229" name="warp" gid="50" x="1350" y="550" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
-    <property name="target" value="map103"/>
+    <property name="target" value="map03"/>
    </properties>
   </object>
  </objectgroup>

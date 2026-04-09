@@ -61,30 +61,35 @@
   <object id="15" name="warp" gid="59" x="1350" y="200" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
+    <property name="newChapter" value="2"/>
     <property name="target" value="map02"/>
    </properties>
   </object>
   <object id="16" name="warp" gid="59" x="1350" y="250" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
+    <property name="newChapter" value="2"/>
     <property name="target" value="map02"/>
    </properties>
   </object>
   <object id="17" name="warp" gid="59" x="1350" y="250" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
+    <property name="newChapter" value="2"/>
     <property name="target" value="map02"/>
    </properties>
   </object>
   <object id="18" name="warp" gid="59" x="1350" y="300" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
+    <property name="newChapter" value="2"/>
     <property name="target" value="map02"/>
    </properties>
   </object>
   <object id="19" name="warp" gid="59" x="1350" y="350" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
+    <property name="newChapter" value="2"/>
     <property name="target" value="map02"/>
    </properties>
   </object>
