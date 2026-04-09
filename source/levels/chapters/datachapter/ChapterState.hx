@@ -1,5 +1,6 @@
 package levels.chapters.datachapter;
 
+import flixel.ui.FlxVirtualPad;
 import flixel.effects.particles.FlxEmitter;
 import leveldata.background.BackgroundManager;
 import gui.DeathState;
@@ -22,9 +23,13 @@ import leveldata.misc.*;
 import leveldata.hazards.*;
 import leveldata.blockdata.*;
 
+@:allow(levels.chapters.RoomLoader)
 class ChapterState extends FlxState
 {
     var player:Player;
+    var virtualPad:FlxVirtualPad;
+    var padScale:Float = 2.5;
+    var hudGroup:FlxGroup;
     var bullets:FlxTypedGroup<FlxSprite>;
     var PlayerGlow:FlxSprite;
     var cameraTarget:FlxObject;
@@ -88,9 +93,21 @@ class ChapterState extends FlxState
 
 override public function create():Void
 {
-    #if !debug FlxG.mouse.visible = false; #end
-    #if debug FlxG.mouse.visible = true; #end
+    #if !debug
+    #if !mobile
+    FlxG.mouse.visible = false;
+    #end
+    #end
+
+    #if debug
+        #if !mobile
+        FlxG.mouse.visible = true;
+        #end
+    #end
     FlxG.fixedTimestep = true;
+
+    hudGroup = new FlxGroup();
+    virtualPad = new FlxVirtualPad(LEFT_RIGHT, A);
 
     FlxG.bitmap.clearUnused();
     imgCache();
@@ -133,20 +150,7 @@ override public function create():Void
     saveAnimation.alpha = 0;
     saveAnimation.scrollFactor.set(0,0);
 
-    loadRoom(PlayerData.currentRoom);
-
-    add(DangerObjects);
-    add(savesGroup);
-    add(saveParticlesGroup);
-    add(doubleJumpGroup);
-    add(trampolines);
-    add(platforms);
-    add(fallingBlock);
-    add(lightsGroup);
-    add(slabs);
-    add(slabsNight);
-    add(bullets);
-    add(saveAnimation);
+    RoomLoader.loadRoom(this, PlayerData.currentRoom);
 
     #if debug
     FlxG.camera.follow(player, FlxCameraFollowStyle.LOCKON);
@@ -158,11 +162,6 @@ override public function create():Void
 
 override public function update(elapsed:Float):Void
 {
-    // if (FlxG.keys.justPressed.ONE) {loadRoom("map36");}
-    // if (FlxG.keys.justPressed.TWO) { PlayerData.currentChapter = 2; loadRoom("map01"); }
-    // if (FlxG.keys.justPressed.THREE) {loadRoom("map16");}
-    // if (FlxG.keys.justPressed.FOUR) {loadRoom("map27");}
-    // if (FlxG.keys.justPressed.NINE) {loadRoom("mapTest01");}
 
     if (isAutoscrolling && cameraTarget != null) 
     {
@@ -172,20 +171,22 @@ override public function update(elapsed:Float):Void
         if (player.x + player.width < FlxG.camera.scroll.x) { killPlayer(); }
     }
 
+    #if !mobile
     if (FlxG.keys.justPressed.F11)
     {
         if (FlxG.fullscreen == false) FlxG.fullscreen = true;
         else FlxG.fullscreen = false;
     }
+    #end
 
     FlxG.collide(player, map);
     FlxG.collide(player, slabs);
     FlxG.collide(player, slabsNight);
 
     // timeElapsed.text = "Time: " + PlayerData.timeElapsed;
-    currentChapter.text = "Current Chapter: " + PlayerData.currentChapter;
-    playerDeaths.text = "Total Resets: " + PlayerData.totalDeaths;
-    lastSave.text = "Last Save: " + PlayerData.currentRoom;
+    if (currentChapter != null) currentChapter.text = "Current Chapter: " + PlayerData.currentChapter;
+    if (playerDeaths != null) playerDeaths.text = "Total Deaths: " + PlayerData.totalDeaths;
+    if (lastSave != null) lastSave.text = "Last Save: " + PlayerData.currentRoom;
 
     if (PlayerData.saveCooldown > 0)
     {
@@ -294,31 +295,41 @@ override public function update(elapsed:Float):Void
     else
         { if (FlxG.overlap(player, DangerObjects)) { killPlayer(); } }
 
+    #if !mobile
     if (FlxG.keys.justPressed.TAB)
-        {
-            FlxG.debugger.drawDebug = !FlxG.debugger.drawDebug;
-        }
+    {
+        FlxG.debugger.drawDebug = !FlxG.debugger.drawDebug;
+    }
+    #end
 
+    #if !mobile
     if (FlxG.keys.justPressed.R)
-        {
-            FlxG.resetState();
-            PlayerData.totalDeaths++;
-        }
+    {
+        FlxG.resetState();
+        PlayerData.totalDeaths++;
+    }
+    #end
 
+    #if !mobile
     if (FlxG.keys.justPressed.K) { killPlayer(); }
+    #end
 
     if (saveAnimation.alpha > 0)
         {
             saveAnimation.alpha -= 0.01;
         }
 
+    #if !mobile
     if (FlxG.keys.justPressed.Z) PlayerShoot();
         FlxG.collide(bullets, map, (bullet, wall) -> { bullet.kill(); });  
+    #end
 
+    #if !mobile
     if (FlxG.keys.justPressed.ESCAPE)
     {
         FlxG.resetGame();
     }
+    #end
 
     if (player != null && player.exists && PlayerGlow != null)
     {
@@ -337,8 +348,19 @@ override public function update(elapsed:Float):Void
         case 2: chapter2Cache();
     }
 
+    #if mobile
+    if (virtualPad.buttonA.justPressed) 
+    {
+        PlayerShoot(); 
+    }
+    #end
+
     #if !debug
     if (player.x > map.width || player.y > map.height - 50) killPlayer();
+    #end
+
+    #if !mobile
+    if (FlxG.keys.justPressed.ONE) RoomLoader.loadRoom(this, "map13");
     #end
 }
 
@@ -410,124 +432,6 @@ function PlayerShoot():Void
 
 }
 
-function loadRoom(roomName:String):Void
-{
-    flixel.tweens.FlxTween.globalManager.forEach(function(twn) twn.cancel());
-    var chartPath = "assets/data/chapters/chapter" + PlayerData.currentChapter + "/ch" + PlayerData.currentChapter + "-" + roomName + ".tmx";
-
-    currentRoomName = roomName;
-
-    tiledData = new TiledMap(chartPath);
-
-    if (map != null) { remove(map); map.destroy(); }
-    if (mapDeco != null) { remove(mapDeco); mapDeco.destroy(); }
-    if (mapDeco2 != null) { remove(mapDeco2); mapDeco2.destroy(); }
-
-    var mainLayer:TiledTileLayer = cast tiledData.getLayer("tiles-main");
-    map = new FlxTilemap();
-    map.loadMapFromArray(mainLayer.tileArray, tiledData.width, tiledData.height, tilesPath, 50, 50, OFF, 1);
-    map.x = -60; map.y = -65;
-    FlxG.worldBounds.set(map.x, map.y, map.width, map.height);
-    add(map);
-
-    var decoLayer = tiledData.getLayer("tiles-deco");
-    if (decoLayer != null)
-    {
-        mapDeco = new FlxTilemap();
-        mapDeco.loadMapFromArray(cast(decoLayer, TiledTileLayer).tileArray, tiledData.width, tiledData.height, tilesPath, 50, 50, OFF, 1);
-        mapDeco.x = -60; mapDeco.y = -65;
-        add(mapDeco);
-    }
-
-    var decoLayer2 = tiledData.getLayer("tiles-deco2");
-    if (decoLayer2 != null)
-    {
-        mapDeco2 = new FlxTilemap();
-        mapDeco2.loadMapFromArray(cast(decoLayer2, TiledTileLayer).tileArray, tiledData.width, tiledData.height, tilesPath, 50, 50, OFF, 1);
-        mapDeco2.x = -60; mapDeco2.y = -65;
-        add(mapDeco2);
-    }
-
-    DangerObjects.clear();
-    doubleJumpGroup.clear();
-    flipGroup.clear();
-    portalGroup.clear();
-    warpsGroup.clear();
-    platforms.clear();
-    trampolines.clear();
-    trampolinesMini.clear();
-    lightsGroup.clear();
-    fallingBlock.clear();
-    slabs.clear();
-    slabsNight.clear();
-    popups.clear();
-    
-
-    if (saveParticlesGroup != null)
-    {
-        saveParticlesGroup.forEachExists(function(p:FlxEmitter)
-        {
-            p.active = false;
-            p.visible = false;
-            p.exists = false;
-        });
-        
-        saveParticlesGroup.clear(); 
-    }
-    
-    if (savesGroup != null)
-    {
-        savesGroup.forEachExists(function(s:SavePoint)
-        {
-            s.exists = false;
-        });
-        savesGroup.clear();
-    }
-    
-    ObjectLoader.loadEverything(tiledData, this, map.x, map.y);
-    add(slabs);
-    add(slabsNight);
-    add(PlayerGlow);
-    add(player);
-    add(player.doubleJumpEffect);
-    add(player.dashEffect);
-    add(DangerObjects);
-    add(platforms);
-    add(savesGroup);
-    add(popups);
-    add(doubleJumpGroup);
-    add(flipGroup);
-    add(portalGroup);
-    add(trampolines);
-    add(trampolinesMini);
-    add(warpsGroup);
-
-    savesGroup.forEach(function(save:SavePoint)
-    {
-        saveParticlesGroup.add(save.particle);
-    });
-
-    BackgroundManager.updateAllEffects(this, tiledData);
-
-    add(lightsGroup);
-
-    if (vignite != null)
-    { 
-        if (members.contains(vignite)) remove(vignite);
-        add(vignite);
-    }
-    add(vignite);
-    setupHUD();
-
-    autoScroll();
-    cameraScroll();
-    updateMusic();
-
-    PlayerData.saveCooldown = 0.1;
-    spawnTimer = 0.1;
-
-}
-
 function handleWarp(w:WarpTrigger):Void
 {
     if (w.newChapter != null && w.newChapter != "")
@@ -535,7 +439,7 @@ function handleWarp(w:WarpTrigger):Void
         PlayerData.currentChapter = Std.parseInt(w.newChapter);
     }
 
-    loadRoom(w.targetRoom);
+    RoomLoader.loadRoom(this,w.targetRoom);
 
     switch (w.direction)
     {
@@ -555,6 +459,7 @@ function setupHUD():Void
     // timeElapsed.scrollFactor.set(0, 0);
     // add(timeElapsed);
 
+    #if !mobile
     currentChapter = new FlxText(50, FlxG.height - 140, 0, "Current Chapter: ", 18);
     currentChapter.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
     currentChapter.scrollFactor.set(0, 0);
@@ -571,6 +476,15 @@ function setupHUD():Void
     playerDeaths.scrollFactor.set(0, 0);
     playerDeaths.scrollFactor.set(0, 0);
     add(playerDeaths);
+    #end
+
+    #if mobile
+    playerDeaths = new FlxText(FlxG.width - 260, 30, 0, "Total Deaths: ", 22);
+    playerDeaths.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
+    playerDeaths.scrollFactor.set(0, 0);
+    playerDeaths.scrollFactor.set(0, 0);
+    add(playerDeaths);
+    #end
 
 }
 
@@ -643,7 +557,7 @@ function FlipSwitchObjLogic(flipSwitchObj:FlipSwitch):Void
 
 function portalWarpLogic(portalLogic:PortalWarp):Void
 {
-    loadRoom("map10");
+    RoomLoader.loadRoom(this, "map10");
     FlxG.camera.shake(0.005, 0.25);
     saveAnimation.alpha = 0.5;
     FlxG.sound.play(AssetPaths.warp__ogg, 0.85, false);
@@ -738,6 +652,42 @@ function cameraScroll():Void
         cameraTarget = new flixel.FlxObject(player.x + 465, player.y, 1, 1);
         add(cameraTarget);
         FlxG.camera.follow(cameraTarget, LOCKON, 1);
+    }
+}
+
+function layoutVirtualPad():Void
+{
+    if (virtualPad == null) return;
+    var targetAlpha:Float = 0.5;
+    var padScale:Float = 2.5; 
+
+    var allButtons = [ virtualPad.getButton(LEFT), virtualPad.getButton(RIGHT), virtualPad.getButton(A)];
+    
+    for (button in allButtons)
+    {
+        if (button == null) continue;
+        button.scale.set(padScale, padScale);
+        button.updateHitbox();
+        button.scrollFactor.set(0, 0);
+        button.alpha = targetAlpha;
+    }
+
+    if (virtualPad.getButton(LEFT) != null)
+    {
+        virtualPad.getButton(LEFT).x = 100;
+        virtualPad.getButton(LEFT).y = FlxG.height - virtualPad.getButton(LEFT).height - 90;
+    }
+
+    if (virtualPad.getButton(RIGHT) != null && virtualPad.getButton(LEFT) != null)
+    {
+        virtualPad.getButton(RIGHT).x = virtualPad.getButton(LEFT).x + virtualPad.getButton(LEFT).width + 40; 
+        virtualPad.getButton(RIGHT).y = virtualPad.getButton(LEFT).y;
+    }
+
+    if (virtualPad.getButton(A) != null)
+    {
+        virtualPad.getButton(A).x = FlxG.width - virtualPad.getButton(A).width - 140;
+        virtualPad.getButton(A).y = FlxG.height - virtualPad.getButton(A).height - 200;
     }
 }
 

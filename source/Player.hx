@@ -5,7 +5,7 @@ import flixel.FlxSprite;
 import flixel.util.FlxDirectionFlags;
 import flixel.effects.particles.FlxEmitter;
 import flixel.util.FlxColor;
-// import PlayerData;
+import flixel.ui.FlxVirtualPad;
 
 class Player extends FlxSprite
 {
@@ -15,19 +15,27 @@ class Player extends FlxSprite
 
     var safeJump:Float = 0;
     var safeJumpMax:Float = 0.15;
-    var playerSprite:FlxSprite;
     public var mapMaxSpeed:Float = 400;
 
     public var canDash:Bool = false;
     var dashTimer:Float = 0;
     var dashDirection:Int = 0;
     var isDashing:Bool = false;
+    var tapTimer:Float = 0;
+    var tapCount:Int = 0;
 
     var animationJumpUp:Bool = false;
     var animationJumpDown:Bool = false;
 
-    public static var isFacingRIGHT:Bool = false;
+    public var inputLeft:Bool = false;
+    public var inputRight:Bool = false;
+    public var inputJump:Bool = false;
+    public var inputJumpReleased:Bool = false;
+    public var inputDash:Bool = false;
 
+    public var pad:FlxVirtualPad;
+
+    public static var isFacingRIGHT:Bool = false;
     public static var lastFacing:FlxDirectionFlags = RIGHT;
 
     public function new(x:Float, y:Float)
@@ -39,6 +47,7 @@ class Player extends FlxSprite
         animation.add("jumpUp", [6], 16, false);
         animation.add("jumpDown", [7], 1, false);
         animation.add("walking", [8, 9, 10, 11, 12, 13], 24, true);
+        
         width = 20; 
         height = 30;
         offset.set(20, 20);
@@ -67,35 +76,39 @@ class Player extends FlxSprite
         dashEffect.alpha.set(1, 1, 0, 0);
         dashEffect.launchMode = CIRCLE;
         dashEffect.angularVelocity.set(-300, 300);
-
     }
 
     override public function update(elapsed:Float):Void
     {
+        updateInputs();
+        
         acceleration.x = 0;
         maxVelocity.x = mapMaxSpeed;
-         
+
+        if (tapTimer > 0)
+        {
+            tapTimer -= elapsed;
+            if (tapTimer <= 0) tapCount = 0;
+        }
+        
         if (isTouching(DOWN))
         {
             safeJump = safeJumpMax;
             canDoubleJump = true;
             drag.x = 4000;
             canDash = true;
-
             animationJumpUp = false;
             animationJumpDown = false;
-            
         }
         else
         {
             safeJump -= elapsed;
         }
 
-        var jumpPressed = FlxG.keys.anyJustPressed([SPACE, UP, W]) || FlxG.mouse.justPressed;
-        var dashPressed = FlxG.keys.anyJustPressed([SHIFT, TAB, F]) || FlxG.mouse.justPressedRight;
-
-        var left = (FlxG.keys.anyPressed([LEFT, A]));
-        var right = (FlxG.keys.anyPressed([RIGHT, D]));
+        var jumpPressed = inputJump;
+        var dashPressed = inputDash;
+        var left = inputLeft;
+        var right = inputRight;
     
         if (left) 
         { 
@@ -146,22 +159,9 @@ class Player extends FlxSprite
             }
 
             acceleration.y = 2000;
-            acceleration.x = 0;
             
-            if (left)
-            {
-                acceleration.x = -4000; facing = LEFT;
-            }
-
-            else if (right)
-            {
-                acceleration.x = 4000; facing = RIGHT;
-            }
-
-            else
-            {
-
-            }
+            if (left) { acceleration.x = -4000; facing = LEFT; }
+            else if (right) { acceleration.x = 4000; facing = RIGHT; }
 
             if (jumpPressed)
             {
@@ -186,9 +186,6 @@ class Player extends FlxSprite
             }
         }
 
-        // ##############################
-        // TRAMPOLINE RED ADJUSTMENTS!!!!
-        // ##############################
         if (maxVelocity.x > 400)
         {
             maxVelocity.x -= 600 * elapsed; 
@@ -203,40 +200,75 @@ class Player extends FlxSprite
 
         super.update(elapsed);
 
-        // trace("PLAYER X: " + x + " PLAYER Y: " + y);
-
-        if (FlxG.keys.anyJustReleased([SPACE, UP, W]) || FlxG.mouse.justReleased && velocity.y < 0)
+        if (inputJumpReleased && velocity.y < 0)
         {
             velocity.y *= 0.8;
             animationJumpDown = true;
             animationJumpUp = false;
         }
 
-        if (isDashing) 
-        {
-            animation.play("walking");
-        }
-
+        if (isDashing) animation.play("walking");
         else if (!isTouching(DOWN) && Math.abs(velocity.y) > 50) 
         {
-            
-            if (velocity.y < 0)
-            {
-                animation.play("jumpUp");
-            }
-            else
-            {
-                animation.play("jumpDown");
-            }
+            if (velocity.y < 0) animation.play("jumpUp");
+            else animation.play("jumpDown");
+        }
+        else 
+        {
+            if (Math.abs(velocity.x) > 20) animation.play("walking");
+            else animation.play("idle");
+        }
+    }
+
+    function updateInputs():Void
+    {
+        inputLeft = false;
+        inputRight = false;
+        inputJump = false;
+        inputJumpReleased = false;
+        inputDash = false;
+
+        #if !mobile
+        inputLeft = FlxG.keys.anyPressed([LEFT, A]);
+        inputRight = FlxG.keys.anyPressed([RIGHT, D]);
+        inputJump = FlxG.keys.anyJustPressed([SPACE, UP, W]) || FlxG.mouse.justPressed;
+        inputJumpReleased = FlxG.keys.anyJustReleased([SPACE, UP, W]) || FlxG.mouse.justReleased;
+        inputDash = FlxG.keys.anyJustPressed([SHIFT, TAB, F]) || FlxG.mouse.justPressedRight;
+        #else
+        if (pad != null)
+        {
+            inputLeft = pad.buttonLeft.pressed;
+            inputRight = pad.buttonRight.pressed;
         }
 
-        else 
+        for (touch in FlxG.touches.list)
+        {
+            if (touch.justPressed)
             {
-                if (Math.abs(velocity.x) > 20) 
-                    animation.play("walking");
-                else 
-                    animation.play("idle");
-            }
+                var onPad = false;
+                if (pad != null)
+                {
+                    if (pad.buttonLeft.overlapsPoint(touch.getScreenPosition()) || 
+                        pad.buttonRight.overlapsPoint(touch.getScreenPosition()) || 
+                        pad.buttonA.overlapsPoint(touch.getScreenPosition())) 
+                        onPad = true;
+                }
 
+                if (!onPad)
+                {
+                    tapTimer = 0.125;
+                    inputJump = true;
+                    tapCount++;
+                    
+                    if (tapCount == 2 && tapTimer > 0)
+                    {
+                        inputDash = true;
+                        tapCount = 0;
+                    }
+                   
+                }
+            }
+        }
+        #end
     }
 }

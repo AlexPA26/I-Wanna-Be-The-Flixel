@@ -1,5 +1,6 @@
 package leveldata.misc;
 
+import haxe.Exception;
 import flixel.util.FlxSave;
 
 class SaveManager
@@ -9,6 +10,8 @@ class SaveManager
     public static function saveGame():Void
     {
         save.bind("IWBTF_Save1");
+        save.data.playtime = PlayerData.timeElapsed;
+        save.data.chapterID = PlayerData.currentChapter;
         save.data.roomID = PlayerData.currentRoom;
         save.data.deaths = PlayerData.totalDeaths;
         save.data.spawnX = PlayerData.spawnX;
@@ -30,6 +33,12 @@ class SaveManager
             PlayerData.spawnX = save.data.spawnX;
             PlayerData.spawnY = save.data.spawnY;
             return true;
+        }
+
+        if (save.data.roomID == Exception || save.data.chapterID == Exception)
+        {
+            PlayerData.currentChapter = 1;
+            PlayerData.currentRoom = "map01";
         }
         return false;
     }

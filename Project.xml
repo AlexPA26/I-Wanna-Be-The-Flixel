@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project xmlns="http://lime.openfl.org/project/1.0.4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://lime.openfl.org/project/1.0.4 http://lime.openfl.org/xsd/project-1.0.4.xsd">
+<project xmlns="http://lime.openfl.org/project/1.0.4" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:android="http://schemas.android.com/apk/res/android"
+         xsi:schemaLocation="http://lime.openfl.org/project/1.0.4 http://lime.openfl.org/xsd/project-1.0.4.xsd">
 
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="I Wanna Be The Flixel" file="IWBTF v.014" main="Main" version="1.4" company="darkuganda" />
+	<app title="I Wanna Be The Flixel" file="IWBTF v.015" main="Main" version="1.4" company="darkuganda" />
 
 	<!--The flixel preloader is not accurate in Chrome. You can use it regularly if you embed the swf into a html file
 		or you can set the actual size of your file manually at "FlxPreloaderBase-onUpdate-bytesTotal"-->
@@ -84,4 +86,11 @@
 
 	<!--Place custom nodes like icons here-->
 	<icon path="assets/images/shared/icon.png" force="true"/>
+
+	<config android:target-sdk-version="30" if="android" />
+	<config android:min-sdk-version="21" if="android" />
+	<config android:install-location="auto" if="android" />
+	<set name="CHXCPP_TOOLCHAIN_PATH" value="C:\Users\darku\AppData\Local\Android\Sdk\ndk\23.1.7779620\toolchains\llvm\prebuilt\windows-x86_64\bin" if="android" />
+	<set name="ANDROID_NDK_ROOT" value="C:\Users\darku\AppData\Local\Android\Sdk\ndk\23.1.7779620" if="android" />
+	<haxedef name="no_pch" />
 </project>

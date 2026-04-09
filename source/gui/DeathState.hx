@@ -119,26 +119,40 @@ class DeathState extends FlxSubState
     }
 
     override public function update(elapsed:Float):Void
-
     {
         
         super.update(elapsed);
 
+        #if !mobile
         if (FlxG.keys.justPressed.F11)
         {
             if (FlxG.fullscreen == false) FlxG.fullscreen = true;
             else FlxG.fullscreen = false;
         }
+        #end
 
         if (bg.alpha < 1)
         {
             bg.alpha += 0.005; 
         }
+
+        #if !mobile
         if (FlxG.keys.justPressed.R)
         {
-            if (FlxG.sound.music != null) FlxG.sound.music.stop();
-            FlxG.resetState();
+            restartLevel();
         }
-        
+        #else
+        if (FlxG.touches.justStarted().length > 0)
+        {
+            restartLevel();
+        }
+        #end
+
+    }
+
+    function restartLevel():Void
+    {
+        if (FlxG.sound.music != null) FlxG.sound.music.stop();
+        FlxG.resetState();
     }
 }
