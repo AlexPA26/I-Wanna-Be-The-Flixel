@@ -182,7 +182,7 @@ override public function update(elapsed:Float):Void
     FlxG.collide(player, slabs);
     FlxG.collide(player, slabsNight);
 
-    timeElapsed.text = "Time: " + PlayerData.timeElapsed;
+    // timeElapsed.text = "Time: " + PlayerData.timeElapsed;
     currentChapter.text = "Current Chapter: " + PlayerData.currentChapter;
     playerDeaths.text = "Total Resets: " + PlayerData.totalDeaths;
     lastSave.text = "Last Save: " + PlayerData.currentRoom;
@@ -344,7 +344,6 @@ override public function update(elapsed:Float):Void
 
 function imgCache():Void
 {
-    FlxG.bitmap.add(AssetPaths.death__png);
     FlxG.bitmap.add(AssetPaths.save__png);
     FlxG.bitmap.add(AssetPaths.transitionTiles__png);
     FlxG.bitmap.add(AssetPaths.playerGlow__png);
@@ -379,6 +378,11 @@ function chapter1Cache():Void
 function chapter2Cache():Void
 {
     FlxG.bitmap.add(AssetPaths.ch2tiles__png);
+    FlxG.bitmap.add(AssetPaths.laser__png);
+    FlxG.bitmap.add(AssetPaths.trampoline_mini__png);
+    FlxG.bitmap.add(AssetPaths.trampoline__png);
+    FlxG.bitmap.add(AssetPaths.slab__png);
+    FlxG.bitmap.add(AssetPaths.spikes__png);
     FlxG.bitmap.add(AssetPaths.sandstorm__png);
     FlxG.bitmap.add(AssetPaths.double_jump__png);
 }
