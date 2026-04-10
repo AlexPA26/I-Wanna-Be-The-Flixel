@@ -103,7 +103,7 @@
  </objectgroup>
  <objectgroup id="10" name="mapEffect">
   <properties>
-   <property name="effectType" value="fog"/>
+   <property name="effectType" value="toxic"/>
   </properties>
  </objectgroup>
  <objectgroup id="7" name="spike-normal"/>

@@ -97,7 +97,7 @@
  </objectgroup>
  <objectgroup id="12" name="mapEffect">
   <properties>
-   <property name="effectType" value="toxic"/>
+   <property name="effectType" value="fog"/>
   </properties>
  </objectgroup>
  <objectgroup id="15" name="music">
