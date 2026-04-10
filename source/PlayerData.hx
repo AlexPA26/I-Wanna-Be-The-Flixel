@@ -3,7 +3,7 @@ package;
 class PlayerData
 {
     public static var currentChapter:Int = 1;
-    public static var currentRoom:String = "01";
+    public static var currentRoom:String = "03";
     public static var currentSong:String = "";
     public static var timeElapsed:String = "00:00:00";
 

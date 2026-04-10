@@ -114,12 +114,21 @@ class MenuState extends FlxState
         customizeButton(btnNewGame);
         add(btnNewGame);
 
-        btnContinue = new FlxButton(300, 300, "Continue", clickContinue);
+        #if mobile
+            btnContinue = new FlxButton(300, 340, "Continue", clickContinue);
+        #else
+            btnContinue = new FlxButton(300, 300, "Continue", clickContinue);
+        #end
         customizeButton(btnContinue);
         add(btnContinue);
 
-        btnExit = new FlxButton(300, 470, "Quit Game", clickQuit);
+        #if mobile
+            btnExit = new FlxButton(300, 540, "Quit Game", clickQuit);
+        #else
+            btnExit = new FlxButton(300, 470, "Quit Game", clickQuit);
+        #end
         customizeButton(btnExit);
+
         #if !html5
         add(btnExit);
         #end
@@ -158,16 +167,16 @@ class MenuState extends FlxState
 
     function customizeButton(btn:FlxButton):Void
     {
-        #if !mobile
         btn.makeGraphic(270, 60, FlxColor.TRANSPARENT); 
-        #end
-
-        #if mobile
-        btn.makeGraphic(360, 80, FlxColor.TRANSPARENT); 
-        #end
+        
         if (btn.label != null) 
         {
-            btn.label.setFormat(null, 28, FlxColor.WHITE, CENTER);
+            #if mobile
+                btn.label.setFormat(null, 36, FlxColor.WHITE, CENTER);
+            #else
+                btn.label.setFormat(null, 28, FlxColor.WHITE, CENTER);
+            #end
+
             btn.label.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
             btn.label.fieldWidth = 300;
             btn.label.centerOffsets();

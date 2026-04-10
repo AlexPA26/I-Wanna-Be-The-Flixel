@@ -2,11 +2,23 @@
 <project xmlns="http://lime.openfl.org/project/1.0.4" 
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns:android="http://schemas.android.com/apk/res/android"
+         xmlns:config="http://lime.openfl.org/project/config"
          xsi:schemaLocation="http://lime.openfl.org/project/1.0.4 http://lime.openfl.org/xsd/project-1.0.4.xsd">
 
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="I Wanna Be The Flixel" file="IWBTF v.015" main="Main" version="1.4" company="darkuganda" />
+	<app title="I Wanna Be The Flixel" file="IWBTF v.015" main="Main" version="1.5" company="darkuganda" package="com.darkuganda.iwbtf"/>
+	<certificate path="release.keystore" alias="release" password="123456" if="android" />
+	<set name="ANDROID_NDK_ROOT" value="C:\Users\darku\AppData\Local\Android\Sdk\ndk\21.4.7075529" force="true" />
+	<set name="ANDROID_TARGET_SDK_VERSION" value="33" />
+	<set name="ANDROID_BUILD_SDK_VERSION" value="33" />
+	<set name="android-target-sdk-version" value="33" />
+	<set name="ANT_TARGET_SDK_VERSION" value="33" />
+	<set name="ANDROID_BUILD_TOOLS_VERSION" value="33.0.0" />
+	<set name="no-debug" value="1" />
+	<set name="debug" value="false" unless="debug" />
+	<set name="ANDROID_DEBUGGABLE" value="false" />
+	<haxedef name="no_debug" />
 
 	<!--The flixel preloader is not accurate in Chrome. You can use it regularly if you embed the swf into a html file
 		or you can set the actual size of your file manually at "FlxPreloaderBase-onUpdate-bytesTotal"-->
@@ -36,6 +48,10 @@
 	<assets path="assets" />
 	<assets path="assets/images" rename="assets/images" />
 	<assets path="assets/data" rename="assets/data" />
+	<assets path="assets/data/chapters_mobile" />
+	
+	<template path="templates" />
+	<set name="KEYSTORE_FILE" value="../../release.keystore" />
 	<!-- _______________________________ Libraries ______________________________ -->
 
 	<haxelib name="flixel" />
@@ -73,24 +89,19 @@
 	<!--<haxedef name="FLX_NO_FOCUS_LOST_SCREEN" />-->
 
 	<!--Disable the Flixel core debugger. Automatically gets set whenever you compile in release mode!-->
-	<haxedef name="FLX_NO_DEBUG" unless="debug" />
-
 	<!--Enable this for Nape release builds for a serious peformance improvement-->
-	<haxedef name="NAPE_RELEASE_BUILD" unless="debug" />
+	<haxedef name="FLX_NO_DEBUG" if="release" />
+	<haxedef name="FLX_NO_MOUSE_ADVANCED" if="mobile" />
+	<haxedef name="no_debug" if="release" />
 
+	<haxedef name="fdb" value="0" />
 	<!-- Haxe 4.3.0+: Enable pretty syntax errors and stuff. -->
 	<!-- pretty (haxeflixel default), indent, classic (haxe compiler default) -->
 	<haxedef name="message.reporting" value="pretty" />
 
 	<!-- _________________________________ Custom _______________________________ -->
 
-	<!--Place custom nodes like icons here-->
 	<icon path="assets/images/shared/icon.png" force="true"/>
 
-	<config android:target-sdk-version="30" if="android" />
-	<config android:min-sdk-version="21" if="android" />
-	<config android:install-location="auto" if="android" />
-	<set name="CHXCPP_TOOLCHAIN_PATH" value="C:\Users\darku\AppData\Local\Android\Sdk\ndk\23.1.7779620\toolchains\llvm\prebuilt\windows-x86_64\bin" if="android" />
-	<set name="ANDROID_NDK_ROOT" value="C:\Users\darku\AppData\Local\Android\Sdk\ndk\23.1.7779620" if="android" />
 	<haxedef name="no_pch" />
 </project>

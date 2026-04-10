@@ -162,7 +162,9 @@ override public function create():Void
 
 override public function update(elapsed:Float):Void
 {
-
+    #if mobile
+        player.pad.alpha = 0.5;
+    #end
     if (isAutoscrolling && cameraTarget != null) 
     {
         cameraTarget.x += scrollSpeed * elapsed;
@@ -557,7 +559,7 @@ function FlipSwitchObjLogic(flipSwitchObj:FlipSwitch):Void
 
 function portalWarpLogic(portalLogic:PortalWarp):Void
 {
-    RoomLoader.loadRoom(this, "map10");
+    RoomLoader.loadRoom(this, "map12");
     FlxG.camera.shake(0.005, 0.25);
     saveAnimation.alpha = 0.5;
     FlxG.sound.play(AssetPaths.warp__ogg, 0.85, false);
@@ -595,7 +597,7 @@ function updateMusic():Void
 
     var songName:String = musicLayer.properties.get("songName");
     var songPath = "assets/music/chapters/chapter" + PlayerData.currentChapter + "bgm/" + songName + ".ogg";
-    trace("Music Changed to: " + songName);
+    // trace("Music Changed to: " + songName);
 
     if (PlayerData.currentSong == songPath && FlxG.sound.music != null && FlxG.sound.music.playing)
     {

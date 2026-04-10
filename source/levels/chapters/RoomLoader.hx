@@ -16,8 +16,11 @@ class RoomLoader
     {
         flixel.tweens.FlxTween.globalManager.forEach(function(twn) twn.cancel());
 
-        var chartPath = "assets/data/chapters/chapter" + PlayerData.currentChapter + "/ch" + PlayerData.currentChapter + "-" + roomName + ".tmx";
-        
+        #if !mobile
+            var chartPath = "assets/data/chapters/chapter" + PlayerData.currentChapter + "/ch" + PlayerData.currentChapter + "-" + roomName + ".tmx";
+        #else
+            var chartPath = "assets/data/chapters_mobile/chapter" + PlayerData.currentChapter + "/ch" + PlayerData.currentChapter + "-" + roomName + "-mobile" + ".tmx";
+        #end
         state.currentRoomName = roomName;
         state.tiledData = new TiledMap(chartPath);
 
@@ -141,8 +144,30 @@ class RoomLoader
             state.virtualPad.visible = false;
             state.virtualPad.active = false;
         #else
-            state.player.pad.alpha = 0.35;
+            state.player.pad.alpha = 0.5;
         #end
+
+        // --- TSX DEBUG TRACE START ---
+if (state.tiledData != null && state.tiledData.tilesets != null) 
+{
+    trace("--- Tileset Info for: " + roomName + " ---");
+    
+    for (ts in state.tiledData.tilesets) 
+    {
+        trace("Tileset Key: " + ts.name);
+        trace("First GID: " + ts.firstGID);
+        
+        // This is the property that holds the path to the PNG inside the TMX/TSX
+        if (ts.imageSource != null) {
+            trace("Internal Image Source Path: " + ts.imageSource);
+        } else {
+            trace("WARNING: No image source found for this tileset!");
+        }
+    }
+} else {
+    trace("!!! ERROR: tiledData or tilesets Map is null for " + roomName);
+}
+// --- TSX DEBUG TRACE END ---
     }
 
 }
