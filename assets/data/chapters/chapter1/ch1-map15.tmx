@@ -21,7 +21,7 @@
 0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,9,1,0,0,0,1,0,0,0,0,0,0,
 0,0,0,0,0,1,0,0,0,0,0,7,0,1,1,0,9,1,0,0,0,1,0,0,0,0,0,0,
 0,0,0,0,0,1,0,0,0,0,0,1,0,9,9,0,9,1,0,0,0,1,0,0,0,0,0,0,
-1,1,1,1,1,1,7,0,0,0,0,1,0,9,9,0,9,7,0,0,0,7,7,1,1,1,1,1,
+1,1,1,1,1,1,7,0,0,0,0,1,0,9,9,0,9,7,0,0,0,7,1,1,1,1,1,1,
 0,0,0,0,0,0,0,0,0,0,0,1,0,9,9,0,9,1,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,1,0,9,9,0,9,1,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,1,0,9,9,0,9,1,0,0,0,0,0,0,0,0,0,0,
@@ -143,7 +143,7 @@
  </objectgroup>
  <objectgroup id="8" name="save">
   <object id="365" name="save" gid="52" x="200" y="600" width="50" height="50"/>
-  <object id="366" name="save" gid="52" x="1250" y="600" width="50" height="50"/>
+  <object id="366" name="save" gid="52" x="1200" y="600" width="50" height="50"/>
  </objectgroup>
  <objectgroup id="10" name="laser">
   <object id="316" name="laser" gid="61" x="350" y="200" width="50" height="50">
@@ -219,26 +219,6 @@
   <object id="331" name="laser" gid="61" x="1050" y="750" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
-   </properties>
-  </object>
-  <object id="332" name="laser" gid="67" x="1100" y="700" width="50" height="50">
-   <properties>
-    <property name="direction" value="v"/>
-   </properties>
-  </object>
-  <object id="333" name="laser" gid="67" x="1100" y="650" width="50" height="50">
-   <properties>
-    <property name="direction" value="v"/>
-   </properties>
-  </object>
-  <object id="334" name="laser" gid="73" x="1100" y="600" width="50" height="50">
-   <properties>
-    <property name="direction" value="voff"/>
-   </properties>
-  </object>
-  <object id="335" name="laser" gid="73" x="1100" y="550" width="50" height="50">
-   <properties>
-    <property name="direction" value="voff"/>
    </properties>
   </object>
   <object id="336" name="laser" gid="73" x="550" y="300" width="50" height="50">

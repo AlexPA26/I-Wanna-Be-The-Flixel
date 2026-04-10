@@ -157,7 +157,7 @@
   </object>
  </objectgroup>
  <objectgroup id="8" name="save"/>
- <objectgroup id="10" name="laser" visible="0">
+ <objectgroup id="10" name="laser">
   <object id="488" name="laser" gid="61" x="150" y="250" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>

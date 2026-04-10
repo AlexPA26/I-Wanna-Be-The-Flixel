@@ -559,7 +559,7 @@ function FlipSwitchObjLogic(flipSwitchObj:FlipSwitch):Void
 
 function portalWarpLogic(portalLogic:PortalWarp):Void
 {
-    RoomLoader.loadRoom(this, "map12");
+    RoomLoader.loadRoom(this, "map21");
     FlxG.camera.shake(0.005, 0.25);
     saveAnimation.alpha = 0.5;
     FlxG.sound.play(AssetPaths.warp__ogg, 0.85, false);

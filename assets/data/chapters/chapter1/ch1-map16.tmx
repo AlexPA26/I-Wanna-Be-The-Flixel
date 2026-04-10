@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="21" nextobjectid="598">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="21" nextobjectid="600">
  <properties>
   <property name="songName" value="castle1"/>
  </properties>
@@ -103,7 +103,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="14" name="light">
+ <objectgroup id="14" name="light" visible="0">
   <object id="565" name="light" gid="79" x="325.333" y="224" width="200" height="200"/>
   <object id="566" name="light" gid="79" x="774.667" y="226.667" width="200" height="200"/>
   <object id="567" name="light" gid="79" x="1224" y="222.667" width="200" height="200"/>
@@ -285,11 +285,6 @@
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="411" name="laser" gid="61" x="1150" y="350" width="50" height="50">
-   <properties>
-    <property name="direction" value="h"/>
-   </properties>
-  </object>
   <object id="412" name="laser" gid="61" x="1250" y="350" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
@@ -401,11 +396,6 @@
    </properties>
   </object>
   <object id="434" name="laser" gid="61" x="650" y="550" width="50" height="50">
-   <properties>
-    <property name="direction" value="h"/>
-   </properties>
-  </object>
-  <object id="435" name="laser" gid="61" x="450" y="550" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
@@ -853,6 +843,16 @@
   <object id="580" name="laser" gid="73" x="400" y="250" width="50" height="50">
    <properties>
     <property name="direction" value="voff"/>
+   </properties>
+  </object>
+  <object id="598" name="laser" gid="75" x="450" y="550" width="50" height="50">
+   <properties>
+    <property name="direction" value="hoff"/>
+   </properties>
+  </object>
+  <object id="599" name="laser" gid="75" x="1150" y="350" width="50" height="50">
+   <properties>
+    <property name="direction" value="hoff"/>
    </properties>
   </object>
  </objectgroup>
