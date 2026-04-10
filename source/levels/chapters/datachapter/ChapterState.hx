@@ -1,5 +1,6 @@
 package levels.chapters.datachapter;
 
+import leveldata.background.AcidFluid;
 import flixel.ui.FlxVirtualPad;
 import flixel.effects.particles.FlxEmitter;
 import leveldata.background.BackgroundManager;
@@ -45,7 +46,7 @@ class ChapterState extends FlxState
 
     var currentRoomName:String;
     public var warpsGroup:FlxTypedGroup<WarpTrigger>;
-    var vignite:FlxSprite;
+    public var vignite:FlxSprite;
 
     public var backEffectObj:FlxBackdrop;
     public var currentBackEffectName:String = "";
@@ -67,6 +68,7 @@ class ChapterState extends FlxState
     public var currentTopEffectName:String = "";
     public var lastTopScrollBoost:Float = 0;
 
+    public var eventEffectGroup:FlxGroup;
     public var savesGroup:FlxTypedGroup<SavePoint>;
     public var popups:FlxTypedGroup<FlxText>;
     public var saveParticlesGroup:FlxTypedGroup<FlxEmitter>;
@@ -90,6 +92,8 @@ class ChapterState extends FlxState
     var currentChapter:FlxText;
     var playerDeaths:FlxText;
     var lastSave:FlxText;
+
+    public var roomAcid:AcidFluid = null;
 
 override public function create():Void
 {
@@ -119,6 +123,7 @@ override public function create():Void
     popups = new FlxTypedGroup<FlxText>();
     saveParticlesGroup = new FlxTypedGroup<FlxEmitter>();
     doubleJumpGroup = new FlxTypedGroup<DoubleJumpObj>();
+    eventEffectGroup = new FlxTypedGroup();
     flipGroup = new FlxTypedGroup<FlipSwitch>();
     portalGroup = new FlxTypedGroup<PortalWarp>();
     trampolines = new FlxTypedGroup<NormalTrampoline>();
@@ -362,7 +367,7 @@ override public function update(elapsed:Float):Void
     #end
 
     #if !mobile
-    if (FlxG.keys.justPressed.ONE) RoomLoader.loadRoom(this, "map13");
+    if (FlxG.keys.justPressed.ONE) RoomLoader.loadRoom(this, "map24");
     #end
 }
 
@@ -661,7 +666,8 @@ function layoutVirtualPad():Void
 {
     if (virtualPad == null) return;
     var targetAlpha:Float = 0.5;
-    var padScale:Float = 2.5; 
+    var padScale:Float = 2.5;
+    var hitboxPadding:Float = 40;
 
     var allButtons = [ virtualPad.getButton(LEFT), virtualPad.getButton(RIGHT), virtualPad.getButton(A)];
     
@@ -670,6 +676,12 @@ function layoutVirtualPad():Void
         if (button == null) continue;
         button.scale.set(padScale, padScale);
         button.updateHitbox();
+        button.width += hitboxPadding;
+        button.height += hitboxPadding;
+
+        button.offset.x -= hitboxPadding / 2;
+        button.offset.y -= hitboxPadding / 2;
+
         button.scrollFactor.set(0, 0);
         button.alpha = targetAlpha;
     }

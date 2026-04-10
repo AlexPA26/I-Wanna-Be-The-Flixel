@@ -4,6 +4,7 @@ import leveldata.background.BackgroundManager;
 import flixel.effects.particles.FlxEmitter;
 import leveldata.events.SavePoint;
 import leveldata.events.ObjectLoader;
+import leveldata.events.EventLoader;
 import levels.chapters.datachapter.ChapterState;
 import flixel.FlxG;
 import flixel.tile.FlxTilemap;
@@ -16,7 +17,13 @@ class RoomLoader
     {
         flixel.tweens.FlxTween.globalManager.forEach(function(twn) twn.cancel());
 
-        #if !mobile
+        if (state.roomAcid != null) 
+    {
+        state.remove(state.roomAcid);
+        state.roomAcid.destroy();
+        state.roomAcid = null; // Important: null it out so we know it's gone
+    }
+        #if !linux
             var chartPath = "assets/data/chapters/chapter" + PlayerData.currentChapter + "/ch" + PlayerData.currentChapter + "-" + roomName + ".tmx";
         #else
             var chartPath = "assets/data/chapters_mobile/chapter" + PlayerData.currentChapter + "/ch" + PlayerData.currentChapter + "-" + roomName + "-mobile" + ".tmx";
@@ -89,6 +96,7 @@ class RoomLoader
         }
 
         ObjectLoader.loadEverything(state.tiledData, state, state.map.x, state.map.y);
+        EventLoader.loadEvents(state.tiledData, state);
         state.add(state.PlayerGlow);
         state.add(state.DangerObjects);
         state.add(state.player);
@@ -107,6 +115,7 @@ class RoomLoader
         state.add(state.portalGroup);
         state.add(state.trampolines);
         state.add(state.trampolinesMini);
+        state.add(state.eventEffectGroup);
 
         state.savesGroup.forEach(function(save:SavePoint)
         {
@@ -147,27 +156,6 @@ class RoomLoader
             state.player.pad.alpha = 0.5;
         #end
 
-        // --- TSX DEBUG TRACE START ---
-if (state.tiledData != null && state.tiledData.tilesets != null) 
-{
-    trace("--- Tileset Info for: " + roomName + " ---");
-    
-    for (ts in state.tiledData.tilesets) 
-    {
-        trace("Tileset Key: " + ts.name);
-        trace("First GID: " + ts.firstGID);
-        
-        // This is the property that holds the path to the PNG inside the TMX/TSX
-        if (ts.imageSource != null) {
-            trace("Internal Image Source Path: " + ts.imageSource);
-        } else {
-            trace("WARNING: No image source found for this tileset!");
-        }
-    }
-} else {
-    trace("!!! ERROR: tiledData or tilesets Map is null for " + roomName);
-}
-// --- TSX DEBUG TRACE END ---
     }
 
 }

@@ -7,14 +7,9 @@
 
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="I Wanna Be The Flixel" file="IWBTF v.015" main="Main" version="1.5" company="darkuganda" package="com.darkuganda.iwbtf"/>
+	<app title="IWBTF" file="IWBTF v.015" main="Main" version="1.5" company="darkuganda" package="com.darkuganda.iwbtf"/>
 	<certificate path="release.keystore" alias="release" password="123456" if="android" />
 	<set name="ANDROID_NDK_ROOT" value="C:\Users\darku\AppData\Local\Android\Sdk\ndk\21.4.7075529" force="true" />
-	<set name="ANDROID_TARGET_SDK_VERSION" value="33" />
-	<set name="ANDROID_BUILD_SDK_VERSION" value="33" />
-	<set name="android-target-sdk-version" value="33" />
-	<set name="ANT_TARGET_SDK_VERSION" value="33" />
-	<set name="ANDROID_BUILD_TOOLS_VERSION" value="33.0.0" />
 	<set name="no-debug" value="1" />
 	<set name="debug" value="false" unless="debug" />
 	<set name="ANDROID_DEBUGGABLE" value="false" />
@@ -101,7 +96,8 @@
 
 	<!-- _________________________________ Custom _______________________________ -->
 
-	<icon path="assets/images/shared/icon.png" force="true"/>
+	<icon path="assets/images/shared/icon.png" if="!mobile"/>
+	<icon path="assets/images/shared/icon-mobile.png" if="android"/>
 
 	<haxedef name="no_pch" />
 </project>

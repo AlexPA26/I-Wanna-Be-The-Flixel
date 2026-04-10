@@ -146,6 +146,10 @@ public static function bgEffect(state:ChapterState, tiledData:TiledMap):Void
                 state.backEffectObj = new FlxBackdrop(AssetPaths.cloudsBack__png, XY);
                 state.backEffectObj.velocity.set(-60, 0);
                 state.backEffectObj.alpha = 0.65;
+            case "toxic":
+                state.backEffectObj = new FlxBackdrop(AssetPaths.poison_air__png, X);
+                state.backEffectObj.velocity.set(25 - boost, 0);
+                state.backEffectObj.alpha = 0.5;
         }
 
         if (state.backEffectObj != null)
