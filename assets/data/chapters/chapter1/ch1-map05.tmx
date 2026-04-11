@@ -4,16 +4,16 @@
   <property name="songName" value="rain"/>
  </properties>
  <tileset firstgid="1" source="ch1-tiles.tsx"/>
- <tileset firstgid="49" source="../../textures/save.tsx"/>
- <tileset firstgid="50" source="../../textures/laser.tsx"/>
- <tileset firstgid="68" source="../../textures/spike.tsx"/>
- <tileset firstgid="76" source="../../textures/transition-tiles.tsx"/>
+ <tileset firstgid="81" source="../../textures/save.tsx"/>
+ <tileset firstgid="82" source="../../textures/laser.tsx"/>
+ <tileset firstgid="100" source="../../textures/spike.tsx"/>
+ <tileset firstgid="108" source="../../textures/transition-tiles.tsx"/>
  <layer id="1" name="tiles-main" width="28" height="18">
   <data encoding="csv">
-0,0,0,0,0,0,0,2,23,13,0,0,13,13,0,13,23,13,0,2,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,2,0,13,0,0,13,23,0,13,0,13,0,2,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,2,0,23,0,0,13,0,0,23,0,13,0,2,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,2,0,0,0,0,23,0,0,0,0,23,0,2,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,2,20,13,0,0,13,13,0,13,20,13,0,2,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,2,0,13,0,0,13,20,0,13,0,13,0,2,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,2,0,20,0,0,13,0,0,20,0,13,0,2,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,2,0,0,0,0,20,0,0,0,0,20,0,2,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,2,2,2,0,0,0,0,0,0,
 0,0,0,2,2,2,2,7,0,0,0,0,0,0,0,0,0,0,0,0,0,7,2,2,2,0,0,0,
 0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2,
@@ -23,11 +23,11 @@
 0,0,0,0,0,0,2,7,2,2,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,
 0,0,0,0,0,0,2,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,
 2,2,2,2,2,2,2,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,0,0,0,
-0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,21,0,0,0,0,0,0,0,2,0,0,0,
-0,0,0,0,0,0,0,0,0,2,0,21,0,21,0,0,13,0,21,0,0,0,21,0,2,0,0,0,
-0,0,0,0,0,0,0,0,0,2,0,13,0,13,21,0,13,0,13,0,21,0,13,0,2,0,0,0,
+0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,18,0,0,0,0,0,0,0,2,0,0,0,
+0,0,0,0,0,0,0,0,0,2,0,18,0,18,0,0,13,0,18,0,0,0,18,0,2,0,0,0,
+0,0,0,0,0,0,0,0,0,2,0,13,0,13,18,0,13,0,13,0,18,0,13,0,2,0,0,0,
 0,0,0,0,0,0,0,0,0,2,0,13,0,13,13,0,13,0,13,0,13,0,13,0,2,0,0,0,
-0,0,0,0,0,0,0,0,0,2,21,13,0,13,13,0,13,0,13,21,13,0,13,0,2,0,0,0
+0,0,0,0,0,0,0,0,0,2,18,13,0,13,13,0,13,0,13,18,13,0,13,0,2,0,0,0
 </data>
  </layer>
  <layer id="13" name="tiles-deco" width="28" height="18">
@@ -63,81 +63,81 @@
   </properties>
  </objectgroup>
  <objectgroup id="2" name="save">
-  <object id="23" name="save" gid="49" x="150" y="500" width="50" height="50"/>
+  <object id="23" name="save" gid="81" x="150" y="500" width="50" height="50"/>
  </objectgroup>
  <objectgroup id="4" name="spike-normal">
-  <object id="24" name="spike" gid="68" x="550" y="700" width="50" height="50">
+  <object id="24" name="spike" gid="100" x="550" y="700" width="50" height="50">
    <properties>
     <property name="id" value="0"/>
    </properties>
   </object>
-  <object id="25" name="spike" gid="68" x="800" y="650" width="50" height="50">
+  <object id="25" name="spike" gid="100" x="800" y="650" width="50" height="50">
    <properties>
     <property name="id" value="0"/>
    </properties>
   </object>
-  <object id="26" name="spike" gid="68" x="1000" y="750" width="50" height="50">
+  <object id="26" name="spike" gid="100" x="1000" y="750" width="50" height="50">
    <properties>
     <property name="id" value="0"/>
    </properties>
   </object>
-  <object id="27" name="spike" gid="72" x="1100" y="700" width="50" height="50">
+  <object id="27" name="spike" gid="104" x="1100" y="700" width="50" height="50">
    <properties>
     <property name="id" value="4"/>
    </properties>
   </object>
-  <object id="28" name="spike" gid="72" x="900" y="700" width="50" height="50">
+  <object id="28" name="spike" gid="104" x="900" y="700" width="50" height="50">
    <properties>
     <property name="id" value="4"/>
    </properties>
   </object>
-  <object id="29" name="spike" gid="72" x="650" y="700" width="50" height="50">
+  <object id="29" name="spike" gid="104" x="650" y="700" width="50" height="50">
    <properties>
     <property name="id" value="4"/>
    </properties>
   </object>
-  <object id="30" name="spike" gid="72" x="700" y="750" width="50" height="50">
+  <object id="30" name="spike" gid="104" x="700" y="750" width="50" height="50">
    <properties>
     <property name="id" value="4"/>
    </properties>
   </object>
-  <object id="31" name="spike" gid="74" x="850" y="250" width="50" height="50">
+  <object id="31" name="spike" gid="106" x="850" y="250" width="50" height="50">
    <properties>
     <property name="id" value="6"/>
    </properties>
   </object>
-  <object id="32" name="spike" gid="74" x="750" y="200" width="50" height="50"/>
-  <object id="33" name="spike" gid="74" x="600" y="250" width="50" height="50">
+  <object id="32" name="spike" gid="106" x="750" y="200" width="50" height="50"/>
+  <object id="33" name="spike" gid="106" x="600" y="250" width="50" height="50">
    <properties>
     <property name="id" value="6"/>
    </properties>
   </object>
-  <object id="34" name="spike" gid="70" x="450" y="200" width="50" height="50">
+  <object id="34" name="spike" gid="102" x="450" y="200" width="50" height="50">
    <properties>
     <property name="id" value="2"/>
    </properties>
   </object>
-  <object id="55" gid="68" x="500" y="850" width="50" height="50">
+  <object id="55" gid="100" x="500" y="850" width="50" height="50">
    <properties>
     <property name="id" value="0"/>
    </properties>
   </object>
-  <object id="56" gid="68" x="950" y="850" width="50" height="50">
+  <object id="56" gid="100" x="950" y="850" width="50" height="50">
    <properties>
     <property name="id" value="0"/>
    </properties>
   </object>
-  <object id="57" gid="70" x="800" y="100" width="50" height="50">
+  <object id="57" gid="102" x="800" y="100" width="50" height="50">
    <properties>
     <property name="id" value="2"/>
    </properties>
   </object>
-  <object id="58" gid="70" x="650" y="150" width="50" height="50">
+  <object id="58" gid="102" x="650" y="150" width="50" height="50">
    <properties>
     <property name="id" value="2"/>
    </properties>
   </object>
-  <object id="59" gid="70" x="400" y="100" width="50" height="50">
+  <object id="59" gid="102" x="400" y="100" width="50" height="50">
    <properties>
     <property name="id" value="2"/>
    </properties>
@@ -149,201 +149,201 @@
   </properties>
  </objectgroup>
  <objectgroup id="3" name="laser">
-  <object id="2" name="laser" gid="50" x="400" y="300" width="50" height="50">
+  <object id="2" name="laser" gid="82" x="400" y="300" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="3" name="laser" gid="50" x="450" y="300" width="50" height="50">
+  <object id="3" name="laser" gid="82" x="450" y="300" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="4" name="laser" gid="50" x="500" y="300" width="50" height="50">
+  <object id="4" name="laser" gid="82" x="500" y="300" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="5" name="laser" gid="50" x="550" y="300" width="50" height="50">
+  <object id="5" name="laser" gid="82" x="550" y="300" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="6" name="laser" gid="50" x="600" y="300" width="50" height="50">
+  <object id="6" name="laser" gid="82" x="600" y="300" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="7" name="laser" gid="50" x="600" y="300" width="50" height="50">
+  <object id="7" name="laser" gid="82" x="600" y="300" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="8" name="laser" gid="50" x="650" y="300" width="50" height="50">
+  <object id="8" name="laser" gid="82" x="650" y="300" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="9" name="laser" gid="50" x="700" y="300" width="50" height="50">
+  <object id="9" name="laser" gid="82" x="700" y="300" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="10" name="laser" gid="50" x="750" y="300" width="50" height="50">
+  <object id="10" name="laser" gid="82" x="750" y="300" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="11" name="laser" gid="50" x="800" y="300" width="50" height="50">
+  <object id="11" name="laser" gid="82" x="800" y="300" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="12" name="laser" gid="50" x="850" y="300" width="50" height="50">
+  <object id="12" name="laser" gid="82" x="850" y="300" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="13" name="laser" gid="50" x="900" y="300" width="50" height="50">
+  <object id="13" name="laser" gid="82" x="900" y="300" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="14" name="laser" gid="50" x="950" y="300" width="50" height="50">
+  <object id="14" name="laser" gid="82" x="950" y="300" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="15" name="laser" gid="50" x="1000" y="300" width="50" height="50">
+  <object id="15" name="laser" gid="82" x="1000" y="300" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="37" name="laser" gid="50" x="500" y="600" width="50" height="50">
+  <object id="37" name="laser" gid="82" x="500" y="600" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="38" name="laser" gid="50" x="550" y="600" width="50" height="50">
+  <object id="38" name="laser" gid="82" x="550" y="600" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="39" name="laser" gid="50" x="600" y="600" width="50" height="50">
+  <object id="39" name="laser" gid="82" x="600" y="600" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="40" name="laser" gid="50" x="650" y="600" width="50" height="50">
+  <object id="40" name="laser" gid="82" x="650" y="600" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="41" name="laser" gid="50" x="700" y="600" width="50" height="50">
+  <object id="41" name="laser" gid="82" x="700" y="600" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="42" name="laser" gid="50" x="800" y="600" width="50" height="50">
+  <object id="42" name="laser" gid="82" x="800" y="600" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="43" name="laser" gid="50" x="850" y="600" width="50" height="50">
+  <object id="43" name="laser" gid="82" x="850" y="600" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="44" name="laser" gid="50" x="900" y="600" width="50" height="50">
+  <object id="44" name="laser" gid="82" x="900" y="600" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="45" name="laser" gid="50" x="750" y="600" width="50" height="50">
+  <object id="45" name="laser" gid="82" x="750" y="600" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="46" name="laser" gid="50" x="950" y="600" width="50" height="50">
+  <object id="46" name="laser" gid="82" x="950" y="600" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="47" name="laser" gid="50" x="1000" y="600" width="50" height="50">
+  <object id="47" name="laser" gid="82" x="1000" y="600" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="48" name="laser" gid="50" x="1050" y="600" width="50" height="50">
+  <object id="48" name="laser" gid="82" x="1050" y="600" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="51" name="laser" gid="56" x="350" y="500" width="50" height="50">
+  <object id="51" name="laser" gid="88" x="350" y="500" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="52" name="laser" gid="56" x="350" y="450" width="50" height="50">
+  <object id="52" name="laser" gid="88" x="350" y="450" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="53" name="laser" gid="62" x="350" y="400" width="50" height="50">
+  <object id="53" name="laser" gid="94" x="350" y="400" width="50" height="50">
    <properties>
     <property name="direction" value="voff"/>
    </properties>
   </object>
-  <object id="54" name="laser" gid="62" x="350" y="350" width="50" height="50">
+  <object id="54" name="laser" gid="94" x="350" y="350" width="50" height="50">
    <properties>
     <property name="direction" value="voff"/>
    </properties>
   </object>
  </objectgroup>
  <objectgroup id="12" name="warps">
-  <object id="60" name="warp" gid="79" x="0" y="450" width="50" height="50">
+  <object id="60" name="warp" gid="111" x="0" y="450" width="50" height="50">
    <properties>
     <property name="direction" value="left"/>
     <property name="target" value="map04"/>
    </properties>
   </object>
-  <object id="61" name="warp" gid="79" x="0" y="500" width="50" height="50">
+  <object id="61" name="warp" gid="111" x="0" y="500" width="50" height="50">
    <properties>
     <property name="direction" value="left"/>
     <property name="target" value="map04"/>
    </properties>
   </object>
-  <object id="62" name="warp" gid="79" x="0" y="550" width="50" height="50">
+  <object id="62" name="warp" gid="111" x="0" y="550" width="50" height="50">
    <properties>
     <property name="direction" value="left"/>
     <property name="target" value="map04"/>
    </properties>
   </object>
-  <object id="63" name="warp" gid="79" x="0" y="600" width="50" height="50">
+  <object id="63" name="warp" gid="111" x="0" y="600" width="50" height="50">
    <properties>
     <property name="direction" value="left"/>
     <property name="target" value="map04"/>
    </properties>
   </object>
-  <object id="64" name="warp" gid="77" x="1350" y="400" width="50" height="50">
+  <object id="64" name="warp" gid="109" x="1350" y="400" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
     <property name="target" value="map06"/>
    </properties>
   </object>
-  <object id="65" name="warp" gid="77" x="1350" y="500" width="50" height="50">
+  <object id="65" name="warp" gid="109" x="1350" y="500" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
     <property name="target" value="map06"/>
    </properties>
   </object>
-  <object id="66" name="warp" gid="77" x="1350" y="500" width="50" height="50">
+  <object id="66" name="warp" gid="109" x="1350" y="500" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
     <property name="target" value="map06"/>
    </properties>
   </object>
-  <object id="67" name="warp" gid="77" x="1350" y="450" width="50" height="50">
+  <object id="67" name="warp" gid="109" x="1350" y="450" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
     <property name="target" value="map06"/>

@@ -39,10 +39,13 @@ class ChapterState extends FlxState
 
     public var bg:FlxSprite;
     public var currentBGName:String = "";
-    public var tilesPath:String = "assets/images/levels/tiles/ch" + PlayerData.currentChapter + "tiles.png";
+    public var mainTilesPath:String = "assets/images/levels/tiles/ch" + PlayerData.currentChapter + "tiles.png";
     var map:FlxTilemap;
     var mapDeco:FlxTilemap;
     var mapDeco2:FlxTilemap;
+
+    public var tilemapLayers:Map<String, FlxTilemap> = new Map();
+    public var tilemapGroup:flixel.group.FlxGroup;
 
     var currentRoomName:String;
     public var warpsGroup:FlxTypedGroup<WarpTrigger>;
@@ -83,6 +86,7 @@ class ChapterState extends FlxState
     public var DangerObjects:FlxGroup;
     public var slabs:FlxTypedGroup<NormalSlab>;
     public var slabsNight:FlxTypedGroup<NormalSlabNight>;
+    public var slabsPoison:FlxTypedGroup<NormalSlabPoison>;
 
     var spikes:FlxGroup;
     var saveAnimation:FlxSprite;
@@ -133,6 +137,7 @@ override public function create():Void
     lightsGroup = new FlxTypedGroup<LightTorch>();
     slabs = new FlxTypedGroup<NormalSlab>();
     slabsNight = new FlxTypedGroup<NormalSlabNight>();
+    slabsPoison = new FlxTypedGroup<NormalSlabPoison>();
     bullets = new FlxTypedGroup<FlxSprite>();
 
     PlayerGlow = new FlxSprite();
@@ -189,9 +194,11 @@ override public function update(elapsed:Float):Void
     FlxG.collide(player, map);
     FlxG.collide(player, slabs);
     FlxG.collide(player, slabsNight);
+    FlxG.collide(player, slabsPoison);
+
 
     // timeElapsed.text = "Time: " + PlayerData.timeElapsed;
-    if (currentChapter != null) currentChapter.text = "Current Chapter: " + PlayerData.currentChapter;
+    if (currentChapter != null) currentChapter.text = "Chapter: " + PlayerData.currentChapter;
     if (playerDeaths != null) playerDeaths.text = "Total Deaths: " + PlayerData.totalDeaths;
     if (lastSave != null) lastSave.text = "Last Save: " + PlayerData.currentRoom;
 
@@ -402,6 +409,7 @@ function chapter1Cache():Void
     FlxG.bitmap.add(AssetPaths.light__png);
     FlxG.bitmap.add(AssetPaths.slab__png);
     FlxG.bitmap.add(AssetPaths.slab_night__png);
+    FlxG.bitmap.add(AssetPaths.acid__png);
 }
 
 function chapter2Cache():Void
@@ -467,18 +475,18 @@ function setupHUD():Void
     // add(timeElapsed);
 
     #if !mobile
-    currentChapter = new FlxText(50, FlxG.height - 140, 0, "Current Chapter: ", 18);
+    currentChapter = new FlxText(50, FlxG.height - 90, 0, "Chapter: ", 18);
     currentChapter.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
     currentChapter.scrollFactor.set(0, 0);
     currentChapter.scrollFactor.set(0, 0);
     add(currentChapter);
 
-    lastSave = new FlxText(50, FlxG.height - 110, 0, "Last Save: ", 18);
+    lastSave = new FlxText(50, FlxG.height - 60, 0, "Last Save: ", 18);
     lastSave.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
     lastSave.scrollFactor.set(0, 0);
     add(lastSave);
 
-    playerDeaths = new FlxText(50, FlxG.height - 80, 0, "Total Resets: ", 22);
+    playerDeaths = new FlxText(FlxG.width - 260, FlxG.height - 80, 0, "Total Resets: ", 22);
     playerDeaths.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
     playerDeaths.scrollFactor.set(0, 0);
     playerDeaths.scrollFactor.set(0, 0);

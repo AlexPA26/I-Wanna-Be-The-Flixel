@@ -18,11 +18,11 @@ class RoomLoader
         flixel.tweens.FlxTween.globalManager.forEach(function(twn) twn.cancel());
 
         if (state.roomAcid != null) 
-    {
+        {
         state.remove(state.roomAcid);
         state.roomAcid.destroy();
-        state.roomAcid = null; // Important: null it out so we know it's gone
-    }
+        state.roomAcid = null;
+        }
         #if !linux
             var chartPath = "assets/data/chapters/chapter" + PlayerData.currentChapter + "/ch" + PlayerData.currentChapter + "-" + roomName + ".tmx";
         #else
@@ -37,7 +37,7 @@ class RoomLoader
 
         var mainLayer:TiledTileLayer = cast state.tiledData.getLayer("tiles-main");
         state.map = new FlxTilemap();
-        state.map.loadMapFromArray(mainLayer.tileArray, state.tiledData.width, state.tiledData.height, state.tilesPath, 50, 50, OFF, 1);
+        state.map.loadMapFromArray(mainLayer.tileArray, state.tiledData.width, state.tiledData.height, state.mainTilesPath, 50, 50, OFF, 1);
         state.map.x = -60; state.map.y = -65;
         FlxG.worldBounds.set(state.map.x, state.map.y, state.map.width, state.map.height);
         state.add(state.map);
@@ -46,7 +46,7 @@ class RoomLoader
         if (decoLayer != null)
         {
             state.mapDeco = new FlxTilemap();
-            state.mapDeco.loadMapFromArray(cast(decoLayer, TiledTileLayer).tileArray, state.tiledData.width, state.tiledData.height, state.tilesPath, 50, 50, OFF, 1);
+            state.mapDeco.loadMapFromArray(cast(decoLayer, TiledTileLayer).tileArray, state.tiledData.width, state.tiledData.height, state.mainTilesPath, 50, 50, OFF, 1);
             state.mapDeco.x = -60; state.mapDeco.y = -65;
             state.add(state.mapDeco);
         }
@@ -55,7 +55,7 @@ class RoomLoader
         if (decoLayer2 != null)
         {
             state.mapDeco2 = new FlxTilemap();
-            state.mapDeco2.loadMapFromArray(cast(decoLayer2, TiledTileLayer).tileArray, state.tiledData.width, state.tiledData.height, state.tilesPath, 50, 50, OFF, 1);
+            state.mapDeco2.loadMapFromArray(cast(decoLayer2, TiledTileLayer).tileArray, state.tiledData.width, state.tiledData.height, state.mainTilesPath, 50, 50, OFF, 1);
             state.mapDeco2.x = -60; state.mapDeco2.y = -65;
             state.add(state.mapDeco2);
         }
@@ -157,7 +157,5 @@ class RoomLoader
         #end
 
     }
-
-    
 
 }

@@ -115,6 +115,9 @@ class ObjectLoader
                         case "slab-night":
                             var slabNight = new NormalSlabNight(spawnX, spawnY);
                             state.slabsNight.add(slabNight);
+                        case "slab-poison":
+                            var slabPoison = new NormalSlabPoison(spawnX, spawnY);
+                            state.slabsPoison.add(slabPoison);
                     }
                 }
             }
