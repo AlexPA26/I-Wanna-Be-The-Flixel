@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="25" nextobjectid="797">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="25" nextobjectid="824">
  <properties>
   <property name="songName" value="rain"/>
  </properties>
@@ -120,6 +120,101 @@
   <object id="793" name="spike" gid="87" x="450" y="500" width="50" height="50">
    <properties>
     <property name="id" value="2"/>
+   </properties>
+  </object>
+  <object id="804" name="spike" gid="91" x="350" y="760" width="50" height="50">
+   <properties>
+    <property name="id" value="6"/>
+   </properties>
+  </object>
+  <object id="805" name="spike" gid="91" x="400" y="760" width="50" height="50">
+   <properties>
+    <property name="id" value="6"/>
+   </properties>
+  </object>
+  <object id="806" name="spike" gid="91" x="450" y="760" width="50" height="50">
+   <properties>
+    <property name="id" value="6"/>
+   </properties>
+  </object>
+  <object id="807" name="spike" gid="91" x="450" y="760" width="50" height="50">
+   <properties>
+    <property name="id" value="6"/>
+   </properties>
+  </object>
+  <object id="808" name="spike" gid="91" x="550" y="760" width="50" height="50">
+   <properties>
+    <property name="id" value="6"/>
+   </properties>
+  </object>
+  <object id="809" name="spike" gid="91" x="600" y="760" width="50" height="50">
+   <properties>
+    <property name="id" value="6"/>
+   </properties>
+  </object>
+  <object id="810" name="spike" gid="91" x="500" y="760" width="50" height="50">
+   <properties>
+    <property name="id" value="6"/>
+   </properties>
+  </object>
+  <object id="811" name="spike" gid="91" x="650" y="760" width="50" height="50">
+   <properties>
+    <property name="id" value="6"/>
+   </properties>
+  </object>
+  <object id="812" name="spike" gid="91" x="700" y="760" width="50" height="50">
+   <properties>
+    <property name="id" value="6"/>
+   </properties>
+  </object>
+  <object id="813" name="spike" gid="91" x="750" y="760" width="50" height="50">
+   <properties>
+    <property name="id" value="6"/>
+   </properties>
+  </object>
+  <object id="814" name="spike" gid="91" x="800" y="760" width="50" height="50">
+   <properties>
+    <property name="id" value="6"/>
+   </properties>
+  </object>
+  <object id="815" name="spike" gid="91" x="850" y="760" width="50" height="50">
+   <properties>
+    <property name="id" value="6"/>
+   </properties>
+  </object>
+  <object id="816" name="spike" gid="91" x="900" y="760" width="50" height="50">
+   <properties>
+    <property name="id" value="6"/>
+   </properties>
+  </object>
+  <object id="817" name="spike" gid="91" x="950" y="760" width="50" height="50">
+   <properties>
+    <property name="id" value="6"/>
+   </properties>
+  </object>
+  <object id="819" name="spike" gid="91" x="1000" y="760" width="50" height="50">
+   <properties>
+    <property name="id" value="6"/>
+   </properties>
+  </object>
+  <object id="820" name="spike" gid="91" x="1050" y="760" width="50" height="50">
+   <properties>
+    <property name="id" value="6"/>
+   </properties>
+  </object>
+  <object id="821" name="spike" gid="91" x="1100" y="760" width="50" height="50">
+   <properties>
+    <property name="id" value="6"/>
+   </properties>
+  </object>
+  <object id="822" name="spike" gid="91" x="1150" y="760" width="50" height="50">
+   <properties>
+    <property name="id" value="6"/>
+   </properties>
+  </object>
+  <object id="823" name="spike" gid="91" x="1200" y="760" width="50" height="50">
+   <properties>
+    <property name="id" value="6"/>
    </properties>
   </object>
  </objectgroup>

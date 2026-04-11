@@ -199,7 +199,11 @@ override public function update(elapsed:Float):Void
 
     // timeElapsed.text = "Time: " + PlayerData.timeElapsed;
     if (currentChapter != null) currentChapter.text = "Chapter: " + PlayerData.currentChapter;
-    if (playerDeaths != null) playerDeaths.text = "Total Deaths: " + PlayerData.totalDeaths;
+    #if mobile
+        if (playerDeaths != null) playerDeaths.text = "Total Deaths: " + PlayerData.totalDeaths;
+    #else
+        if (playerDeaths != null) playerDeaths.text = "Total Resets: " + PlayerData.totalDeaths;
+    #end
     if (lastSave != null) lastSave.text = "Last Save: " + PlayerData.currentRoom;
 
     if (PlayerData.saveCooldown > 0)
@@ -374,7 +378,7 @@ override public function update(elapsed:Float):Void
     #end
 
     #if !mobile
-    if (FlxG.keys.justPressed.ONE) RoomLoader.loadRoom(this, "map24");
+    if (FlxG.keys.justPressed.ONE) RoomLoader.loadRoom(this, "map25");
     #end
 }
 
@@ -572,11 +576,11 @@ function FlipSwitchObjLogic(flipSwitchObj:FlipSwitch):Void
 
 function portalWarpLogic(portalLogic:PortalWarp):Void
 {
-    RoomLoader.loadRoom(this, "map21");
+    RoomLoader.loadRoom(this, "map25");
     FlxG.camera.shake(0.005, 0.25);
     saveAnimation.alpha = 0.5;
     FlxG.sound.play(AssetPaths.warp__ogg, 0.85, false);
-    player.x = 150;
+    player.x = 350;
     player.y = 300;
 }
 

@@ -22,6 +22,11 @@ class Main extends Sprite
 		var skipSplash:Bool = true;
 		var startFullscreen:Bool = false;
 
+		#if html5
+			var document = js.Browser.document;
+			document.addEventListener("contextmenu", function(e:js.html.Event) { e.preventDefault(); });
+		#end
+		
 		#if !debug
 		addChild(new FlxGame(gameWidth, gameHeight, initialState, updateFramerate, drawFramerate, skipSplash, startFullscreen));
 		

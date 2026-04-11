@@ -72,6 +72,7 @@ class RoomLoader
         state.fallingBlock.clear();
         state.slabs.clear();
         state.slabsNight.clear();
+        state.slabsPoison.clear();
         state.popups.clear();
         state.saveParticlesGroup.clear();
 
@@ -109,6 +110,7 @@ class RoomLoader
         state.add(state.warpsGroup);
         state.add(state.slabs);
         state.add(state.slabsNight);
+        state.add(state.slabsPoison);
         state.add(state.platforms);
         state.add(state.fallingBlock);
         state.add(state.flipGroup);
