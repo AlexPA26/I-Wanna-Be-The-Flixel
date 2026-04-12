@@ -424,8 +424,6 @@ function chapter1Cache():Void
     FlxG.bitmap.add(AssetPaths.trampoline_mini__png);
     FlxG.bitmap.add(AssetPaths.trampoline__png);
     FlxG.bitmap.add(AssetPaths.light__png);
-    FlxG.bitmap.add(AssetPaths.slab__png);
-    FlxG.bitmap.add(AssetPaths.slab_night__png);
     FlxG.bitmap.add(AssetPaths.acid__png);
 }
 
@@ -435,7 +433,6 @@ function chapter2Cache():Void
     FlxG.bitmap.add(AssetPaths.laser__png);
     FlxG.bitmap.add(AssetPaths.trampoline_mini__png);
     FlxG.bitmap.add(AssetPaths.trampoline__png);
-    FlxG.bitmap.add(AssetPaths.slab__png);
     FlxG.bitmap.add(AssetPaths.spikes__png);
     FlxG.bitmap.add(AssetPaths.sandstorm__png);
     FlxG.bitmap.add(AssetPaths.double_jump__png);
