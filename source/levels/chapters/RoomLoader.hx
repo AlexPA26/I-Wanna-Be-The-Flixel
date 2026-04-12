@@ -105,7 +105,10 @@ class RoomLoader
         state.add(state.doubleJumpGroup);
         state.add(state.player.dashEffect);
         state.add(state.saveParticlesGroup);
-        state.add(state.savesGroup);
+        if (PlayerData.currentRoom != state.currentRoomName)
+        {
+            state.add(state.savesGroup);
+        }
         state.add(state.popups);
         state.add(state.warpsGroup);
         state.add(state.slabs);

@@ -222,6 +222,10 @@ public static function bgEffect(state:ChapterState, tiledData:TiledMap):Void
 
                 switch (effect)
                 {
+                    case "rain":
+                        state.frontEffectObj = new FlxBackdrop(AssetPaths.rain__png, XY);
+                        state.frontEffectObj.velocity.set(-250, 1200);
+                        state.frontEffectObj.alpha = 0.15;
                     case "toxic":
                         state.frontEffectObj = new FlxBackdrop(AssetPaths.poison_air__png, X);
                         state.frontEffectObj.velocity.set(25, 0);
@@ -266,9 +270,10 @@ public static function bgEffect(state:ChapterState, tiledData:TiledMap):Void
                     case "speed":
                         state.topEffectObj = new FlxBackdrop(AssetPaths.speed_lines__png, X);
                         state.topEffectObj.velocity.set(boost - 3000, 0);
-                    case "trees":
-                        state.topEffectObj = new FlxBackdrop(AssetPaths.trees__png, XY);
-                        state.topEffectObj.velocity.set(boost - 2000, 0);
+                    case "wind":
+                        state.topEffectObj = new FlxBackdrop(AssetPaths.wind__png, XY);
+                        state.topEffectObj.velocity.set(-1300, 0);
+                        state.topEffectObj.alpha = 0.25;
                 }
                 if (state.topEffectObj != null)
                 {

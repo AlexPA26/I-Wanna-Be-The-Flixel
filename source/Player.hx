@@ -35,7 +35,7 @@ class Player extends FlxSprite
 
     public var pad:FlxVirtualPad;
 
-    public static var isFacingRIGHT:Bool = false;
+    public static var isFacingRIGHT:Bool = true;
     public static var lastFacing:FlxDirectionFlags = RIGHT;
 
     public function new(x:Float, y:Float)
@@ -129,7 +129,7 @@ class Player extends FlxSprite
         {
             isDashing = true;
             canDash = false;
-            dashTimer = 0.15;
+            dashTimer = 0.05;
             
             if (left) dashDirection = -1;
             else if (right) dashDirection = 1;
@@ -233,7 +233,7 @@ class Player extends FlxSprite
         inputRight = FlxG.keys.anyPressed([RIGHT, D]);
         inputJump = FlxG.keys.anyJustPressed([SPACE, UP, W]) || FlxG.mouse.justPressed;
         inputJumpReleased = FlxG.keys.anyJustReleased([SPACE, UP, W]) || FlxG.mouse.justReleased;
-        inputDash = FlxG.keys.anyJustPressed([SHIFT, TAB, F]) || FlxG.mouse.justPressedRight;
+        // inputDash = FlxG.keys.anyJustPressed([SHIFT, TAB, F]) || FlxG.mouse.justPressedRight;
         #else
         if (pad != null)
         {

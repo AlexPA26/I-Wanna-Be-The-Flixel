@@ -1,0 +1,14 @@
+.vs/
+.idea/
+.vscode/
+
+.builds/
+export/
+mapeditor/
+screenshots/
+templates/
+
+*.psd
+.DS_Store
+release.keystore
+hxformat.json

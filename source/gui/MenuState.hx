@@ -217,9 +217,9 @@ class MenuState extends FlxState
     function clickNewGame():Void
     {
         PlayerData.currentChapter = 1;
-        PlayerData.currentRoom = "map01";
-        PlayerData.spawnX = 300;
-        PlayerData.spawnY = 400;
+        PlayerData.currentRoom = "map" + "01";
+        PlayerData.spawnX = 250;
+        PlayerData.spawnY = 450 + 5;
         PlayerData.totalDeaths = 0;
         if (FlxG.sound.music != null) { FlxG.sound.music.stop(); }
         FlxG.switchState(ChapterState.new);

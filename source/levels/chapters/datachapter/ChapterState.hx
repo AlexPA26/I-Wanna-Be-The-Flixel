@@ -224,8 +224,7 @@ override public function update(elapsed:Float):Void
         if (player.touching == DOWN && tramp.touching == UP)
             {
                 player.velocity.y = -1000; tramp.launch();
-                FlxG.sound.play(AssetPaths.trampoline_bounce__ogg, 0.5, false);
-            }});
+    FlxG.sound.play(AssetPaths.trampoline_bounce__ogg, 0.5, false); }});
     FlxG.collide(player, trampolinesMini, (p:Player, t:NormalTrampolineMini) ->
     { 
         var trampMini:NormalTrampolineMini = cast t;
@@ -275,10 +274,10 @@ override public function update(elapsed:Float):Void
                     FlxG.sound.play(AssetPaths.lateral_bounce__ogg, 0.5);
                 }
         }
-        });
+    });
 
     FlxG.collide(player, platforms, function(p:Player, plat:MovingBlock)
-        {
+    {
         if (p.touching.has(FlxDirectionFlags.DOWN) && plat.touching.has(FlxDirectionFlags.UP))
         {
             
@@ -289,13 +288,13 @@ override public function update(elapsed:Float):Void
             }
             p.velocity.y = 0;
         }
-        });
+    });
 
     FlxG.collide(platforms, map, function(plat:MovingBlock, wall:FlxObject)
-        { plat.stopMovement(); });
+    { plat.stopMovement(); });
 
     FlxG.collide(player, fallingBlock, function(p:Player, plat:FallingBlock)
-        {
+    {
         if (p.touching.has(FlxDirectionFlags.DOWN) && plat.touching.has(FlxDirectionFlags.UP))
         {
             FlxG.sound.play(AssetPaths.break_block__ogg, 0.5, false);
@@ -306,12 +305,12 @@ override public function update(elapsed:Float):Void
 
             p.velocity.y = 0;
         }
-        });
+    });
             
     if (spawnTimer > 0) { spawnTimer -= elapsed; }
     
     else
-        { if (FlxG.overlap(player, DangerObjects)) { killPlayer(); } }
+    { if (FlxG.overlap(player, DangerObjects)) { killPlayer(); } }
 
     #if !mobile
     if (FlxG.keys.justPressed.TAB)
@@ -337,9 +336,17 @@ override public function update(elapsed:Float):Void
             saveAnimation.alpha -= 0.01;
         }
 
-    #if !mobile
+    #if !mobile // PLAYERSHOOT BULLETS
     if (FlxG.keys.justPressed.Z) PlayerShoot();
-        FlxG.collide(bullets, map, (bullet, wall) -> { bullet.kill(); });  
+        FlxG.collide(bullets, map, (bullet, wall) -> { bullet.kill(); });
+    
+    bullets.forEachAlive((bullet) ->
+    {
+        if (!bullet.isOnScreen())
+        {
+            bullet.kill();
+        }
+    });
     #end
 
     #if !mobile
@@ -378,7 +385,7 @@ override public function update(elapsed:Float):Void
     #end
 
     #if !mobile
-    if (FlxG.keys.justPressed.ONE) RoomLoader.loadRoom(this, "map25");
+    if (FlxG.keys.justPressed.ONE) RoomLoader.loadRoom(this, "map22");
     #end
 }
 
@@ -430,20 +437,23 @@ function chapter2Cache():Void
 
 function PlayerShoot():Void
 {
-    var bullet:FlxSprite;
-    bullet = new FlxSprite(player.x + 25, player.y + 7);
-    bullet.makeGraphic(4,4, FlxColor.YELLOW);
+    var bullet = new FlxSprite();
+    bullet = new FlxSprite();
+    bullet.loadGraphic(AssetPaths.bullet__png, false);
     add(bullet);
 
     if (Player.isFacingRIGHT == false)
     {
-        bullet.velocity.x = -600;
+        bullet.velocity.x = -800;
+        bullet.x = player.x + -20;
+        bullet.y = player.y + 4;
     }
 
     else if (Player.isFacingRIGHT == true)
     {
-        bullet.velocity.x = 600;
-        bullet.x -= 20;
+        bullet.velocity.x = 800;
+        bullet.x = player.x + 30;
+        bullet.y = player.y + 4;
     }
 
     bullets.add(bullet);
@@ -488,6 +498,7 @@ function setupHUD():Void
     lastSave = new FlxText(50, FlxG.height - 60, 0, "Last Save: ", 18);
     lastSave.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
     lastSave.scrollFactor.set(0, 0);
+    lastSave.alpha = 0.75;
     add(lastSave);
 
     playerDeaths = new FlxText(FlxG.width - 260, FlxG.height - 80, 0, "Total Resets: ", 22);
@@ -511,8 +522,15 @@ function saveLogicSprite(saveObj:SavePoint):Void
 {
     if (saveObj.alive) 
     {
+        if (PlayerData.currentRoom == currentRoomName)
+        {
+            saveObj.alive = false;
+            saveObj.visible = false;
+            saveObj.kill();
+            return;
+        }
         PlayerData.spawnX = player.x; 
-        PlayerData.spawnY = player.y;
+        PlayerData.spawnY = player.y + 60;
         PlayerData.currentRoom = currentRoomName;
 
         if (PlayerData.saveCooldown <= 0)

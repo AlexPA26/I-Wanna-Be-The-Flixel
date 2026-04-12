@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="25" nextobjectid="36">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="27" nextobjectid="36">
  <properties>
+  <property name="foregroundEffectType" value="rain"/>
   <property name="songName" value="rain"/>
  </properties>
  <tileset firstgid="1" source="ch1-tiles.tsx"/>
@@ -104,6 +105,16 @@
  <objectgroup id="10" name="mapEffect">
   <properties>
    <property name="effectType" value="fog"/>
+  </properties>
+ </objectgroup>
+ <objectgroup id="25" name="foregroundEffect">
+  <properties>
+   <property name="foregroundEffectType" value="rain"/>
+  </properties>
+ </objectgroup>
+ <objectgroup id="26" name="topEffect">
+  <properties>
+   <property name="topEffectType" value="wind"/>
   </properties>
  </objectgroup>
  <objectgroup id="7" name="spike-normal"/>

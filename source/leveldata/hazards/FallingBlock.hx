@@ -1,5 +1,7 @@
 package leveldata.hazards;
 
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 import flixel.FlxSprite;
 using flixel.util.FlxDirectionFlags;
 using flixel.FlxG;
@@ -16,6 +18,7 @@ class FallingBlock extends FlxSprite
         loadGraphic(AssetPaths.ch1tiles__png, true, 50, 50);
         offset.set(0, 0);
         animation.frameIndex = 39;
+        FlxTween.tween(this, {x: x + 1}, 0.25, {type: PINGPONG, ease: FlxEase.sineInOut});
         
         this.moveDir = MoveDir;
         immovable = true;
