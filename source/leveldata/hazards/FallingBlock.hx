@@ -12,12 +12,12 @@ class FallingBlock extends FlxSprite
     var speed:Float = 600;
     var activeMoving:Bool = false;
 
-    public function new(X:Float, Y:Float, MoveDir:String)
+    public function new(X:Float, Y:Float, MoveDir:String, TileID:Int)
     {
         super(X, Y);
         loadGraphic(AssetPaths.ch1tiles__png, true, 50, 50);
         offset.set(0, 0);
-        animation.frameIndex = 39;
+        animation.frameIndex = TileID;
         FlxTween.tween(this, {x: x + 1}, 0.25, {type: PINGPONG, ease: FlxEase.sineInOut});
         
         this.moveDir = MoveDir;

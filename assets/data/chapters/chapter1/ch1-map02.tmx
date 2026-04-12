@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="24" nextobjectid="52">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="28" nextobjectid="61">
  <tileset firstgid="1" source="ch1-tiles.tsx"/>
  <tileset firstgid="81" source="../../textures/spike.tsx"/>
  <tileset firstgid="89" source="../../textures/save.tsx"/>
  <tileset firstgid="90" source="../../textures/trampoline-mini.tsx"/>
  <tileset firstgid="99" source="../../textures/transition-tiles.tsx"/>
- <tileset firstgid="104" source="../../textures/slab-night.tsx"/>
  <layer id="5" name="tiles-main" width="28" height="18">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,2,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -52,17 +51,19 @@
  </layer>
  <objectgroup id="11" name="save"/>
  <objectgroup id="20" name="trampoline-mini"/>
- <objectgroup id="22" name="slab-night">
-  <object id="39" name="slab-night" gid="104" x="600" y="450" width="50" height="50"/>
-  <object id="40" name="slab-night" gid="104" x="500" y="450" width="50" height="50"/>
-  <object id="41" name="slab-night" gid="104" x="800" y="400" width="50" height="50"/>
-  <object id="42" name="slab-night" gid="104" x="900" y="400" width="50" height="50"/>
-  <object id="44" name="slab-night" gid="104" x="550" y="450" width="50" height="50"/>
-  <object id="45" name="slab-night" gid="104" x="850" y="400" width="50" height="50"/>
- </objectgroup>
  <objectgroup id="12" name="bg">
   <properties>
    <property name="bgName" value="bgMountains"/>
+  </properties>
+ </objectgroup>
+ <objectgroup id="24" name="foregroundEffect">
+  <properties>
+   <property name="foregroundEffectType" value="rain"/>
+  </properties>
+ </objectgroup>
+ <objectgroup id="25" name="topEffect">
+  <properties>
+   <property name="topEffectType" value="wind"/>
   </properties>
  </objectgroup>
  <objectgroup id="9" name="camera"/>
@@ -75,11 +76,6 @@
   <object id="1" name="spike" gid="81" x="350" y="600" width="50" height="50">
    <properties>
     <property name="id" value="0"/>
-   </properties>
-  </object>
-  <object id="3" name="spike" gid="84" x="1050" y="300" width="50" height="50">
-   <properties>
-    <property name="id" value="3"/>
    </properties>
   </object>
   <object id="4" name="spike" gid="84" x="1050" y="250" width="50" height="50">
@@ -188,6 +184,11 @@
     <property name="id" value="6"/>
    </properties>
   </object>
+  <object id="60" name="spike" gid="88" x="1050" y="300" width="50" height="50">
+   <properties>
+    <property name="id" value="7"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="13" name="music">
   <properties>
@@ -243,5 +244,11 @@
     <property name="target" value="map03"/>
    </properties>
   </object>
+ </objectgroup>
+ <objectgroup id="27" name="slab">
+  <object id="56" name="slab" gid="24" x="500" y="450" width="50" height="50"/>
+  <object id="57" name="slab" gid="24" x="600" y="450" width="50" height="50"/>
+  <object id="58" name="slab" gid="24" x="800" y="400" width="50" height="50"/>
+  <object id="59" name="slab" gid="24" x="900" y="400" width="50" height="50"/>
  </objectgroup>
 </map>

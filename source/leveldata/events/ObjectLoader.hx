@@ -101,7 +101,9 @@ class ObjectLoader
 
                         case "falling":
                             var dir = obj.properties.get("direction");
-                            var fall = new FallingBlock(spawnX, spawnY, dir);
+                            var tileset = tiledData.getGidOwner(obj.gid);
+                            var localID:Int = obj.gid - tileset.firstGID;
+                            var fall = new FallingBlock(spawnX, spawnY, dir, localID);
                             state.fallingBlock.add(fall);
 
                         case "light":
@@ -110,14 +112,10 @@ class ObjectLoader
                             light.y -= light.height / 2;
                             state.lightsGroup.add(light);
                         case "slab":
-                            var slab = new NormalSlab(spawnX, spawnY);
+                            var tileset = tiledData.getGidOwner(obj.gid);
+                            var localID:Int = obj.gid - tileset.firstGID;
+                            var slab = new NormalSlab(spawnX, spawnY, localID);
                             state.slabs.add(slab);
-                        case "slab-night":
-                            var slabNight = new NormalSlabNight(spawnX, spawnY);
-                            state.slabsNight.add(slabNight);
-                        case "slab-poison":
-                            var slabPoison = new NormalSlabPoison(spawnX, spawnY);
-                            state.slabsPoison.add(slabPoison);
                     }
                 }
             }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="16" nextobjectid="204">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="18" nextobjectid="204">
  <tileset firstgid="1" source="ch1-tiles.tsx"/>
  <tileset firstgid="81" source="../../textures/trampoline.tsx"/>
  <tileset firstgid="84" source="../../textures/save.tsx"/>
@@ -104,6 +104,16 @@
   </object>
  </objectgroup>
  <objectgroup id="8" name="save"/>
+ <objectgroup id="16" name="topEffect">
+  <properties>
+   <property name="topEffectType" value="wind"/>
+  </properties>
+ </objectgroup>
+ <objectgroup id="17" name="foregroundEffect">
+  <properties>
+   <property name="foregroundEffectType" value="rain"/>
+  </properties>
+ </objectgroup>
  <objectgroup id="10" name="laser">
   <object id="80" name="laser" gid="93" x="800" y="600" width="50" height="50">
    <properties>

@@ -85,8 +85,6 @@ class ChapterState extends FlxState
     public var lightsGroup:FlxTypedGroup<LightTorch>;
     public var DangerObjects:FlxGroup;
     public var slabs:FlxTypedGroup<NormalSlab>;
-    public var slabsNight:FlxTypedGroup<NormalSlabNight>;
-    public var slabsPoison:FlxTypedGroup<NormalSlabPoison>;
 
     var spikes:FlxGroup;
     var saveAnimation:FlxSprite;
@@ -136,8 +134,6 @@ override public function create():Void
     fallingBlock = new FlxTypedGroup<FallingBlock>();
     lightsGroup = new FlxTypedGroup<LightTorch>();
     slabs = new FlxTypedGroup<NormalSlab>();
-    slabsNight = new FlxTypedGroup<NormalSlabNight>();
-    slabsPoison = new FlxTypedGroup<NormalSlabPoison>();
     bullets = new FlxTypedGroup<FlxSprite>();
 
     PlayerGlow = new FlxSprite();
@@ -193,8 +189,6 @@ override public function update(elapsed:Float):Void
 
     FlxG.collide(player, map);
     FlxG.collide(player, slabs);
-    FlxG.collide(player, slabsNight);
-    FlxG.collide(player, slabsPoison);
 
 
     // timeElapsed.text = "Time: " + PlayerData.timeElapsed;
@@ -385,7 +379,19 @@ override public function update(elapsed:Float):Void
     #end
 
     #if !mobile
-    if (FlxG.keys.justPressed.ONE) RoomLoader.loadRoom(this, "map22");
+    if (FlxG.keys.justPressed.ONE) RoomLoader.loadRoom(this, "map12");
+    if (FlxG.keys.justPressed.PLUS || FlxG.keys.justPressed.NUMPADPLUS)
+    {
+        var current = currentRoomName; 
+        var numPart = Std.parseInt(current.substr(3));
+        numPart++;
+        var nextRoomNum = (numPart < 10) ? "0" + numPart : Std.string(numPart);
+        var nextRoomName = "map" + nextRoomNum;
+        
+        RoomLoader.loadRoom(this, nextRoomName);
+        
+        trace("Teleported to: " + nextRoomName);
+    }
     #end
 }
 

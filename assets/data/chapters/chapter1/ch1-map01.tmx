@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="27" nextobjectid="36">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="28" nextobjectid="51">
  <properties>
   <property name="foregroundEffectType" value="rain"/>
   <property name="songName" value="rain"/>
@@ -117,6 +117,7 @@
    <property name="topEffectType" value="wind"/>
   </properties>
  </objectgroup>
+ <objectgroup id="27" name="slab"/>
  <objectgroup id="7" name="spike-normal"/>
  <objectgroup id="11" name="music">
   <properties>
