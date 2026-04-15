@@ -115,16 +115,6 @@
  </objectgroup>
  <objectgroup id="7" name="trampoline"/>
  <objectgroup id="9" name="spike-normal">
-  <object id="355" name="spike" gid="92" x="650" y="350" width="50" height="50">
-   <properties>
-    <property name="id" value="7"/>
-   </properties>
-  </object>
-  <object id="356" name="spike" gid="92" x="650" y="300" width="50" height="50">
-   <properties>
-    <property name="id" value="7"/>
-   </properties>
-  </object>
   <object id="357" name="spike" gid="85" x="850" y="250" width="50" height="50">
    <properties>
     <property name="id" value="0"/>
@@ -143,7 +133,6 @@
  </objectgroup>
  <objectgroup id="8" name="save">
   <object id="365" name="save" gid="84" x="200" y="600" width="50" height="50"/>
-  <object id="366" name="save" gid="84" x="1200" y="600" width="50" height="50"/>
  </objectgroup>
  <objectgroup id="10" name="laser">
   <object id="316" name="laser" gid="93" x="350" y="200" width="50" height="50">

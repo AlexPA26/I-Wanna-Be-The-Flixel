@@ -102,7 +102,6 @@
   <object id="905" name="trampoline" gid="81" x="1000" y="350" width="50" height="50"/>
   <object id="906" name="trampoline" gid="81" x="1050" y="350" width="50" height="50"/>
   <object id="911" name="trampoline" gid="81" x="1150" y="350" width="50" height="50"/>
-  <object id="912" name="trampoline" gid="81" x="900" y="350" width="50" height="50"/>
   <object id="913" name="trampoline" gid="81" x="1300" y="350" width="50" height="50"/>
   <object id="914" name="trampoline" gid="81" x="1250" y="350" width="50" height="50"/>
  </objectgroup>

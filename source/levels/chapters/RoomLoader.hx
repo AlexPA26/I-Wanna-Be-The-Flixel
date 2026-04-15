@@ -60,7 +60,7 @@ class RoomLoader
             state.add(state.mapDeco2);
         }
 
-        state.DangerObjects.clear();
+        state.dangerObjects.clear();
         state.doubleJumpGroup.clear();
         state.flipGroup.clear();
         state.portalGroup.clear();
@@ -96,8 +96,8 @@ class RoomLoader
 
         ObjectLoader.loadEverything(state.tiledData, state, state.map.x, state.map.y);
         EventLoader.loadEvents(state.tiledData, state);
-        state.add(state.PlayerGlow);
-        state.add(state.DangerObjects);
+        state.add(state.playerGlow);
+        state.add(state.dangerObjects);
         state.add(state.player);
         state.add(state.player.doubleJumpEffect);
         state.add(state.doubleJumpGroup);

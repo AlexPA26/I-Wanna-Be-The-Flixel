@@ -1,5 +1,7 @@
 package levels.chapters.datachapter;
 
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 import leveldata.background.AcidFluid;
 import flixel.ui.FlxVirtualPad;
 import flixel.effects.particles.FlxEmitter;
@@ -30,9 +32,10 @@ class ChapterState extends FlxState
     var player:Player;
     var virtualPad:FlxVirtualPad;
     var padScale:Float = 2.5;
+    var targetAlpha:Float = 0.5;
     var hudGroup:FlxGroup;
     var bullets:FlxTypedGroup<FlxSprite>;
-    var PlayerGlow:FlxSprite;
+    var playerGlow:FlxSprite;
     var cameraTarget:FlxObject;
     var scrollSpeed:Float = 0;
     var isAutoscrolling:Bool = false;
@@ -78,12 +81,13 @@ class ChapterState extends FlxState
     public var doubleJumpGroup:FlxTypedGroup<DoubleJumpObj>;
     public var flipGroup:FlxTypedGroup<FlipSwitch>;
     public var portalGroup:FlxTypedGroup<PortalWarp>;
+    public var roomAcid:AcidFluid = null;
     public var trampolines:FlxTypedGroup<NormalTrampoline>;
     public var trampolinesMini:FlxTypedGroup<NormalTrampolineMini>;
     public var platforms:FlxTypedGroup<MovingBlock>;
     public var fallingBlock:FlxTypedGroup<FallingBlock>;
     public var lightsGroup:FlxTypedGroup<LightTorch>;
-    public var DangerObjects:FlxGroup;
+    public var dangerObjects:FlxGroup;
     public var slabs:FlxTypedGroup<NormalSlab>;
 
     var spikes:FlxGroup;
@@ -94,8 +98,6 @@ class ChapterState extends FlxState
     var currentChapter:FlxText;
     var playerDeaths:FlxText;
     var lastSave:FlxText;
-
-    public var roomAcid:AcidFluid = null;
 
 override public function create():Void
 {
@@ -119,7 +121,7 @@ override public function create():Void
     imgCache();
     sfxCache();
 
-    DangerObjects = new FlxGroup(); 
+    dangerObjects = new FlxGroup(); 
 
     savesGroup = new FlxTypedGroup<SavePoint>();
     popups = new FlxTypedGroup<FlxText>();
@@ -136,10 +138,10 @@ override public function create():Void
     slabs = new FlxTypedGroup<NormalSlab>();
     bullets = new FlxTypedGroup<FlxSprite>();
 
-    PlayerGlow = new FlxSprite();
-    PlayerGlow.loadGraphic(AssetPaths.playerGlow__png, false);
-    PlayerGlow.blend = flash.display.BlendMode.ADD;
-    PlayerGlow.alpha = 0.15;
+    playerGlow = new FlxSprite();
+    playerGlow.loadGraphic(AssetPaths.playerGlow__png, false);
+    playerGlow.blend = flash.display.BlendMode.ADD;
+    playerGlow.alpha = 0.15;
 
     warpsGroup = new FlxTypedGroup<WarpTrigger>(); add(warpsGroup);
     player = new Player(PlayerData.spawnX, PlayerData.spawnY);
@@ -168,9 +170,6 @@ override public function create():Void
 
 override public function update(elapsed:Float):Void
 {
-    #if mobile
-        player.pad.alpha = 0.5;
-    #end
     if (isAutoscrolling && cameraTarget != null) 
     {
         cameraTarget.x += scrollSpeed * elapsed;
@@ -187,26 +186,9 @@ override public function update(elapsed:Float):Void
     }
     #end
 
+    super.update(elapsed);
     FlxG.collide(player, map);
     FlxG.collide(player, slabs);
-
-
-    // timeElapsed.text = "Time: " + PlayerData.timeElapsed;
-    if (currentChapter != null) currentChapter.text = "Chapter: " + PlayerData.currentChapter;
-    #if mobile
-        if (playerDeaths != null) playerDeaths.text = "Total Deaths: " + PlayerData.totalDeaths;
-    #else
-        if (playerDeaths != null) playerDeaths.text = "Total Resets: " + PlayerData.totalDeaths;
-    #end
-    if (lastSave != null) lastSave.text = "Last Save: " + PlayerData.currentRoom;
-
-    if (PlayerData.saveCooldown > 0)
-    {
-        PlayerData.saveCooldown -= elapsed;
-        if (PlayerData.saveCooldown < 0) PlayerData.saveCooldown = 0;
-    }
-
-    super.update(elapsed);
 
     FlxG.overlap(player, warpsGroup, (p, w) -> { handleWarp(cast w); });
     FlxG.overlap(player, savesGroup, (p, s) -> { saveLogicSprite(cast s); });
@@ -304,35 +286,57 @@ override public function update(elapsed:Float):Void
     if (spawnTimer > 0) { spawnTimer -= elapsed; }
     
     else
-    { if (FlxG.overlap(player, DangerObjects)) { killPlayer(); } }
+    { if (FlxG.overlap(player, dangerObjects)) { killPlayer(); } }
 
-    #if !mobile
-    if (FlxG.keys.justPressed.TAB)
+
+    // timeElapsed.text = "Time: " + PlayerData.timeElapsed;
+    if (currentChapter != null) currentChapter.text = "Chapter: " + PlayerData.currentChapter;
+    #if mobile
+        if (playerDeaths != null) playerDeaths.text = "Total Deaths: " + PlayerData.totalDeaths;
+    #else
+        if (playerDeaths != null) playerDeaths.text = "Total Resets: " + PlayerData.totalDeaths;
+    #end
+    if (lastSave != null) lastSave.text = "Last Save: " + PlayerData.currentRoom;
+
+    if (PlayerData.saveCooldown > 0)
     {
-        FlxG.debugger.drawDebug = !FlxG.debugger.drawDebug;
+        PlayerData.saveCooldown -= elapsed;
+        if (PlayerData.saveCooldown < 0) PlayerData.saveCooldown = 0;
     }
-    #end
+
+
+
+
 
     #if !mobile
-    if (FlxG.keys.justPressed.R)
-    {
-        FlxG.resetState();
-        PlayerData.totalDeaths++;
-    }
-    #end
-
-    #if !mobile
-    if (FlxG.keys.justPressed.K) { killPlayer(); }
-    #end
-
-    if (saveAnimation.alpha > 0)
+        if (FlxG.keys.justPressed.TAB)
         {
-            saveAnimation.alpha -= 0.01;
+            FlxG.debugger.drawDebug = !FlxG.debugger.drawDebug;
         }
 
-    #if !mobile // PLAYERSHOOT BULLETS
-    if (FlxG.keys.justPressed.Z) PlayerShoot();
-        FlxG.collide(bullets, map, (bullet, wall) -> { bullet.kill(); });
+        if (FlxG.keys.justPressed.R)
+        {
+            PlayerData.totalDeaths++;
+            FlxG.resetState();
+        }
+
+        if (FlxG.keys.justPressed.K) { killPlayer(); }
+
+        if (FlxG.keys.justPressed.Z) PlayerShoot();
+        {
+            FlxG.collide(bullets, map, (bullet, wall) -> { bullet.kill(); });
+        }
+
+        if (FlxG.keys.justPressed.ESCAPE)
+        {
+            FlxG.resetGame();
+        }
+    #end
+    
+    if (saveAnimation.alpha > 0)
+    {
+        saveAnimation.alpha -= 0.01;
+    }
     
     bullets.forEachAlive((bullet) ->
     {
@@ -341,24 +345,16 @@ override public function update(elapsed:Float):Void
             bullet.kill();
         }
     });
-    #end
 
-    #if !mobile
-    if (FlxG.keys.justPressed.ESCAPE)
+    if (player != null && player.exists && playerGlow != null)
     {
-        FlxG.resetGame();
+        playerGlow.exists = true;
+        playerGlow.x = player.x + (player.width / 2) - (playerGlow.width / 2);
+        playerGlow.y = player.y + (player.height / 2) - (playerGlow.height / 2);
     }
-    #end
-
-    if (player != null && player.exists && PlayerGlow != null)
+    else if (playerGlow != null)
     {
-        PlayerGlow.exists = true;
-        PlayerGlow.x = player.x + (player.width / 2) - (PlayerGlow.width / 2);
-        PlayerGlow.y = player.y + (player.height / 2) - (PlayerGlow.height / 2);
-    }
-    else if (PlayerGlow != null)
-    {
-        PlayerGlow.exists = false;
+        playerGlow.exists = false;
     }
 
     switch(PlayerData.currentChapter)
@@ -370,8 +366,10 @@ override public function update(elapsed:Float):Void
     #if mobile
     if (virtualPad.buttonA.justPressed) 
     {
-        PlayerShoot(); 
+        PlayerShoot();
     }
+
+    player.pad.alpha = padAlpha;
     #end
 
     #if !debug
@@ -379,8 +377,8 @@ override public function update(elapsed:Float):Void
     #end
 
     #if !mobile
-    if (FlxG.keys.justPressed.ONE) RoomLoader.loadRoom(this, "map12");
-    if (FlxG.keys.justPressed.PLUS || FlxG.keys.justPressed.NUMPADPLUS)
+    if (FlxG.keys.justPressed.ONE) RoomLoader.loadRoom(this, "map21");
+    if (FlxG.keys.justPressed.M)
     {
         var current = currentRoomName; 
         var numPart = Std.parseInt(current.substr(3));
@@ -393,6 +391,7 @@ override public function update(elapsed:Float):Void
         trace("Teleported to: " + nextRoomName);
     }
     #end
+
 }
 
 function imgCache():Void
@@ -441,7 +440,6 @@ function chapter2Cache():Void
 function PlayerShoot():Void
 {
     var bullet = new FlxSprite();
-    bullet = new FlxSprite();
     bullet.loadGraphic(AssetPaths.bullet__png, false);
     add(bullet);
 
@@ -564,34 +562,19 @@ function FlipSwitchObjLogic(flipSwitchObj:FlipSwitch):Void
 {
     if (flipSwitchObj.alive)
     {
-        if (FlxG.camera.canvas.scaleX == 1)
-        {
-            FlxG.camera.canvas.scaleX = -1;
-            FlxG.camera.canvas.x = FlxG.width;
-        }
-        
-        else
-        
-        {
-            FlxG.camera.canvas.scaleX = 1;
-            FlxG.camera.canvas.x = 0;
-        }
-
-        if (FlxG.camera.canvas.scaleY == 1)
-        {
-            FlxG.camera.canvas.scaleY = -1;
-            FlxG.camera.canvas.y = FlxG.height;
-        }
-        
-        else
-            
-        {
-            FlxG.camera.canvas.scaleY = 1;
-            FlxG.camera.canvas.y = 0;
-        }
-
-        flipSwitchObj.kill();
+        flipSwitchObj.kill(); 
         FlxG.sound.play(AssetPaths.flip__ogg);
+        player.flipGravity();
+
+        var targetAngle:Float = (FlxG.camera.angle % 360 == 0) ? 180 : 0;
+
+        FlxTween.tween(FlxG.camera, {angle: targetAngle}, 0.5,
+        {
+            ease: FlxEase.sineIn
+        });
+
+        player.acceleration.y = -player.acceleration.y;
+        player.flipY = !player.flipY;
     }
 }
 
@@ -619,7 +602,7 @@ function killPlayer():Void
 
         PlayerData.deathX = player.x; PlayerData.deathY = player.y;
         PlayerData.totalDeaths++;
-        PlayerGlow.visible = false;
+        playerGlow.visible = false;
         remove(player);
 
         if (FlxG.sound.music != null) FlxG.sound.music.stop();
@@ -698,7 +681,6 @@ function cameraScroll():Void
 function layoutVirtualPad():Void
 {
     if (virtualPad == null) return;
-    var targetAlpha:Float = 0.5;
     var padScale:Float = 2.5;
     var hitboxPadding:Float = 40;
 

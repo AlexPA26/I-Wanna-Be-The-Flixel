@@ -54,7 +54,7 @@ class ObjectLoader
                             localID = obj.gid - tileset.firstGID;
                         }
                             var spike = new NormalSpike(spawnX, spawnY, localID);
-                            state.DangerObjects.add(spike);
+                            state.dangerObjects.add(spike);
 
                         case "save":
                             var save = new SavePoint(spawnX, spawnY);
@@ -76,7 +76,7 @@ class ObjectLoader
                             var dir:String = "hor";
                             if (obj.properties.contains("direction")) { dir = obj.properties.get("direction"); }
                             var laser = new YellowLaser(spawnX, spawnY, dir); 
-                            state.DangerObjects.add(laser);
+                            state.dangerObjects.add(laser);
 
                         case "trampoline":
                             var tramp = new NormalTrampoline(spawnX, spawnY);

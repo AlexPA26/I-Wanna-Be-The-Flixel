@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="21" nextobjectid="1045">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="21" nextobjectid="1047">
  <properties>
   <property name="songName" value="castle1"/>
  </properties>
@@ -108,11 +108,8 @@
   <object id="1035" name="light" gid="111" x="177.333" y="718.667" width="200" height="200"/>
  </objectgroup>
  <objectgroup id="7" name="trampoline">
-  <object id="964" name="trampoline" gid="81" x="0" y="350" width="50" height="50"/>
-  <object id="965" name="trampoline" gid="81" x="50" y="350" width="50" height="50"/>
   <object id="966" name="trampoline" gid="81" x="200" y="350" width="50" height="50"/>
   <object id="967" name="trampoline" gid="81" x="250" y="350" width="50" height="50"/>
-  <object id="968" name="trampoline" gid="81" x="300" y="350" width="50" height="50"/>
   <object id="969" name="trampoline" gid="81" x="350" y="500" width="50" height="50"/>
   <object id="971" name="trampoline" gid="81" x="450" y="600" width="50" height="50"/>
   <object id="972" name="trampoline" gid="81" x="500" y="600" width="50" height="50"/>
@@ -126,6 +123,7 @@
   <object id="982" name="trampoline" gid="81" x="1200" y="600" width="50" height="50"/>
   <object id="983" name="trampoline" gid="81" x="550" y="600" width="50" height="50"/>
   <object id="984" name="trampoline" gid="81" x="600" y="600" width="50" height="50"/>
+  <object id="1046" name="trampoline" gid="81" x="150" y="350" width="50" height="50"/>
  </objectgroup>
  <objectgroup id="9" name="spike-normal">
   <object id="985" name="spike" gid="87" x="0" y="200" width="50" height="50">
@@ -148,7 +146,7 @@
     <property name="id" value="2"/>
    </properties>
   </object>
-  <object id="990" name="spike" gid="87" x="250" y="200" width="50" height="50">
+  <object id="990" name="spike" gid="87" x="300" y="200" width="50" height="50">
    <properties>
     <property name="id" value="2"/>
    </properties>
@@ -258,7 +256,7 @@
     <property name="id" value="6"/>
    </properties>
   </object>
-  <object id="1037" name="spike" gid="91" x="300" y="200" width="50" height="50">
+  <object id="1037" name="spike" gid="91" x="250" y="200" width="50" height="50">
    <properties>
     <property name="id" value="6"/>
    </properties>
@@ -301,7 +299,7 @@
   </properties>
  </objectgroup>
  <objectgroup id="19" name="save"/>
- <objectgroup id="20" name="warps" visible="0">
+ <objectgroup id="20" name="warps">
   <object id="1014" name="warp" gid="115" x="0" y="200" width="50" height="50">
    <properties>
     <property name="direction" value="left"/>
@@ -378,6 +376,12 @@
    <properties>
     <property name="direction" value="right"/>
     <property name="target" value="map20"/>
+   </properties>
+  </object>
+  <object id="1045" name="warp" gid="115" x="0" y="350" width="50" height="50">
+   <properties>
+    <property name="direction" value="left"/>
+    <property name="target" value="map18"/>
    </properties>
   </object>
  </objectgroup>

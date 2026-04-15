@@ -180,10 +180,10 @@ public static function bgEffect(state:ChapterState, tiledData:TiledMap):Void
 
                 switch (effect)
                 {
-                    case "fog":
-                        state.doubleEffectObj = new FlxBackdrop(AssetPaths.white_fog__png, X);
+                    case "dark-cloud":
+                        state.doubleEffectObj = new FlxBackdrop(AssetPaths.darkcloud__png, X);
                         state.doubleEffectObj.velocity.set(360 - boost, 0);
-                        state.doubleEffectObj.alpha = 0.25;
+                        state.doubleEffectObj.alpha = 1;
                     case "clouds":
                         state.doubleEffectObj = new FlxBackdrop(AssetPaths.cloudsDouble__png, XY);
                         state.doubleEffectObj.velocity.set(-20, 0);
@@ -228,7 +228,7 @@ public static function bgEffect(state:ChapterState, tiledData:TiledMap):Void
                         state.frontEffectObj.alpha = 0.15;
                     case "toxic":
                         state.frontEffectObj = new FlxBackdrop(AssetPaths.poison_air__png, X);
-                        state.frontEffectObj.velocity.set(25, 0);
+                        state.frontEffectObj.velocity.set(35, 0);
                         state.frontEffectObj.alpha = 1;
                     case "sandstorm":
                         state.frontEffectObj = new FlxBackdrop(AssetPaths.sandstorm__png, XY);
@@ -272,7 +272,7 @@ public static function bgEffect(state:ChapterState, tiledData:TiledMap):Void
                         state.topEffectObj.velocity.set(boost - 3000, 0);
                     case "wind":
                         state.topEffectObj = new FlxBackdrop(AssetPaths.wind__png, XY);
-                        state.topEffectObj.velocity.set(-1300, 0);
+                        state.topEffectObj.velocity.set(-1300, 200);
                         state.topEffectObj.alpha = 0.25;
                 }
                 if (state.topEffectObj != null)

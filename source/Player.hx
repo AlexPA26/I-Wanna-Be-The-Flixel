@@ -1,5 +1,7 @@
 package;
 
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.util.FlxDirectionFlags;
@@ -16,8 +18,10 @@ class Player extends FlxSprite
     var safeJump:Float = 0;
     var safeJumpMax:Float = 0.15;
     public var mapMaxSpeed:Float = 400;
+    public var currentOffsetY:Float = 20;
 
     public var canDash:Bool = false;
+    public var isFlipped:Bool = false; 
     var dashTimer:Float = 0;
     var dashDirection:Int = 0;
     var isDashing:Bool = false;
@@ -78,6 +82,19 @@ class Player extends FlxSprite
         dashEffect.angularVelocity.set(-300, 300);
     }
 
+    public function flipGravity():Void
+    {
+        isFlipped = !isFlipped;
+        velocity.y = 0;
+        var targetAngle:Float = isFlipped ? 180 : 0;
+        var targetOffset:Float = isFlipped ? 0 : 20;
+        FlxTween.tween(this, {angle: targetAngle, currentOffsetY: targetOffset}, 0.5,
+        {
+            ease: FlxEase.sineInOut
+        });
+
+    }
+
     override public function update(elapsed:Float):Void
     {
         updateInputs();
@@ -85,13 +102,16 @@ class Player extends FlxSprite
         acceleration.x = 0;
         maxVelocity.x = mapMaxSpeed;
 
+        var floorDir:FlxDirectionFlags = isFlipped ? UP : DOWN;
+        var gravMult:Int = isFlipped ? -1 : 1;
+
         if (tapTimer > 0)
         {
             tapTimer -= elapsed;
             if (tapTimer <= 0) tapCount = 0;
         }
         
-        if (isTouching(DOWN))
+        if (isTouching(floorDir))
         {
             safeJump = safeJumpMax;
             canDoubleJump = true;
@@ -109,7 +129,7 @@ class Player extends FlxSprite
         var dashPressed = inputDash;
         var left = inputLeft;
         var right = inputRight;
-    
+
         if (left) 
         { 
             acceleration.x = -1500; 
@@ -125,7 +145,7 @@ class Player extends FlxSprite
             isFacingRIGHT = true;
         }
 
-        if (dashPressed && canDash && !isDashing && !isTouching(DOWN))
+        if (dashPressed && canDash && !isDashing && !isTouching(floorDir))
         {
             isDashing = true;
             canDash = false;
@@ -158,7 +178,7 @@ class Player extends FlxSprite
                 maxVelocity.x = mapMaxSpeed;
             }
 
-            acceleration.y = 2000;
+            acceleration.y = 2000 * gravMult;
             
             if (left) { acceleration.x = -4000; facing = LEFT; }
             else if (right) { acceleration.x = 4000; facing = RIGHT; }
@@ -167,7 +187,7 @@ class Player extends FlxSprite
             {
                 if (safeJump > 0) 
                 {
-                    velocity.y = -650; 
+                    velocity.y = -650 * gravMult; 
                     safeJump = 0;
                     FlxG.sound.play(AssetPaths.jump__ogg, 1);
                     animationJumpUp = true;
@@ -175,10 +195,10 @@ class Player extends FlxSprite
                 }
                 else if (canDoubleJump) 
                 {
-                    doubleJumpEffect.setPosition(x + (width / 2), y + height);
+                    doubleJumpEffect.setPosition(x + (width / 2), y + (isFlipped ? 0 : height));
                     doubleJumpEffect.start(true, 0, 10);
                     canDoubleJump = false;
-                    velocity.y = -600;
+                    velocity.y = -600 * gravMult;
                     FlxG.sound.play(AssetPaths.doublejump__ogg, 1);
                     animationJumpUp = true;
                     animationJumpDown = false;
@@ -192,7 +212,7 @@ class Player extends FlxSprite
             if (maxVelocity.x < 400) maxVelocity.x = 400;
         }
 
-        if (isTouching(DOWN))
+        if (isTouching(floorDir))
         {
             maxVelocity.x = mapMaxSpeed;
             drag.x = 4000;
@@ -200,7 +220,9 @@ class Player extends FlxSprite
 
         super.update(elapsed);
 
-        if (inputJumpReleased && velocity.y < 0)
+        var isMovingUp = isFlipped ? (velocity.y > 0) : (velocity.y < 0);
+
+        if (inputJumpReleased && isMovingUp)
         {
             velocity.y *= 0.8;
             animationJumpDown = true;
@@ -210,7 +232,7 @@ class Player extends FlxSprite
         if (isDashing) animation.play("walking");
         else if (!isTouching(DOWN) && Math.abs(velocity.y) > 50) 
         {
-            if (velocity.y < 0) animation.play("jumpUp");
+            if (isMovingUp) animation.play("jumpUp");
             else animation.play("jumpDown");
         }
         else 
