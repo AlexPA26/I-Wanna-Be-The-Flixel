@@ -58,7 +58,10 @@ class ObjectLoader
 
                         case "save":
                             var save = new SavePoint(spawnX, spawnY);
-                            state.savesGroup.add(save);
+                            if (PlayerData.currentRoom != state.currentRoomName)
+                            {
+                                state.savesGroup.add(save);
+                            }
 
                         case "doubleJump":
                             var doubleJump = new DoubleJumpObj(spawnX, spawnY);

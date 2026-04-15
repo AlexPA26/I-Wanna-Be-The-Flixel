@@ -50,7 +50,7 @@ class ChapterState extends FlxState
     public var tilemapLayers:Map<String, FlxTilemap> = new Map();
     public var tilemapGroup:flixel.group.FlxGroup;
 
-    var currentRoomName:String;
+    public var currentRoomName:String;
     public var warpsGroup:FlxTypedGroup<WarpTrigger>;
     public var vignite:FlxSprite;
 
@@ -121,8 +121,7 @@ override public function create():Void
     imgCache();
     sfxCache();
 
-    dangerObjects = new FlxGroup(); 
-
+    dangerObjects = new FlxGroup();
     savesGroup = new FlxTypedGroup<SavePoint>();
     popups = new FlxTypedGroup<FlxText>();
     saveParticlesGroup = new FlxTypedGroup<FlxEmitter>();
