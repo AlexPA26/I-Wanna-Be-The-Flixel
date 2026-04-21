@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="25" nextobjectid="937">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="26" nextobjectid="939">
  <properties>
   <property name="songName" value="rain"/>
  </properties>
@@ -11,6 +11,7 @@
  <tileset firstgid="111" source="../../textures/light.tsx"/>
  <tileset firstgid="112" source="../../textures/trampoline-mini.tsx"/>
  <tileset firstgid="121" source="../../textures/transition-tiles.tsx"/>
+ <tileset firstgid="126" source="../../textures/small-spike.tsx"/>
  <layer id="1" name="tiles-main" width="28" height="18">
   <data encoding="csv">
 0,0,0,0,0,0,33,0,0,0,0,0,33,0,33,0,0,33,0,0,0,33,0,0,0,33,0,0,
@@ -178,6 +179,18 @@
   <object id="936" name="spike" gid="91" x="1200" y="760" width="50" height="50">
    <properties>
     <property name="id" value="6"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="25" name="small-spike">
+  <object id="937" name="small-spike" gid="128" x="325" y="175" width="25" height="25">
+   <properties>
+    <property name="id" value="2"/>
+   </properties>
+  </object>
+  <object id="938" name="small-spike" gid="126" x="1124" y="200" width="25" height="25">
+   <properties>
+    <property name="id" value="0"/>
    </properties>
   </object>
  </objectgroup>

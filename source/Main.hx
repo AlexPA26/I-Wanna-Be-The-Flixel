@@ -38,7 +38,7 @@ class Main extends Sprite
 		#end
 
 		#if debug
-		addChild(new FlxGame(0, 0, debugState, 60, 60, true, false));
+		addChild(new FlxGame(0, 0, initialState, 60, 60, true, false));
 		addChild(new FPS(10, 10, 0xFFFFFF));
 		flixel.FlxG.autoPause = false;
 		#end

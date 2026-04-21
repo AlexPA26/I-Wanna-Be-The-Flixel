@@ -5,7 +5,6 @@ import flixel.tweens.FlxTween;
 import leveldata.background.AcidFluid;
 import flixel.ui.FlxVirtualPad;
 import flixel.effects.particles.FlxEmitter;
-import leveldata.background.BackgroundManager;
 import gui.DeathState;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
@@ -89,6 +88,7 @@ class ChapterState extends FlxState
     public var lightsGroup:FlxTypedGroup<LightTorch>;
     public var dangerObjects:FlxGroup;
     public var slabs:FlxTypedGroup<NormalSlab>;
+    public var hud:FlxGroup;
 
     var spikes:FlxGroup;
     var saveAnimation:FlxSprite;
@@ -102,9 +102,9 @@ class ChapterState extends FlxState
 override public function create():Void
 {
     #if !debug
-    #if !mobile
-    FlxG.mouse.visible = false;
-    #end
+        #if !mobile
+        FlxG.mouse.visible = false;
+        #end
     #end
 
     #if debug
@@ -136,6 +136,7 @@ override public function create():Void
     lightsGroup = new FlxTypedGroup<LightTorch>();
     slabs = new FlxTypedGroup<NormalSlab>();
     bullets = new FlxTypedGroup<FlxSprite>();
+    hud = new FlxGroup();
 
     playerGlow = new FlxSprite();
     playerGlow.loadGraphic(AssetPaths.playerGlow__png, false);
@@ -160,8 +161,14 @@ override public function create():Void
     RoomLoader.loadRoom(this, PlayerData.currentRoom);
 
     #if debug
-    FlxG.camera.follow(player, FlxCameraFollowStyle.LOCKON);
+        FlxG.camera.follow(player, FlxCameraFollowStyle.LOCKON);
     #end
+
+    switch(PlayerData.currentChapter)
+    {
+        case 1: chapter1Cache();
+        case 2: chapter2Cache();
+    }
 
     super.create();
 
@@ -186,13 +193,14 @@ override public function update(elapsed:Float):Void
     #end
 
     super.update(elapsed);
+
     FlxG.collide(player, map);
     FlxG.collide(player, slabs);
 
-    FlxG.overlap(player, warpsGroup, (p, w) -> { handleWarp(cast w); });
-    FlxG.overlap(player, savesGroup, (p, s) -> { saveLogicSprite(cast s); });
-    FlxG.overlap(player, doubleJumpGroup, (p, d) -> { doubleJumpObjLogic(cast d); });
-    FlxG.overlap(player, portalGroup, (p, pw) -> { portalWarpLogic(cast pw); });
+    FlxG.overlap(player, warpsGroup, (p, w) -> { HandleWarp(cast w); });
+    FlxG.overlap(player, savesGroup, (p, s) -> { SaveLogicSprite(cast s); });
+    FlxG.overlap(player, doubleJumpGroup, (p, d) -> { DoubleJumpLogic(cast d); });
+    FlxG.overlap(player, portalGroup, (p, pw) -> { PortalWarpLogic(cast pw); });
     FlxG.overlap(player, flipGroup, (p, sw) -> { FlipSwitchObjLogic(cast sw); });
 
     FlxG.collide(player, trampolines, (p, t) -> { var tramp:NormalTrampoline = cast t;
@@ -287,25 +295,11 @@ override public function update(elapsed:Float):Void
     else
     { if (FlxG.overlap(player, dangerObjects)) { killPlayer(); } }
 
-
-    // timeElapsed.text = "Time: " + PlayerData.timeElapsed;
-    if (currentChapter != null) currentChapter.text = "Chapter: " + PlayerData.currentChapter;
-    #if mobile
-        if (playerDeaths != null) playerDeaths.text = "Total Deaths: " + PlayerData.totalDeaths;
-    #else
-        if (playerDeaths != null) playerDeaths.text = "Total Resets: " + PlayerData.totalDeaths;
-    #end
-    if (lastSave != null) lastSave.text = "Last Save: " + PlayerData.currentRoom;
-
     if (PlayerData.saveCooldown > 0)
     {
         PlayerData.saveCooldown -= elapsed;
         if (PlayerData.saveCooldown < 0) PlayerData.saveCooldown = 0;
     }
-
-
-
-
 
     #if !mobile
         if (FlxG.keys.justPressed.TAB)
@@ -332,10 +326,7 @@ override public function update(elapsed:Float):Void
         }
     #end
     
-    if (saveAnimation.alpha > 0)
-    {
-        saveAnimation.alpha -= 0.01;
-    }
+    if (saveAnimation.alpha > 0) { saveAnimation.alpha -= 0.01; }
     
     bullets.forEachAlive((bullet) ->
     {
@@ -356,39 +347,34 @@ override public function update(elapsed:Float):Void
         playerGlow.exists = false;
     }
 
-    switch(PlayerData.currentChapter)
-    {
-        case 1: chapter1Cache();
-        case 2: chapter2Cache();
-    }
 
     #if mobile
-    if (virtualPad.buttonA.justPressed) 
+    if (virtualPad.buttonA.justPressed) PlayerShoot();
     {
-        PlayerShoot();
+        FlxG.collide(bullets, map, (bullet, wall) -> { bullet.kill(); });
     }
-
-    player.pad.alpha = padAlpha;
     #end
 
     #if !debug
-    if (player.x > map.width || player.y > map.height - 50) killPlayer();
+        if (player.x > map.width || player.y > map.height - 50) killPlayer();
     #end
 
     #if !mobile
-    if (FlxG.keys.justPressed.ONE) RoomLoader.loadRoom(this, "map21");
-    if (FlxG.keys.justPressed.M)
-    {
-        var current = currentRoomName; 
-        var numPart = Std.parseInt(current.substr(3));
-        numPart++;
-        var nextRoomNum = (numPart < 10) ? "0" + numPart : Std.string(numPart);
-        var nextRoomName = "map" + nextRoomNum;
-        
-        RoomLoader.loadRoom(this, nextRoomName);
-        
-        trace("Teleported to: " + nextRoomName);
-    }
+        if (FlxG.keys.justPressed.ONE) RoomLoader.loadRoom(this, "map21");
+        if (FlxG.keys.justPressed.TWO) RoomLoader.loadRoom(this, "boss");
+        if (FlxG.keys.justPressed.M)
+        {
+            var current = currentRoomName; 
+            var numPart = Std.parseInt(current.substr(3));
+            numPart++;
+            var nextRoomNum = (numPart < 10) ? "0" + numPart : Std.string(numPart);
+            var nextRoomName = "map" + nextRoomNum;
+            
+            RoomLoader.loadRoom(this, nextRoomName);
+
+            trace("Teleported to: " + nextRoomName);
+            spawnTimer = 2.0;
+        }
     #end
 
 }
@@ -461,7 +447,7 @@ function PlayerShoot():Void
 
 }
 
-function handleWarp(w:WarpTrigger):Void
+function HandleWarp(w:WarpTrigger):Void
 {
     if (w.newChapter != null && w.newChapter != "")
     {
@@ -492,33 +478,33 @@ function setupHUD():Void
     currentChapter = new FlxText(50, FlxG.height - 90, 0, "Chapter: ", 18);
     currentChapter.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
     currentChapter.scrollFactor.set(0, 0);
-    currentChapter.scrollFactor.set(0, 0);
-    add(currentChapter);
+    currentChapter.alpha = 0.65;
+    add(hud);
 
     lastSave = new FlxText(50, FlxG.height - 60, 0, "Last Save: ", 18);
     lastSave.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
     lastSave.scrollFactor.set(0, 0);
-    lastSave.alpha = 0.75;
-    add(lastSave);
+    lastSave.alpha = 0.65;
+    add(hud);
 
     playerDeaths = new FlxText(FlxG.width - 260, FlxG.height - 80, 0, "Total Resets: ", 22);
     playerDeaths.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
     playerDeaths.scrollFactor.set(0, 0);
-    playerDeaths.scrollFactor.set(0, 0);
-    add(playerDeaths);
+    playerDeaths.alpha = 0.65;
+    add(hud);
     #end
 
     #if mobile
     playerDeaths = new FlxText(FlxG.width - 260, 30, 0, "Total Deaths: ", 22);
     playerDeaths.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
     playerDeaths.scrollFactor.set(0, 0);
-    playerDeaths.scrollFactor.set(0, 0);
-    add(playerDeaths);
+    playerDeaths.alpha = 0.65;
+    add(hud);
     #end
 
 }
 
-function saveLogicSprite(saveObj:SavePoint):Void
+function SaveLogicSprite(saveObj:SavePoint):Void
 {
     if (saveObj.alive) 
     {
@@ -539,7 +525,6 @@ function saveLogicSprite(saveObj:SavePoint):Void
             saveAnimation.alpha = 0.5;
             FlxG.sound.play(AssetPaths.savedgame__ogg, 0.5, false);
             SaveManager.saveGame();
-            
         }
 
         saveObj.alive = false;
@@ -548,7 +533,7 @@ function saveLogicSprite(saveObj:SavePoint):Void
     }
 }
 
-function doubleJumpObjLogic(doublejObj:DoubleJumpObj):Void
+function DoubleJumpLogic(doublejObj:DoubleJumpObj):Void
 {
     if (doublejObj.alive)
     {
@@ -577,7 +562,7 @@ function FlipSwitchObjLogic(flipSwitchObj:FlipSwitch):Void
     }
 }
 
-function portalWarpLogic(portalLogic:PortalWarp):Void
+function PortalWarpLogic(portalLogic:PortalWarp):Void
 {
     RoomLoader.loadRoom(this, "map25");
     FlxG.camera.shake(0.005, 0.25);

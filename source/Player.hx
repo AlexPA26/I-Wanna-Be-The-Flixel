@@ -88,6 +88,7 @@ class Player extends FlxSprite
         velocity.y = 0;
         var targetAngle:Float = isFlipped ? 180 : 0;
         var targetOffset:Float = isFlipped ? 0 : 20;
+        offset.set(10, 0);
         FlxTween.tween(this, {angle: targetAngle, currentOffsetY: targetOffset}, 0.5,
         {
             ease: FlxEase.sineInOut

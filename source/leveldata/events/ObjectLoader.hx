@@ -43,7 +43,7 @@ class ObjectLoader
                         state.warpsGroup.add(warp);
 
                         case "spike":
-                            var localID:Int = 0;
+                        var localID:Int = 0;
                         if (obj.properties.contains("id")) 
                         {
                             localID = Std.parseInt(obj.properties.get("id"));
@@ -55,6 +55,20 @@ class ObjectLoader
                         }
                             var spike = new NormalSpike(spawnX, spawnY, localID);
                             state.dangerObjects.add(spike);
+
+                        case "small-spike":
+                        var localID:Int = 0;
+                        if (obj.properties.contains("id")) 
+                        {
+                            localID = Std.parseInt(obj.properties.get("id"));
+                        } 
+                        else 
+                        {
+                            var tileset = tiledData.getGidOwner(obj.gid);
+                            localID = obj.gid - tileset.firstGID;
+                        }
+                            var smallSpike = new SmallSpike(spawnX, spawnY, localID);
+                            state.dangerObjects.add(smallSpike);
 
                         case "save":
                             var save = new SavePoint(spawnX, spawnY);

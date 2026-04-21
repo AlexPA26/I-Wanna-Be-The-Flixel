@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="25" nextobjectid="998">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="26" nextobjectid="1003">
  <properties>
   <property name="songName" value="rain"/>
  </properties>
@@ -11,6 +11,7 @@
  <tileset firstgid="111" source="../../textures/light.tsx"/>
  <tileset firstgid="112" source="../../textures/trampoline-mini.tsx"/>
  <tileset firstgid="121" source="../../textures/transition-tiles.tsx"/>
+ <tileset firstgid="126" source="../../textures/small-spike.tsx"/>
  <layer id="1" name="tiles-main" width="28" height="18">
   <data encoding="csv">
 0,0,0,33,0,0,0,0,0,0,0,0,33,0,33,0,0,4,4,0,0,0,0,0,0,0,0,0,
@@ -78,7 +79,7 @@
 </data>
  </layer>
  <objectgroup id="24" name="slab-poison"/>
- <objectgroup id="16" name="falling" visible="0">
+ <objectgroup id="16" name="falling">
   <properties>
    <property name="direction" value="down"/>
   </properties>
@@ -208,6 +209,13 @@
    </properties>
   </object>
  </objectgroup>
+ <objectgroup id="25" name="small-spike">
+  <object id="998" name="small-spike" gid="126" x="525" y="300" width="25" height="25">
+   <properties>
+    <property name="id" value="0"/>
+   </properties>
+  </object>
+ </objectgroup>
  <objectgroup id="8" name="save"/>
  <objectgroup id="21" name="acidlayer"/>
  <objectgroup id="10" name="laser">
@@ -316,16 +324,6 @@
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="982" name="laser" gid="99" x="1300" y="550" width="50" height="50">
-   <properties>
-    <property name="direction" value="v"/>
-   </properties>
-  </object>
-  <object id="983" name="laser" gid="99" x="1300" y="600" width="50" height="50">
-   <properties>
-    <property name="direction" value="v"/>
-   </properties>
-  </object>
   <object id="984" name="laser" gid="99" x="1300" y="650" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
@@ -361,14 +359,24 @@
     <property name="direction" value="voff"/>
    </properties>
   </object>
-  <object id="995" name="laser" gid="99" x="1300" y="500" width="50" height="50">
+  <object id="996" name="laser" gid="99" x="1300" y="450" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="996" name="laser" gid="99" x="1300" y="450" width="50" height="50">
+  <object id="1000" name="laser" gid="105" x="1300" y="600" width="50" height="50">
    <properties>
-    <property name="direction" value="v"/>
+    <property name="direction" value="voff"/>
+   </properties>
+  </object>
+  <object id="1001" name="laser" gid="105" x="1300" y="550" width="50" height="50">
+   <properties>
+    <property name="direction" value="voff"/>
+   </properties>
+  </object>
+  <object id="1002" name="laser" gid="105" x="1300" y="500" width="50" height="50">
+   <properties>
+    <property name="direction" value="voff"/>
    </properties>
   </object>
  </objectgroup>

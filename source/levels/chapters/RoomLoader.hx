@@ -60,6 +60,7 @@ class RoomLoader
             state.add(state.mapDeco2);
         }
 
+        FlxG.bitmap.clearUnused();
         state.dangerObjects.clear();
         state.doubleJumpGroup.clear();
         state.flipGroup.clear();
@@ -73,6 +74,7 @@ class RoomLoader
         state.slabs.clear();
         state.popups.clear();
         state.saveParticlesGroup.clear();
+        state.hud.clear();
 
         if (state.saveParticlesGroup != null)
         {
@@ -103,10 +105,7 @@ class RoomLoader
         state.add(state.doubleJumpGroup);
         state.add(state.player.dashEffect);
         state.add(state.saveParticlesGroup);
-        if (PlayerData.currentRoom != state.currentRoomName)
-        {
-            state.add(state.savesGroup);
-        }
+        state.add(state.savesGroup);
         state.add(state.popups);
         state.add(state.warpsGroup);
         state.add(state.slabs);
@@ -117,6 +116,7 @@ class RoomLoader
         state.add(state.trampolines);
         state.add(state.trampolinesMini);
         state.add(state.eventEffectGroup);
+        state.add(state.hud);
 
         state.savesGroup.forEach(function(save:SavePoint)
         {
@@ -138,8 +138,13 @@ class RoomLoader
         state.updateMusic();
         state.add(state.saveAnimation);
 
-        PlayerData.saveCooldown = 0.1;
-        state.spawnTimer = 0.1;
+        #if !debug
+            PlayerData.saveCooldown = 0.1;
+            state.spawnTimer = 0.1;
+        #else
+            PlayerData.saveCooldown = 9999;
+            state.spawnTimer = 0.1;
+        #end
 
         state.hudGroup.clear();
         state.hudGroup.add(state.virtualPad);
@@ -154,9 +159,18 @@ class RoomLoader
             state.virtualPad.visible = false;
             state.virtualPad.active = false;
         #else
-            state.player.pad.alpha = 0.5;
+            state.player.pad.alpha = padAlpha;
         #end
 
+        if (state.currentChapter != null) state.currentChapter.text = "Chapter: " + PlayerData.currentChapter;
+        #if mobile
+            if (playerDeaths != null) playerDeaths.text = "Total Deaths: " + PlayerData.totalDeaths;
+        #else
+            if (state.playerDeaths != null) state.playerDeaths.text = "Total Resets: " + PlayerData.totalDeaths;
+        #end
+        if (state.lastSave != null) state.lastSave.text = "Last Save: " + PlayerData.currentRoom;
+
     }
+
 
 }
