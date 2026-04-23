@@ -112,7 +112,6 @@ override public function create():Void
         FlxG.mouse.visible = true;
         #end
     #end
-    FlxG.fixedTimestep = true;
 
     hudGroup = new FlxGroup();
     virtualPad = new FlxVirtualPad(LEFT_RIGHT, A);
@@ -360,8 +359,9 @@ override public function update(elapsed:Float):Void
     #end
 
     #if !mobile
-        if (FlxG.keys.justPressed.ONE) RoomLoader.loadRoom(this, "map21");
+        if (FlxG.keys.justPressed.ONE) RoomLoader.loadRoom(this, "map31");
         if (FlxG.keys.justPressed.TWO) RoomLoader.loadRoom(this, "boss");
+        if (FlxG.keys.justPressed.I) spawnTimer = 9999;
         if (FlxG.keys.justPressed.M)
         {
             var current = currentRoomName; 

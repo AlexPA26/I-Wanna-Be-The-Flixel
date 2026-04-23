@@ -28,6 +28,7 @@ class MenuState extends FlxState
     var logo:FlxSprite;
     var effectLogo:FlxEffectSprite;
     var glitchEffect:FlxGlitchEffect;
+    var player:FlxSprite;
     var bg:FlxSprite;
 
     var btnNewGame:FlxButton;
@@ -55,6 +56,14 @@ class MenuState extends FlxState
         bg.screenCenter();
         bg.alpha = 0.15;
         add(bg);
+
+        player = new FlxSprite();
+        player.loadGraphic(AssetPaths.thekid__png, true, 50, 50);
+        player.animation.add("walking", [8, 9, 10, 11, 12, 13], 12, true);
+        player.animation.play("walking");
+        player.screenCenter();
+        add(player);
+        player.scale.set(2, 2);
 
         scanline = new FlxBackdrop(AssetPaths.scanline__png, Y);
         scanline.velocity.set(0, 40);

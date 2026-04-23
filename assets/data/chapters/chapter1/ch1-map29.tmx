@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="26" nextobjectid="1003">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="26" nextobjectid="1007">
  <properties>
   <property name="songName" value="rain"/>
  </properties>
@@ -110,77 +110,77 @@
   </object>
   <object id="935" name="spike" gid="91" x="650" y="760" width="50" height="50">
    <properties>
-    <property name="direction" value="6"/>
+    <property name="id" value="6"/>
    </properties>
   </object>
   <object id="936" name="spike" gid="91" x="700" y="760" width="50" height="50">
    <properties>
-    <property name="direction" value="6"/>
+    <property name="id" value="6"/>
    </properties>
   </object>
   <object id="937" name="spike" gid="91" x="750" y="760" width="50" height="50">
    <properties>
-    <property name="direction" value="6"/>
+    <property name="id" value="6"/>
    </properties>
   </object>
   <object id="938" name="spike" gid="91" x="800" y="760" width="50" height="50">
    <properties>
-    <property name="direction" value="6"/>
+    <property name="id" value="6"/>
    </properties>
   </object>
   <object id="939" name="spike" gid="91" x="850" y="760" width="50" height="50">
    <properties>
-    <property name="direction" value="6"/>
+    <property name="id" value="6"/>
    </properties>
   </object>
   <object id="940" name="spike" gid="91" x="900" y="760" width="50" height="50">
    <properties>
-    <property name="direction" value="6"/>
+    <property name="id" value="6"/>
    </properties>
   </object>
   <object id="941" name="spike" gid="91" x="950" y="760" width="50" height="50">
    <properties>
-    <property name="direction" value="6"/>
+    <property name="id" value="6"/>
    </properties>
   </object>
   <object id="942" name="spike" gid="91" x="1000" y="760" width="50" height="50">
    <properties>
-    <property name="direction" value="6"/>
+    <property name="id" value="6"/>
    </properties>
   </object>
   <object id="943" name="spike" gid="91" x="1050" y="760" width="50" height="50">
    <properties>
-    <property name="direction" value="6"/>
+    <property name="id" value="6"/>
    </properties>
   </object>
   <object id="944" name="spike" gid="91" x="1100" y="760" width="50" height="50">
    <properties>
-    <property name="direction" value="6"/>
+    <property name="id" value="6"/>
    </properties>
   </object>
   <object id="945" name="spike" gid="91" x="1150" y="760" width="50" height="50">
    <properties>
-    <property name="direction" value="6"/>
+    <property name="id" value="6"/>
    </properties>
   </object>
   <object id="946" name="spike" gid="91" x="1200" y="760" width="50" height="50">
    <properties>
-    <property name="direction" value="6"/>
+    <property name="id" value="6"/>
    </properties>
   </object>
   <object id="947" name="spike" gid="91" x="1250" y="760" width="50" height="50">
    <properties>
-    <property name="direction" value="6"/>
+    <property name="id" value="6"/>
    </properties>
   </object>
   <object id="948" name="spike" gid="91" x="1300" y="760" width="50" height="50">
    <properties>
-    <property name="direction" value="6"/>
+    <property name="id" value="6"/>
    </properties>
   </object>
   <object id="949" name="spike" gid="91" x="1350" y="760" width="50" height="50">
    <properties>
-    <property name="direction" value="6"/>
+    <property name="id" value="6"/>
    </properties>
   </object>
   <object id="950" name="spike" gid="92" x="550" y="200" width="50" height="50">
@@ -208,6 +208,16 @@
     <property name="id" value="0"/>
    </properties>
   </object>
+  <object id="1003" name="spike" gid="86" x="650" y="450" width="50" height="50">
+   <properties>
+    <property name="id" value="1"/>
+   </properties>
+  </object>
+  <object id="1004" name="spike" gid="90" x="650" y="500" width="50" height="50">
+   <properties>
+    <property name="id" value="5"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="25" name="small-spike">
   <object id="998" name="small-spike" gid="126" x="525" y="300" width="25" height="25">
@@ -216,7 +226,9 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="8" name="save"/>
+ <objectgroup id="8" name="save">
+  <object id="1005" name="save" gid="84" x="450" y="200" width="50" height="50"/>
+ </objectgroup>
  <objectgroup id="21" name="acidlayer"/>
  <objectgroup id="10" name="laser">
   <object id="961" name="laser" gid="99" x="200" y="150" width="50" height="50">
