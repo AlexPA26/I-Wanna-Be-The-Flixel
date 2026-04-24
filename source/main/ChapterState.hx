@@ -1,4 +1,4 @@
-package levels.chapters.datachapter;
+package main;
 
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -25,7 +25,7 @@ import leveldata.misc.*;
 import leveldata.hazards.*;
 import leveldata.blockdata.*;
 
-@:allow(levels.chapters.RoomLoader)
+@:allow(main.RoomLoader)
 class ChapterState extends FlxState
 {
     var player:Player;
@@ -359,7 +359,7 @@ override public function update(elapsed:Float):Void
     #end
 
     #if !mobile
-        if (FlxG.keys.justPressed.ONE) RoomLoader.loadRoom(this, "map31");
+        if (FlxG.keys.justPressed.ONE) RoomLoader.loadRoom(this, "map29");
         if (FlxG.keys.justPressed.TWO) RoomLoader.loadRoom(this, "boss");
         if (FlxG.keys.justPressed.I) spawnTimer = 9999;
         if (FlxG.keys.justPressed.M)

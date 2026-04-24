@@ -1,6 +1,6 @@
 package gui;
 
-import levels.chapters.datachapter.ChapterState;
+import main.ChapterState;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -8,7 +8,7 @@ import flixel.addons.display.FlxBackdrop;
 import flixel.addons.effects.chainable.FlxEffectSprite;
 import flixel.ui.FlxButton;
 import flixel.addons.effects.chainable.FlxGlitchEffect;
-import PlayerData;
+import main.PlayerData;
 import leveldata.misc.SaveManager;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
@@ -22,20 +22,27 @@ class MenuState extends FlxState
 {
     var scanline:FlxBackdrop;
     var scanline2:FlxBackdrop;
-    var titleText:FlxText;
+    var flixelIcon:FlxSprite;
     var versionText:FlxText;
     var vignite:FlxSprite;
     var logo:FlxSprite;
     var effectLogo:FlxEffectSprite;
     var glitchEffect:FlxGlitchEffect;
     var player:FlxSprite;
+    var globe:FlxSprite;
     var bg:FlxSprite;
+
+    var isActiveNew:Bool = false;
+    var isActiveCont:Bool = false;
 
     var btnNewGame:FlxButton;
     var btnContinue:FlxButton;
+    var btnSpriteNew:FlxSprite;
+    var btnSpriteCont:FlxSprite;
     var btnExit:FlxButton;
 
     var activeTweens:Map<FlxButton, FlxTween> = new Map();
+    var activeLabelTweens:Map<FlxText, FlxTween> = new Map();
 
     var outlineColors:Array<FlxColor> =
     [
@@ -54,100 +61,114 @@ class MenuState extends FlxState
         bg = new FlxSprite();
         bg.makeGraphic(1280, 720, 0xFF1B76FF, false);
         bg.screenCenter();
-        bg.alpha = 0.15;
+        bg.alpha = 0.25;
         add(bg);
 
         player = new FlxSprite();
         player.loadGraphic(AssetPaths.thekid__png, true, 50, 50);
-        player.animation.add("walking", [8, 9, 10, 11, 12, 13], 12, true);
+        player.animation.add("walking", [8, 9, 10, 11, 12, 13], 14, true);
         player.animation.play("walking");
+        player.scale.set(1.2, 1.2);
         player.screenCenter();
-        add(player);
-        player.scale.set(2, 2);
+        player.y = player.y + 122;
+        player.x = player.x - 15;
+        player.updateHitbox();
+        insert(2, player);
+
+        globe = new FlxSprite();
+        globe.loadGraphic(AssetPaths.globe__png, false);
+        globe.screenCenter();
+        globe.y = globe.y + 650;
+        globe.x = globe.x - 5;
+        FlxTween.angle(globe, 0, -360, 18.0, { type: LOOPING } );
+        insert(3, globe);
 
         scanline = new FlxBackdrop(AssetPaths.scanline__png, Y);
         scanline.velocity.set(0, 40);
         scanline.scrollFactor.set(0, 0);
         scanline.alpha = 0.1;
-        add(scanline);
+        insert(1, scanline);
 
         scanline2 = new FlxBackdrop(AssetPaths.scanline__png, Y);
         scanline2.velocity.set(0, 40);
         scanline2.scrollFactor.set(0, 0);
         scanline2.alpha = 0.05;
         scanline2.y = 10;
-        add(scanline2);
+        insert(1, scanline2);
 
-        titleText = new FlxText(0, 75, FlxG.width, "I Wanna Be The Flixel");
-        titleText.setFormat(null, 60, FlxColor.WHITE, CENTER);
-        titleText.setBorderStyle(OUTLINE, FlxColor.RED, 2);
-        FlxTween.tween(titleText, {y: titleText.y - 3}, 0.8, {type: PINGPONG, ease: FlxEase.sineInOut});
-        add(titleText);
+        flixelIcon = new FlxSprite();
+        flixelIcon.loadGraphic(AssetPaths.haxeflixelLogo__png);
+        flixelIcon.updateHitbox();
 
-        #if !mobile
-        versionText = new FlxText(0, 100, FlxG.width, "v.0.1.5");
-        versionText.setFormat(null, 24, FlxColor.WHITE, CENTER);
-        versionText.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
-        versionText.x = 350;
-        versionText.y = 145;
-        add(versionText);
-        #end
-
-        #if mobile
-        versionText = new FlxText(0, 100, FlxG.width, "v.0.1.5 ANDROID PREVIEW");
-        versionText.setFormat(null, 24, FlxColor.WHITE, CENTER);
-        versionText.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
-        versionText.x = 220;
-        versionText.y = 145;
-        add(versionText);
-        #end
-
-        new FlxTimer().start(0.5, function(tmr:FlxTimer)
-        {
-            titleText.borderColor = FlxG.random.getObject(outlineColors);
-        }, 0);
-
-        logo = new FlxSprite();
-        logo.loadGraphic(AssetPaths.haxeflixelLogo__png);
-        logo.updateHitbox();
-
-        effectLogo = new FlxEffectSprite(logo);
+        effectLogo = new FlxEffectSprite(flixelIcon);
         glitchEffect = new FlxGlitchEffect(10, 2, 0.035);
         effectLogo.effects = [glitchEffect];
-        effectLogo.x = 560;
-        effectLogo.y = 150;
-        effectLogo.scale.set(0.75, 0.75);
-        add(effectLogo);
-
-        btnNewGame = new FlxButton(300, 230, "New Game", clickNewGame);
-        customizeButton(btnNewGame);
-        add(btnNewGame);
-
-        #if mobile
-            btnContinue = new FlxButton(300, 340, "Continue", clickContinue);
-        #else
-            btnContinue = new FlxButton(300, 300, "Continue", clickContinue);
-        #end
-        customizeButton(btnContinue);
-        add(btnContinue);
-
-        #if mobile
-            btnExit = new FlxButton(300, 540, "Quit Game", clickQuit);
-        #else
-            btnExit = new FlxButton(300, 470, "Quit Game", clickQuit);
-        #end
-        customizeButton(btnExit);
-
-        #if !html5
-        add(btnExit);
-        #end
+        effectLogo.screenCenter();
+        effectLogo.y = effectLogo.y - 50;
+        effectLogo.x = effectLogo.x - 240;
+        effectLogo.scale.set(1.35, 1.35);
+        insert(0, effectLogo);
 
         vignite = new FlxSprite();
         vignite.loadGraphic(AssetPaths.vigniteTitle__png, false);
         vignite.scrollFactor.set(0, 0);
         vignite.screenCenter();
-        vignite.alpha = 0.5;
+        vignite.alpha = 0.65;
         add(vignite);
+
+        logo = new FlxSprite(-50, 50);
+        logo.loadGraphic(AssetPaths.logo__png, false);
+        logo.scale.set(0.65, 0.65);
+        FlxTween.tween(logo, {y: logo.y - 3}, 0.8, {type: PINGPONG, ease: FlxEase.sineInOut});
+        add(logo);
+
+        versionText = new FlxText(0, 0, FlxG.width, "v.0.15");
+        versionText.setFormat(null, 24, FlxColor.WHITE, CENTER);
+        versionText.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
+        versionText.x = 350;
+        versionText.y = 160;
+        add(versionText);
+
+        btnSpriteNew = new FlxSprite(200, 290);
+        btnSpriteNew.loadGraphic(AssetPaths.miniClickV2__png, true, 213);
+        btnSpriteNew.animation.add("idle", [0], false);
+        btnSpriteNew.animation.add("hover", [1], false);
+        btnSpriteNew.animation.play("idle");
+        btnSpriteNew.scale.set(1.15, 1.15);
+        btnSpriteNew.updateHitbox();
+        // add(btnSpriteNew);
+
+        btnSpriteCont = new FlxSprite(200, 390);
+        btnSpriteCont.loadGraphic(AssetPaths.miniClickV2__png, true, 213);
+        btnSpriteCont.animation.add("idle", [0], false);
+        btnSpriteCont.animation.add("hover", [1], false);
+        btnSpriteCont.animation.play("idle");
+        btnSpriteCont.scale.set(1.15, 1.15);
+        btnSpriteCont.updateHitbox();
+        // add(btnSpriteCont);
+
+        btnNewGame = new FlxButton(150, 300, "New Game", clickNewGame);
+        customizeButton(btnNewGame);
+        add(btnNewGame);
+
+        #if mobile
+            btnContinue = new FlxButton(150, 450, "Continue", clickContinue);
+        #else
+            btnContinue = new FlxButton(150, 400, "Continue", clickContinue);
+        #end
+        customizeButton(btnContinue);
+        add(btnContinue);
+
+        #if mobile
+            btnExit = new FlxButton(1050, 640, "Quit Game", clickQuit);
+        #else
+            btnExit = new FlxButton(1020, 650, "Quit Game", clickQuit);
+        #end
+        customizeButton(btnExit);
+
+        #if !html5
+            add(btnExit);
+        #end
 
         playMenuMusic();
 
@@ -157,6 +178,26 @@ class MenuState extends FlxState
     override public function update(elapsed:Float):Void
     {
         super.update(elapsed);
+
+        if (FlxG.mouse.overlaps(btnSpriteNew))
+        {
+            btnSpriteNew.animation.play("hover");
+        }
+
+        else
+        {
+            btnSpriteNew.animation.play("idle");
+        }
+
+        if (FlxG.mouse.overlaps(btnSpriteCont))
+        {
+            btnSpriteCont.animation.play("hover");
+        }
+
+        else
+        {
+            btnSpriteCont.animation.play("idle");
+        }
 
         #if !mobile
         if (FlxG.keys.justPressed.F11)
@@ -171,13 +212,19 @@ class MenuState extends FlxState
 
         scanline.alpha = 0.1 - (Math.random() * 0.05);
         scanline2.alpha = 0.1 - (Math.random() * 0.1);
-        effectLogo.alpha = 0.55 - (Math.random() * 0.4);
+        effectLogo.alpha = 0.35 - (Math.random() * 0.25);
+        player.alpha = 1 - Math.random() * 0.2;
+        globe.alpha = 1 - Math.random() * 0.2;
     }
 
     function customizeButton(btn:FlxButton):Void
     {
-        btn.makeGraphic(270, 60, FlxColor.TRANSPARENT); 
-        
+        var w:Int = 250;
+        var h:Int = 60;
+
+        btn.loadGraphic(AssetPaths.buttonTitle__png, false, w, h);
+        // btn.makeGraphic(w, h, FlxColor.fromRGB(255, 255, 255, 128));
+
         if (btn.label != null) 
         {
             #if mobile
@@ -187,9 +234,19 @@ class MenuState extends FlxState
             #end
 
             btn.label.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
-            btn.label.fieldWidth = 300;
-            btn.label.centerOffsets();
+
+            btn.label.fieldWidth = w;
+            btn.label.alignment = CENTER;
+
+            for (offset in btn.labelOffsets)
+            {
+                offset.y += 10;
+            }
+
             btn.label.centerOrigin();
+            btn.label.centerOffsets();
+
+            
         }
 
         btn.onOver.callback = function()
@@ -197,29 +254,38 @@ class MenuState extends FlxState
             openfl.ui.Mouse.cursor = MouseCursor.BUTTON;
 
             FlxTween.tween(btn.label.scale, {x: 1.1, y: 1.1}, 0.05, {ease: FlxEase.quadOut});
+            FlxTween.tween(btn.scale, {x: 1.1, y: 1.1}, 0.05, {ease: FlxEase.quadOut});
 
-            var twn = FlxTween.angle(btn, -5, 5, 0.6, {type: PINGPONG, ease: FlxEase.sineInOut});
-            activeTweens.set(btn, twn);
+            var btnTwn = FlxTween.angle(btn, -5, 5, 0.6, {type: PINGPONG, ease: FlxEase.sineInOut});
+            var txtTwn = FlxTween.angle(btn.label, -5, 5, 0.6, {type: PINGPONG, ease: FlxEase.sineInOut});
 
-            
-            
+            activeTweens.set(btn, btnTwn);
+            activeLabelTweens.set(btn.label, txtTwn);
+            FlxG.sound.play(AssetPaths.trigger__ogg, 0.1, false);
         };
 
         btn.onOut.callback = function()
         {
             openfl.ui.Mouse.cursor = MouseCursor.ARROW;
 
-            FlxTween.tween(btn.label.scale, {x: 1.0, y: 1.0}, 0.1, {ease: FlxEase.quadIn});
-            
+            FlxTween.tween(btn.label.scale, {x: 1.0, y: 1.0}, 0.05, {ease: FlxEase.quadIn});
+            FlxTween.tween(btn.scale, {x: 1.0, y: 1.0}, 0.05, {ease: FlxEase.quadIn});
+
             if (activeTweens.exists(btn))
             {
                 activeTweens.get(btn).cancel();
                 activeTweens.remove(btn);
             }
-            FlxTween.tween(btn, {angle: 0}, 0.1, {ease: FlxEase.quadOut});
-            btn.label.angle = 0;
 
-            FlxG.sound.play(AssetPaths.trigger__ogg, 0.025, false);
+            if (activeLabelTweens.exists(btn.label))
+            {
+                activeLabelTweens.get(btn.label).cancel();
+                activeLabelTweens.remove(btn.label);
+            }
+
+            FlxTween.tween(btn, {angle: 0}, 0.1, {ease: FlxEase.quadOut});
+            FlxTween.tween(btn.label, {angle: 0}, 0.1, {ease: FlxEase.quadOut});
+            
         };
     }
 

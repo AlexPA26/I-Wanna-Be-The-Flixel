@@ -1,14 +1,12 @@
 import flixel.FlxGame;
 import openfl.display.FPS;
 import openfl.display.Sprite;
-import levels.chapters.datachapter.ChapterState;
+import main.ChapterState;
 import gui.MenuState;
 import openfl.Lib;
 
 class Main extends Sprite
 {
-
-
 	public function new()
 	{
 		super();
@@ -27,7 +25,7 @@ class Main extends Sprite
 
 		#if html5
 			var document = js.Browser.document;
-			document.addEventListener("contextmenu", function(e:js.html.Event) { e.preventDefault(); });
+			document.addEventListener("contextmenu", function(event:js.html.Event) { event.preventDefault(); });
 		#end
 		
 		#if !debug

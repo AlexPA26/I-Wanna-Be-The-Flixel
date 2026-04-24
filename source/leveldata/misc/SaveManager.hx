@@ -1,5 +1,7 @@
 package leveldata.misc;
 
+import main.PlayerData;
+
 import haxe.Exception;
 import flixel.util.FlxSave;
 
@@ -17,7 +19,7 @@ class SaveManager
         save.data.spawnX = PlayerData.spawnX;
         save.data.spawnY = PlayerData.spawnY;
         
-        save.flush(); // Writes it to the disk
+        save.flush();
     }
 
     public static function loadGame():Bool

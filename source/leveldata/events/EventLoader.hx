@@ -1,7 +1,7 @@
 package leveldata.events;
 
 import flixel.addons.editors.tiled.TiledMap;
-import levels.chapters.datachapter.ChapterState;
+import main.ChapterState;
 import leveldata.background.AcidFluid;
 
 class EventLoader

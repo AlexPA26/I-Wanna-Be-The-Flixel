@@ -1,11 +1,12 @@
-package levels.chapters;
+package main;
 
 import leveldata.background.BackgroundManager;
 import flixel.effects.particles.FlxEmitter;
 import leveldata.events.SavePoint;
 import leveldata.events.ObjectLoader;
 import leveldata.events.EventLoader;
-import levels.chapters.datachapter.ChapterState;
+import main.ChapterState;
+import main.PlayerData;
 import flixel.FlxG;
 import flixel.tile.FlxTilemap;
 import flixel.addons.editors.tiled.TiledMap;

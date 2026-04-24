@@ -1,6 +1,6 @@
 package leveldata.background;
 
-import levels.chapters.datachapter.ChapterState;
+import main.ChapterState;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.display.FlxBackdrop;
@@ -11,7 +11,7 @@ import flixel.addons.editors.tiled.TiledObjectLayer;
 class BackgroundManager 
 {
     private static function getScrollBoost(tiledData:TiledMap):Float
-        {
+    {
         var scrollSettingsLayer = tiledData.getLayer("ScrollSettings");
         if (scrollSettingsLayer != null && scrollSettingsLayer.type == TiledLayerType.OBJECT)
             {
@@ -140,7 +140,7 @@ public static function bgEffect(state:ChapterState, tiledData:TiledMap):Void
         {
             case "fog":
                 state.backEffectObj = new FlxBackdrop(AssetPaths.white_fog__png, X);
-                state.backEffectObj.velocity.set(50 - boost, 0);
+                state.backEffectObj.velocity.set(-50 - boost, 0);
                 state.backEffectObj.alpha = 0.25;
             case "poison-fog":
                 state.backEffectObj = new FlxBackdrop(AssetPaths.poison_fog__png, XY);
@@ -272,7 +272,7 @@ public static function bgEffect(state:ChapterState, tiledData:TiledMap):Void
                         state.topEffectObj.velocity.set(boost - 3000, 0);
                     case "wind":
                         state.topEffectObj = new FlxBackdrop(AssetPaths.wind__png, XY);
-                        state.topEffectObj.velocity.set(-1300, 200);
+                        state.topEffectObj.velocity.set(-1000, 200);
                         state.topEffectObj.alpha = 0.25;
                 }
                 if (state.topEffectObj != null)
@@ -285,4 +285,5 @@ public static function bgEffect(state:ChapterState, tiledData:TiledMap):Void
             }
         }
     }
+
 }

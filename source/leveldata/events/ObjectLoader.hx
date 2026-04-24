@@ -1,5 +1,6 @@
 package leveldata.events;
 
+import main.PlayerData;
 import flixel.addons.editors.tiled.TiledMap;
 import flixel.addons.editors.tiled.TiledObjectLayer;
 import flixel.addons.editors.tiled.TiledLayer;
@@ -8,7 +9,7 @@ import leveldata.events.*;
 import leveldata.hazards.*;
 import leveldata.misc.*;
 import leveldata.deco.*;
-import levels.chapters.datachapter.ChapterState;
+import main.ChapterState;
 
 class ObjectLoader
 {

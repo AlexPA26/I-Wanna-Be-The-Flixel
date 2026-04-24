@@ -1,6 +1,6 @@
 package leveldata.events;
 
-import levels.chapters.datachapter.ChapterState;
+import main.ChapterState;
 import flixel.FlxSprite;
 import flixel.effects.particles.FlxEmitter;
 import flixel.FlxG;
@@ -8,7 +8,7 @@ import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import flixel.tweens.FlxTween;
 import flixel.tweens.FlxEase;
-import Player;
+import main.Player;
 
 class SavePoint extends FlxSprite
 {
