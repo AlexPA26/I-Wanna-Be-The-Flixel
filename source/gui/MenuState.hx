@@ -129,6 +129,7 @@ class MenuState extends FlxState
         versionText.y = 160;
         add(versionText);
 
+
         btnSpriteNew = new FlxSprite(200, 290);
         btnSpriteNew.loadGraphic(AssetPaths.miniClickV2__png, true, 213);
         btnSpriteNew.animation.add("idle", [0], false);

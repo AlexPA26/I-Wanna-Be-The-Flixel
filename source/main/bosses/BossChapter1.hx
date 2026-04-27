@@ -1,2 +1,0 @@
-package leveldata.events.bosses;
-

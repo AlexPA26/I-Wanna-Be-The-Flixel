@@ -38,6 +38,7 @@ class ChapterState extends FlxState
     var cameraTarget:FlxObject;
     var scrollSpeed:Float = 0;
     var isAutoscrolling:Bool = false;
+    public var isPaused:Bool = false;
 
     public var bg:FlxSprite;
     public var currentBGName:String = "";
@@ -321,7 +322,8 @@ override public function update(elapsed:Float):Void
 
         if (FlxG.keys.justPressed.ESCAPE)
         {
-            FlxG.resetGame();
+            isPaused = true;
+            openSubState(new gui.PauseState());
         }
     #end
     
@@ -376,6 +378,7 @@ override public function update(elapsed:Float):Void
             spawnTimer = 2.0;
         }
     #end
+
 
 }
 

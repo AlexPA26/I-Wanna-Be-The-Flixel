@@ -273,7 +273,7 @@ public static function bgEffect(state:ChapterState, tiledData:TiledMap):Void
                     case "wind":
                         state.topEffectObj = new FlxBackdrop(AssetPaths.wind__png, XY);
                         state.topEffectObj.velocity.set(-1000, 200);
-                        state.topEffectObj.alpha = 0.25;
+                        state.topEffectObj.alpha = 0.3;
                 }
                 if (state.topEffectObj != null)
                 {

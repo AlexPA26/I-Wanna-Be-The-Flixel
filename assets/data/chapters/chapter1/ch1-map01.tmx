@@ -129,6 +129,6 @@
   </properties>
  </objectgroup>
  <objectgroup id="21" name="portal">
-  <object id="30" name="portal" gid="96" x="810" y="588" width="128" height="128"/>
+  <object id="30" name="portal" gid="96" x="810" y="1088" width="128" height="128"/>
  </objectgroup>
 </map>
