@@ -100,6 +100,8 @@ class ChapterState extends FlxState
     var playerDeaths:FlxText;
     var lastSave:FlxText;
 
+    static var loopPoints:Map<String, Float> = null;
+
 override public function create():Void
 {
     #if !debug
@@ -157,7 +159,8 @@ override public function create():Void
     saveAnimation.makeGraphic(FlxG.width + 1, FlxG.height, FlxColor.WHITE, false);
     saveAnimation.alpha = 0;
     saveAnimation.scrollFactor.set(0,0);
-
+    
+    // MapPacker.loadChapter(PlayerData.currentChapter);
     RoomLoader.loadRoom(this, PlayerData.currentRoom);
 
     #if debug
@@ -361,7 +364,7 @@ override public function update(elapsed:Float):Void
     #end
 
     #if !mobile
-        if (FlxG.keys.justPressed.ONE) RoomLoader.loadRoom(this, "map29");
+        if (FlxG.keys.justPressed.ONE) RoomLoader.loadRoom(this, "map12");
         if (FlxG.keys.justPressed.TWO) RoomLoader.loadRoom(this, "boss");
         if (FlxG.keys.justPressed.I) spawnTimer = 9999;
         if (FlxG.keys.justPressed.M)
@@ -598,6 +601,31 @@ function killPlayer():Void
 
 }
 
+function initLoopPoints():Void
+{
+    if (loopPoints != null) return; 
+    
+    loopPoints = new Map<String, Float>();
+    
+    var fileContent:String = openfl.Assets.getText("assets/data/music/loopPoints.txt");
+    
+    if (fileContent != null)
+    {
+        var lines:Array<String> = fileContent.split("\n");
+        for (line in lines)
+        {
+            var parts:Array<String> = line.split(":");
+            if (parts.length == 2)
+            {
+                var songName:String = StringTools.trim(parts[0]);
+                var loopTime:Float = Std.parseFloat(StringTools.trim(parts[1]));
+                
+                loopPoints.set(songName, loopTime);
+            }
+        }
+    }
+}
+
 function updateMusic():Void
 {
     var musicLayer = tiledData.getLayer("music");
@@ -605,7 +633,14 @@ function updateMusic():Void
 
     var songName:String = musicLayer.properties.get("songName");
     var songPath = "assets/music/chapters/chapter" + PlayerData.currentChapter + "bgm/" + songName + ".ogg";
-    // trace("Music Changed to: " + songName);
+
+    initLoopPoints();    
+    var loopStartMs:Float = 0;
+    
+    if (loopPoints.exists(songName)) 
+    {
+        loopStartMs = loopPoints.get(songName) * 1000;
+    }
 
     if (PlayerData.currentSong == songPath && FlxG.sound.music != null && FlxG.sound.music.playing)
     {
@@ -619,6 +654,11 @@ function updateMusic():Void
 
     PlayerData.currentSong = songPath;
     FlxG.sound.playMusic(songPath, 0.5, true);
+
+    if (FlxG.sound.music != null)
+    {
+        FlxG.sound.music.loopTime = loopStartMs;
+    }
 
     if (PlayerData.isRespawning)
     {
