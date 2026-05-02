@@ -26,9 +26,11 @@ import leveldata.hazards.*;
 import leveldata.blockdata.*;
 
 @:allow(main.RoomLoader)
+@:allow(leveldata.events.EventLoader)
 class ChapterState extends FlxState
 {
     var player:Player;
+    var playerTrail:flixel.addons.effects.FlxTrail;
     var virtualPad:FlxVirtualPad;
     var padScale:Float = 2.5;
     var targetAlpha:Float = 0.5;
@@ -38,6 +40,7 @@ class ChapterState extends FlxState
     var cameraTarget:FlxObject;
     var scrollSpeed:Float = 0;
     var isAutoscrolling:Bool = false;
+    public var cameraType:String = "normal";
     public var isPaused:Bool = false;
 
     public var bg:FlxSprite;
@@ -147,6 +150,8 @@ override public function create():Void
 
     warpsGroup = new FlxTypedGroup<WarpTrigger>(); add(warpsGroup);
     player = new Player(PlayerData.spawnX, PlayerData.spawnY);
+    playerTrail = new flixel.addons.effects.FlxTrail(player, null, 24, 0, 0.2, 0.02);
+    playerTrail.alpha = 0;
 
     vignite = new FlxSprite();
     vignite.loadGraphic(AssetPaths.vignite__png, false);
@@ -185,6 +190,26 @@ override public function update(elapsed:Float):Void
         cameraTarget.y = 300;
         
         if (player.x + player.width < FlxG.camera.scroll.x) { killPlayer(); }
+    }
+
+    else if (!isAutoscrolling && cameraTarget != null)
+    {
+        if (cameraType == "unlockX")
+        {
+            cameraTarget.x = player.x;
+            // cameraTarget.y = map.y + (map.height / 2);
+            cameraTarget.y = map.y; 
+        }
+        else if (cameraType == "unlockY")
+        {
+            cameraTarget.x = map.x + (map.width / 2); 
+            cameraTarget.y = player.y;
+        }
+        else if (cameraType == "unlockXY")
+        {
+            cameraTarget.x = player.x;
+            cameraTarget.y = player.y;
+        }
     }
 
     #if !mobile
@@ -351,6 +376,8 @@ override public function update(elapsed:Float):Void
         playerGlow.exists = false;
     }
 
+    var trailTarget = player.velocity.y >= 800 ? 0.05 : 0.0;
+    playerTrail.alpha = flixel.math.FlxMath.lerp(playerTrail.alpha, trailTarget, 0.02);
 
     #if mobile
     if (virtualPad.buttonA.justPressed) PlayerShoot();
@@ -364,8 +391,8 @@ override public function update(elapsed:Float):Void
     #end
 
     #if !mobile
-        if (FlxG.keys.justPressed.ONE) RoomLoader.loadRoom(this, "map12");
-        if (FlxG.keys.justPressed.TWO) RoomLoader.loadRoom(this, "boss");
+        if (FlxG.keys.justPressed.ONE) RoomLoader.loadRoom(this, "cameratest");
+        if (FlxG.keys.justPressed.TWO) RoomLoader.loadRoom(this, "map26");
         if (FlxG.keys.justPressed.I) spawnTimer = 9999;
         if (FlxG.keys.justPressed.M)
         {
@@ -468,6 +495,17 @@ function HandleWarp(w:WarpTrigger):Void
         case "down":  player.y = 10;
         case "left":  player.x = 1265;
         case "right": player.x = 10;
+    }
+
+    if (cameraTarget != null && cameraType != "normal")
+    {
+        if (cameraType == "unlockY") cameraTarget.x = FlxG.width / 2;
+        else cameraTarget.x = player.x;
+        
+        if (cameraType == "unlockX") cameraTarget.y = FlxG.height / 2;
+        else cameraTarget.y = player.y;
+
+        FlxG.camera.focusOn(cameraTarget.getPosition());
     }
 }
 
@@ -697,11 +735,80 @@ function autoScroll():Void
 
 function cameraScroll():Void
 {
+    cameraType = "normal"; 
+    FlxG.camera.target = null; 
+
+    var camLayer = tiledData.getLayer("camera");
+    if (camLayer != null && camLayer.properties.contains("cameraType"))
+    {
+        cameraType = camLayer.properties.get("cameraType");
+    }
+
+    if (map != null && cameraType != "unlockX")
+    {
+        FlxG.camera.setScrollBoundsRect(map.x + 60, map.y + 65, map.width - 50, map.height + 65, false);
+        FlxG.worldBounds.set(map.x - 200, map.y - 200, map.width + 400, map.height + 400);
+    }
+
+    else if (map != null && cameraType == "unlockX")
+    {
+        FlxG.camera.setScrollBoundsRect(map.x + 60, map.y + 65, map.width - 120, map.height + 65, false);
+        FlxG.worldBounds.set(map.x - 200, map.y - 200, map.width + 400, map.height + 400);
+    }
+
+    if (cameraTarget == null)
+    {
+        cameraTarget = new flixel.FlxObject(player.x, player.y, 1, 1);
+        add(cameraTarget);
+    }
+
+    // 5. Apply the correct Follow behavior
     if (this.isAutoscrolling)
     {
-        cameraTarget = new flixel.FlxObject(player.x + 465, player.y, 1, 1);
-        add(cameraTarget);
-        FlxG.camera.follow(cameraTarget, LOCKON, 1);
+        cameraTarget.setPosition(player.x + 465, player.y);
+        FlxG.camera.follow(cameraTarget, PLATFORMER, 1);
+    }
+    else if (cameraType != "normal")
+    {
+        FlxG.camera.follow(cameraTarget, PLATFORMER, 0.1);
+
+        var cameraMarginX:Float = 0;
+        var cameraMarginY:Float = 0;
+        var cameraMarginW:Float = 0;
+        var cameraMarginH:Float = 0;
+
+        if (cameraType == "unlockX")
+        {
+            cameraMarginX = FlxG.width * 0.3;
+            cameraMarginW = FlxG.width * 0.3; // 30% + 40% = 70%
+            
+            cameraMarginY = FlxG.height / 2;
+            cameraMarginH = 0;
+        }
+        else if (cameraType == "unlockY")
+        {
+            cameraMarginX = FlxG.width / 2;
+            cameraMarginW = 0; 
+            
+            cameraMarginY = FlxG.height * 0.3;
+            cameraMarginH = FlxG.height * 0.4;
+        }
+        else if (cameraType == "unlockXY")
+        {
+            cameraMarginX = FlxG.width * 0.3;
+            cameraMarginW = FlxG.width * 0.4;
+            cameraMarginY = FlxG.height * 0.3;
+            cameraMarginH = FlxG.height * 0.4;
+        }
+
+        FlxG.camera.deadzone = flixel.math.FlxRect.get(cameraMarginX, cameraMarginY, cameraMarginW, cameraMarginH);
+    }
+    else 
+    {
+        if (map != null) 
+        {
+            FlxG.camera.scroll.set(-260, -265);
+        }
     }
 }
 

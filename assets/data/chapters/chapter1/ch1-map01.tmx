@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="31" nextobjectid="57">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="32" nextobjectid="57">
  <properties>
   <property name="doubleEffectType" value="dark-cloud"/>
  </properties>
@@ -119,13 +119,17 @@
   </properties>
  </objectgroup>
  <objectgroup id="27" name="slab"/>
- <objectgroup id="28" name="doubleEffect"/>
+ <objectgroup id="28" name="doubleEffect">
+  <properties>
+   <property name="doubleEffectType" value="redMist"/>
+  </properties>
+ </objectgroup>
  <objectgroup id="29" name="flip"/>
  <objectgroup id="30" name="small-spike"/>
  <objectgroup id="7" name="spike-normal"/>
  <objectgroup id="11" name="music">
   <properties>
-   <property name="songName" value="rain"/>
+   <property name="songName" value="volcanpeak"/>
   </properties>
  </objectgroup>
  <objectgroup id="21" name="portal">

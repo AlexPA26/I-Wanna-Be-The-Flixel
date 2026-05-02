@@ -86,61 +86,6 @@
  <objectgroup id="7" name="trampoline"/>
  <objectgroup id="19" name="trampoline-mini"/>
  <objectgroup id="9" name="spike-normal">
-  <object id="818" name="spike" gid="91" x="0" y="760" width="50" height="50">
-   <properties>
-    <property name="id" value="6"/>
-   </properties>
-  </object>
-  <object id="819" name="spike" gid="91" x="50" y="760" width="50" height="50">
-   <properties>
-    <property name="id" value="6"/>
-   </properties>
-  </object>
-  <object id="820" name="spike" gid="91" x="150" y="760" width="50" height="50">
-   <properties>
-    <property name="id" value="6"/>
-   </properties>
-  </object>
-  <object id="821" name="spike" gid="91" x="100" y="760" width="50" height="50">
-   <properties>
-    <property name="id" value="6"/>
-   </properties>
-  </object>
-  <object id="822" name="spike" gid="91" x="200" y="760" width="50" height="50">
-   <properties>
-    <property name="id" value="6"/>
-   </properties>
-  </object>
-  <object id="823" name="spike" gid="91" x="250" y="760" width="50" height="50">
-   <properties>
-    <property name="id" value="6"/>
-   </properties>
-  </object>
-  <object id="824" name="spike" gid="91" x="300" y="760" width="50" height="50">
-   <properties>
-    <property name="id" value="6"/>
-   </properties>
-  </object>
-  <object id="825" name="spike" gid="91" x="350" y="760" width="50" height="50">
-   <properties>
-    <property name="id" value="6"/>
-   </properties>
-  </object>
-  <object id="826" name="spike" gid="91" x="900" y="760" width="50" height="50">
-   <properties>
-    <property name="id" value="6"/>
-   </properties>
-  </object>
-  <object id="827" name="spike" gid="91" x="950" y="760" width="50" height="50">
-   <properties>
-    <property name="id" value="6"/>
-   </properties>
-  </object>
-  <object id="828" name="spike" gid="91" x="1000" y="760" width="50" height="50">
-   <properties>
-    <property name="id" value="6"/>
-   </properties>
-  </object>
   <object id="829" name="spike" gid="90" x="0" y="600" width="50" height="50">
    <properties>
     <property name="id" value="5"/>

@@ -16,7 +16,7 @@ class Player extends FlxSprite
     public var dashEffect:FlxEmitter;
 
     var safeJump:Float = 0;
-    var safeJumpMax:Float = 0.15;
+    var safeJumpMax:Float = 0.1;
     public var mapMaxSpeed:Float = 400;
     public var currentOffsetY:Float = 20;
 
@@ -193,6 +193,9 @@ class Player extends FlxSprite
                     FlxG.sound.play(AssetPaths.jump__ogg, 1);
                     animationJumpUp = true;
                     animationJumpDown = false;
+                    
+                    leveldata.hazards.SwitchSpike.toggleAll();
+                    leveldata.hazards.AllSwitchSpike.toggleAll();
                 }
                 else if (canDoubleJump) 
                 {
@@ -203,6 +206,8 @@ class Player extends FlxSprite
                     FlxG.sound.play(AssetPaths.doublejump__ogg, 1);
                     animationJumpUp = true;
                     animationJumpDown = false;
+                    leveldata.hazards.DJSwitchSpike.toggleAll();
+                    leveldata.hazards.AllSwitchSpike.toggleAll();
                 }
             }
         }

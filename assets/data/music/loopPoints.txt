@@ -1,3 +1,4 @@
 rain: 7.345
 castle1: 11.917
 castle_underground: 38.540
+volcanpeak: 12.000

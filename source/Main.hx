@@ -28,15 +28,13 @@ class Main extends Sprite
 			document.addEventListener("contextmenu", function(event:js.html.Event) { event.preventDefault(); });
 		#end
 		
-		#if !debug
-			addChild(new FlxGame(gameWidth, gameHeight, initialState, updateFramerate, drawFramerate, skipSplash, startFullscreen));
+		addChild(new FlxGame(gameWidth, gameHeight, initialState, updateFramerate, drawFramerate, skipSplash, startFullscreen));
 			flixel.FlxG.fixedTimestep = true;
 		#if !mobile
 			addChild(new FPS(10, 10, 0xffffff));
 		#end
 
 		flixel.FlxG.autoPause = false;
-		#end
 		
 	}
 }

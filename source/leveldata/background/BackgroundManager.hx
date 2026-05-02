@@ -49,13 +49,13 @@ class BackgroundManager
                     state.bg.destroy();
                     state.bg = null;
                 }
-            state.bg = new FlxSprite(0, 0);
-            state.bg.loadGraphic("assets/images/backgrounds/" + newBG + ".png");
-            state.bg.screenCenter();
-            state.bg.scrollFactor.set(0, 0);
+            state.bg = new FlxBackdrop("assets/images/backgrounds/" + newBG + ".png");
+            state.bg.velocity.set(0, 0);
+            state.bg.scrollFactor.set(0.15, 0);
             state.bg.active = false;
             state.currentBGName = newBG;
             state.insert(0, state.bg);
+
         }
     }
 
@@ -141,7 +141,7 @@ public static function bgEffect(state:ChapterState, tiledData:TiledMap):Void
             case "fog":
                 state.backEffectObj = new FlxBackdrop(AssetPaths.white_fog__png, X);
                 state.backEffectObj.velocity.set(-50 - boost, 0);
-                state.backEffectObj.alpha = 0.25;
+                state.backEffectObj.alpha = 0.2;
             case "poison-fog":
                 state.backEffectObj = new FlxBackdrop(AssetPaths.poison_fog__png, XY);
                 state.backEffectObj.velocity.set(60, 0);
@@ -158,47 +158,62 @@ public static function bgEffect(state:ChapterState, tiledData:TiledMap):Void
     }
 }
 
-    public static function bgEffectDouble(state:ChapterState, tiledData:TiledMap):Void
+public static function bgEffectDouble(state:ChapterState, tiledData:TiledMap):Void
+{
+    var layer = tiledData.getLayer("doubleEffect");
+    var boost = getScrollBoost(tiledData);
+
+    if (layer != null && layer.properties.contains("doubleEffectType"))
     {
-        var layer = tiledData.getLayer("doubleEffect");
-        var boost = getScrollBoost(tiledData);
-
-        if (layer != null && layer.properties.contains("doubleEffectType"))
-        {
-            var effect = layer.properties.get("doubleEffectType");
-            if (effect != state.currentDoubleEffectName || boost != state.lastDoubleScrollBoost)
-
-            if (effect == "none" || effect == "" || layer == null)
+        var effect = layer.properties.get("doubleEffectType");
+        
+        // FIX 1: Added the missing bracket '{' here!
+        if (effect != state.currentDoubleEffectName || boost != state.lastDoubleScrollBoost)
+        { 
+            if (effect == "none" || effect == "")
             { 
-                state.remove(state.doubleEffectObj);
+                if (state.doubleEffectObj != null)
+                {
+                    state.remove(state.doubleEffectObj);
+                    state.doubleEffectObj.destroy();
+                    state.doubleEffectObj = null; // FIX 2: Set to null after destroy!
+                }
+                state.currentDoubleEffectName = effect; // Update name so it doesn't loop
                 return;
             }
 
+            // Clean up the old effect
+            if (state.doubleEffectObj != null) 
+            { 
+                state.remove(state.doubleEffectObj); 
+                state.doubleEffectObj.destroy(); 
+                state.doubleEffectObj = null; // FIX 2: Set to null after destroy!
+            }
 
+            // Create the new effect
+            switch (effect)
             {
-                if (state.doubleEffectObj != null) { state.remove(state.doubleEffectObj); state.doubleEffectObj.destroy(); }
+                case "dark-cloud":
+                    state.doubleEffectObj = new FlxBackdrop(AssetPaths.cloudsPixel__png, X);
+                    state.doubleEffectObj.velocity.set(360 - boost, 0);
+                    state.doubleEffectObj.alpha = 1;
+                case "redMist":
+                    state.doubleEffectObj = new FlxBackdrop(AssetPaths.redMist__png, X);
+                    state.doubleEffectObj.velocity.set(-10, 0);
+                    state.doubleEffectObj.alpha = 0.1;
+            }
 
-                switch (effect)
-                {
-                    case "dark-cloud":
-                        state.doubleEffectObj = new FlxBackdrop(AssetPaths.darkcloud__png, X);
-                        state.doubleEffectObj.velocity.set(360 - boost, 0);
-                        state.doubleEffectObj.alpha = 1;
-                    case "clouds":
-                        state.doubleEffectObj = new FlxBackdrop(AssetPaths.cloudsDouble__png, XY);
-                        state.doubleEffectObj.velocity.set(-20, 0);
-                        state.doubleEffectObj.alpha = 0.65;
-                }
-                if (state.doubleEffectObj != null)
-                {
-                    state.doubleEffectObj.scrollFactor.set(0, 0);
-                    state.currentDoubleEffectName = effect;
-                    state.lastDoubleScrollBoost = boost;
-                    state.insert(3, state.doubleEffectObj);
-                }
+            // Apply properties ONLY if the switch actually created a new object
+            if (state.doubleEffectObj != null)
+            {
+                state.doubleEffectObj.scrollFactor.set(0, 0);
+                state.currentDoubleEffectName = effect;
+                state.lastDoubleScrollBoost = boost;
+                state.insert(3, state.doubleEffectObj);
             }
         }
     }
+}
 
     public static function foregroundEffect(state:ChapterState, tiledData:TiledMap):Void
         {
@@ -216,7 +231,6 @@ public static function bgEffect(state:ChapterState, tiledData:TiledMap):Void
                 return;
             }
 
-
                 {
                 if (state.frontEffectObj != null) { state.remove(state.frontEffectObj); state.frontEffectObj.destroy(); }
 
@@ -231,12 +245,12 @@ public static function bgEffect(state:ChapterState, tiledData:TiledMap):Void
                         state.frontEffectObj.velocity.set(35, 0);
                         state.frontEffectObj.alpha = 1;
                     case "sandstorm":
-                        state.frontEffectObj = new FlxBackdrop(AssetPaths.sandstorm__png, XY);
+                        state.frontEffectObj = new FlxBackdrop(AssetPaths.sandstorm__png, X);
                         state.frontEffectObj.velocity.set(boost - 3000, 0);
                 }
                 if (state.frontEffectObj != null)
                 {
-                    state.frontEffectObj.scrollFactor.set(0, 0);
+                    state.frontEffectObj.scrollFactor.set(1, 0);
                     state.currentFrontEffectName = effect;
                     state.lastFrontScrollBoost = boost;
                     state.add(state.frontEffectObj);
@@ -261,7 +275,6 @@ public static function bgEffect(state:ChapterState, tiledData:TiledMap):Void
                 return;
             }
 
-
             {
                 if (state.topEffectObj != null) { state.remove(state.topEffectObj); state.topEffectObj.destroy(); }
 
@@ -277,7 +290,7 @@ public static function bgEffect(state:ChapterState, tiledData:TiledMap):Void
                 }
                 if (state.topEffectObj != null)
                 {
-                    state.topEffectObj.scrollFactor.set(0, 0);
+                    state.topEffectObj.scrollFactor.set(2, 0);
                     state.currentTopEffectName = effect;
                     state.lastTopScrollBoost = boost;
                     state.add(state.topEffectObj);

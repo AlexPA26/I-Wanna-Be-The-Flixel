@@ -76,6 +76,7 @@ class RoomLoader
         state.popups.clear();
         state.saveParticlesGroup.clear();
         state.hud.clear();
+        leveldata.hazards.SwitchSpike.clear();
 
         if (state.saveParticlesGroup != null)
         {
@@ -100,8 +101,9 @@ class RoomLoader
         ObjectLoader.loadEverything(state.tiledData, state, state.map.x, state.map.y);
         EventLoader.loadEvents(state.tiledData, state);
         state.add(state.playerGlow);
-        state.add(state.dangerObjects);
+        state.add(state.playerTrail);
         state.add(state.player);
+        state.add(state.dangerObjects);
         state.add(state.player.doubleJumpEffect);
         state.add(state.doubleJumpGroup);
         state.add(state.player.dashEffect);

@@ -25,6 +25,11 @@ class EventLoader
             {
                 state.roomAcid = new AcidFluid(50);
                 state.eventEffectGroup.add(state.roomAcid);
+                
+                var acidHitbox = new flixel.FlxSprite(0, flixel.FlxG.height - 85);
+                acidHitbox.makeGraphic(Std.int(state.map.width), 85, 0x00ff0000); // invisible
+                acidHitbox.immovable = true;
+                state.dangerObjects.add(acidHitbox);
             }
 
         }
